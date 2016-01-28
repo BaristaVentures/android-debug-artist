@@ -28,7 +28,7 @@ dependencies {
 Check sample module to see how it can be used.
 
 - Debug Drawer: add a debug drawer with info about the app and some debugging tools.
-![Image](img/debug_drawer.png)
+![Image2](img/debug_drawer.png)
 - ViewServer: helps to debug layouts
 
 # Publish
