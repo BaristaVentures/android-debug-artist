@@ -1,7 +1,7 @@
 Debug helpers for apps
 =========================
 
-![Image](android.gif)
+![Image](img/android.gif)
 
 # Setup in project 
 
@@ -9,7 +9,13 @@ Include it in your `gradle.properties`:
 
 ```
 repositories {
-  maven { url 'http://archiva.barista-v.com:8080/repository/barista/' }
+  maven {
+      url 'http://archiva.barista-v.com:8080/repository/snapshots/'
+      credentials {
+        username "${NEXUS_USERNAME}"
+        password "${NEXUS_PASSWORD}"
+      }
+  }
 }
 
 dependencies {
@@ -22,7 +28,8 @@ dependencies {
 Check sample module to see how it can be used.
 
 - Debug Drawer: add a debug drawer with info about the app and some debugging tools.
-- ViewServer.
+![Image](img/debug_drawer.png)
+- ViewServer: helps to debug layouts
 
 # Publish
 
