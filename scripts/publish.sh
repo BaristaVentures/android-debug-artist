@@ -3,4 +3,4 @@
 # Assemble the app, backup it and upload the apks to crashlytics
 #
 
-sh gradlew clean build debugging:uploadAchives --daemon
+sh gradlew clean build debugging:uploadArchives --daemon
