@@ -7,6 +7,24 @@ Debug helpers for apps
 
 Include it in your `gradle.properties`:
 
+* Release:
+```
+repositories {
+  maven {
+      url 'http://archiva.barista-v.com:8080/repository/internal/'
+      credentials {
+        username "${NEXUS_USERNAME}"
+        password "${NEXUS_PASSWORD}"
+      }
+  }
+}
+
+dependencies {
+  devCompile 'com.barista_v:debugging:0.1'
+}
+```
+
+* Snapshots:
 ```
 repositories {
   maven {
