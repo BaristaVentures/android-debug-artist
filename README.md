@@ -20,7 +20,7 @@ repositories {
 }
 
 dependencies {
-  devCompile 'com.barista_v:debugging:0.1.1'
+  devCompile 'com.barista_v:debugging:0.1.2'
 }
 ```
 

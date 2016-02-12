@@ -1,11 +1,10 @@
-<manifest package="com.barista_v.debugging"
-  xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+  package="com.barista_v.debugging">
 
-  <application
-    android:allowBackup="true"
-    android:label="@string/app_name"
-    android:supportsRtl="true">
+  <uses-permission android:name="android.permission.READ_LOGS" />
 
+  <application>
+    <activity android:name="com.github.pedrovgs.lynx.LynxActivity" />
   </application>
 
 </manifest>

@@ -1,6 +1,9 @@
 CHANGELOG
 ===============
 
+*V 0.1.2*
++ Manifest with needed setup
+
 *V 0.1.1*
 + Proguard setup
 
