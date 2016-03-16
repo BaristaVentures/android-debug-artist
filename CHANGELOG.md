@@ -1,7 +1,13 @@
 CHANGELOG
 ===============
 
-*V 0.1.6*
+*V 0.1.8*
+- Unused button "Shake to"
+
+*V 0.1.7*
+= min SDK version 15.
+
+*V 0.1.6 BROKEN BUILD* 
 = Add scalpel layout with `.withScalpelLayout` instead of using interface.
 
 *V 0.1.5*
