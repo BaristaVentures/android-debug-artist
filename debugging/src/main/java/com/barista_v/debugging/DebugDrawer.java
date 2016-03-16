@@ -42,7 +42,6 @@ public class DebugDrawer implements OnCheckedChangeListener {
         .withDrawerGravity(Gravity.END)
         .build();
 
-    addToggleDrawerItem("Shake to report", R.id.drawer_dev_item_bugshaker);
     addToggleDrawerItem("Leak Canary", R.id.drawer_dev_item_leak);
     addToggleDrawerItem("Stetho (Chrome debug bridge)", R.id.drawer_dev_item_stetho);
     addToggleDrawerItem("Lynks (logs)", R.id.drawer_dev_item_lynks);
