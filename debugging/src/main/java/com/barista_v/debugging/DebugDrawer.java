@@ -48,6 +48,7 @@ public class DebugDrawer implements OnCheckedChangeListener {
       }
     }
 
+
     addToggleDrawerItem("Leak Canary", R.id.drawer_dev_item_leak);
     addToggleDrawerItem("Stetho (Chrome debug bridge)", R.id.drawer_dev_item_stetho);
     addToggleDrawerItem("Lynks (logs)", R.id.drawer_dev_item_lynks);
@@ -85,7 +86,7 @@ public class DebugDrawer implements OnCheckedChangeListener {
       return;
     }
 
-    int identifier = drawerItem.getIdentifier();
+    long identifier = drawerItem.getIdentifier();
 
     if (identifier == R.id.drawer_dev_item_scalpel) {
       ToggleDrawerItem toggleDrawerItem = (ToggleDrawerItem) drawerItem;
@@ -113,7 +114,6 @@ public class DebugDrawer implements OnCheckedChangeListener {
         showDialog("chrome://inspect");
       }
     } else if (identifier == R.id.drawer_dev_item_leak) {
-      Context context = activity.getApplicationContext();
       if (!buttonView.isChecked()) {
         showDialog("Leak Canary cant be disabled.");
         buttonView.setChecked(true);

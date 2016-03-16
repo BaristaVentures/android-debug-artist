@@ -1,7 +1,11 @@
 CHANGELOG
 ===============
 
-*V 0.1.2*
+*V 0.1.4*
++ Clean Debugger init.
++ Proguard setup. 
+
+*V 0.1.2 && 0.1.3*
 + Manifest with needed setup
 
 *V 0.1.1*
