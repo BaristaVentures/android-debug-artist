@@ -31,6 +31,7 @@ public class DebugDrawer implements OnCheckedChangeListener {
   WeakReference<AppCompatActivity> mActivityViewWeakReference;
   WeakReference<Application> mApplicationWeakReference;
   private Drawer mMenuDrawer;
+  private WeakReference<ScalpelFrameLayout> mWeakScalpelLayout;
 
   public DebugDrawer(Application application, AppCompatActivity activity) {
     mActivityViewWeakReference = new WeakReference<>(activity);
@@ -41,21 +42,14 @@ public class DebugDrawer implements OnCheckedChangeListener {
         .withDrawerGravity(Gravity.END)
         .build();
 
-    if (activity instanceof ScalpeledActivity) {
-      ScalpeledActivity scalpeledActivity = (ScalpeledActivity) activity;
-      if (scalpeledActivity.getScalpelFrameLayout() != null) {
-        addToggleDrawerItem("Scalpel", R.id.drawer_dev_item_scalpel);
-      }
-    }
-
-
+    addToggleDrawerItem("Shake to report", R.id.drawer_dev_item_bugshaker);
     addToggleDrawerItem("Leak Canary", R.id.drawer_dev_item_leak);
     addToggleDrawerItem("Stetho (Chrome debug bridge)", R.id.drawer_dev_item_stetho);
     addToggleDrawerItem("Lynks (logs)", R.id.drawer_dev_item_lynks);
     addToggleDrawerItem("Picasso Logs", R.id.drawer_dev_item_picasso);
   }
 
-  public DebugDrawer addProperties(Map<String, String> properties) {
+  public DebugDrawer withProperties(Map<String, String> properties) {
     mMenuDrawer.addItems(new DividerDrawerItem());
     for (Map.Entry<String, String> entry : properties.entrySet()) {
       mMenuDrawer.addItems(new SecondaryDrawerItem().withName(entry.getKey())
@@ -64,6 +58,12 @@ public class DebugDrawer implements OnCheckedChangeListener {
           .withSelectable(false));
     }
 
+    return this;
+  }
+
+  public DebugDrawer withScalpelLayout(ScalpelFrameLayout layout) {
+    mWeakScalpelLayout = new WeakReference<>(layout);
+    addToggleDrawerItem("Scalpel", R.id.drawer_dev_item_scalpel);
     return this;
   }
 
@@ -90,18 +90,12 @@ public class DebugDrawer implements OnCheckedChangeListener {
 
     if (identifier == R.id.drawer_dev_item_scalpel) {
       ToggleDrawerItem toggleDrawerItem = (ToggleDrawerItem) drawerItem;
-      if (activity instanceof ScalpeledActivity) {
-        ScalpeledActivity scalpeledActivity = (ScalpeledActivity) activity;
-        ScalpelFrameLayout scalpelFrameLayout = scalpeledActivity.getScalpelFrameLayout();
-        if (scalpelFrameLayout != null) {
-          boolean enabled = toggleDrawerItem.isChecked();
-          scalpelFrameLayout.setLayerInteractionEnabled(enabled);
-          scalpelFrameLayout.setDrawViews(enabled);
-          scalpelFrameLayout.setChromeShadowColor(android.R.color.black);
-        }
-      } else {
-        showDialog(
-            "The activity dont implements ScalpeledActivity interface, then cant use this option.");
+      ScalpelFrameLayout scalpelFrameLayout = mWeakScalpelLayout.get();
+      if (scalpelFrameLayout != null) {
+        boolean enabled = toggleDrawerItem.isChecked();
+        scalpelFrameLayout.setLayerInteractionEnabled(enabled);
+        scalpelFrameLayout.setDrawViews(enabled);
+        scalpelFrameLayout.setChromeShadowColor(android.R.color.black);
       }
     } else if (identifier == R.id.drawer_dev_item_stetho) {
       Context context = activity.getApplicationContext();

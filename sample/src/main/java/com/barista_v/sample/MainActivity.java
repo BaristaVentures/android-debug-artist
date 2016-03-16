@@ -5,13 +5,12 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import com.barista_v.debugging.DebugDrawer;
-import com.barista_v.debugging.ScalpeledActivity;
 import com.barista_v.debugging.ViewServer;
 import com.jakewharton.scalpel.ScalpelFrameLayout;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class MainActivity extends AppCompatActivity implements ScalpeledActivity {
+public class MainActivity extends AppCompatActivity {
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -25,7 +24,8 @@ public class MainActivity extends AppCompatActivity implements ScalpeledActivity
 
     ViewServer.get(this).addWindow(this);
     new DebugDrawer(MyApplication.sInstance, this)
-        .addProperties(getProperties())
+        .withProperties(getProperties())
+        .withScalpelLayout((ScalpelFrameLayout) findViewById(R.id.scalpel))
         .openDrawer();
   }
 
@@ -48,10 +48,5 @@ public class MainActivity extends AppCompatActivity implements ScalpeledActivity
       put("Manufacturer", Build.MANUFACTURER);
       put("Model", Build.MODEL);
     }};
-  }
-
-  @Override
-  public ScalpelFrameLayout getScalpelFrameLayout() {
-    return (ScalpelFrameLayout) findViewById(R.id.scalpel);
   }
 }
