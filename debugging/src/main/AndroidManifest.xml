@@ -2,6 +2,8 @@
   package="com.barista_v.debugging">
 
   <uses-permission android:name="android.permission.READ_LOGS" />
+  <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+  <uses-permission android:name="android.permission.INTERNET" />
 
   <application>
     <activity android:name="com.github.pedrovgs.lynx.LynxActivity" />
