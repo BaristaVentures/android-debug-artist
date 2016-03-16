@@ -9,3 +9,5 @@
 # okio
 -dontwarn java.nio.file.**
 -dontwarn org.codehaus.mojo.animal_sniffer.**
+
+-dontwarn com.squareup.haha.**
