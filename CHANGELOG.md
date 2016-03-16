@@ -1,7 +1,10 @@
 CHANGELOG
 ===============
 
-*V 0.1.4*
+*V 0.1.6*
+= Add scalpel layout with `.withScalpelLayout` instead of using interface.
+
+*V 0.1.5*
 + Clean Debugger init.
 + Proguard setup. 
 
