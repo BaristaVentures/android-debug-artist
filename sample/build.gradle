@@ -1,9 +1,9 @@
 apply plugin: 'com.android.application'
 
 android {
+  signingConfigs {}
   compileSdkVersion 23
   buildToolsVersion "23.0.2"
-
   defaultConfig {
     applicationId "com.barista_v.sample"
     minSdkVersion 15
@@ -12,8 +12,14 @@ android {
     versionName "1.0"
   }
   buildTypes {
+    debug {
+      minifyEnabled true
+      shrinkResources true
+      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+    }
     release {
-      minifyEnabled false
+      minifyEnabled true
+      shrinkResources true
       proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
     }
   }
@@ -23,6 +29,6 @@ android {
 }
 
 dependencies {
-  compile 'com.android.support:appcompat-v7:23.1.1'
+  compile 'com.android.support:appcompat-v7:23.2.0'
   compile project(':debugging')
 }

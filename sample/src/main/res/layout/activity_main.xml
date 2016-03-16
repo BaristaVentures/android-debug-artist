@@ -1,16 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.jakewharton.scalpel.ScalpelFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:tools="http://schemas.android.com/tools"
+  android:id="@+id/scalpel"
   android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  tools:context="com.barista_v.sample.MainActivity">
+  android:layout_height="match_parent">
 
-  <android.support.v7.widget.Toolbar android:id="@+id/toolbar"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+  <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:elevation="4dp"
-    android:minHeight="?attr/actionBarSize"
-    android:theme="@style/Toolbar.ThemeOverlay" />
+    android:layout_height="match_parent"
+    tools:context="com.barista_v.sample.MainActivity">
 
-</RelativeLayout>
+    <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+      android:id="@+id/toolbar"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:elevation="4dp"
+      android:minHeight="?attr/actionBarSize"
+      android:theme="@style/Toolbar.ThemeOverlay" />
+
+  </RelativeLayout>
+
+</com.jakewharton.scalpel.ScalpelFrameLayout>

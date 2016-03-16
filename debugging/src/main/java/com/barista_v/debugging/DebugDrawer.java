@@ -4,7 +4,6 @@ import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
 import android.widget.CompoundButton;
@@ -36,12 +35,8 @@ public class DebugDrawer implements OnCheckedChangeListener {
   public DebugDrawer(Application application, AppCompatActivity activity) {
     mActivityViewWeakReference = new WeakReference<>(activity);
     mApplicationWeakReference = new WeakReference<>(application);
-  }
 
-  public void addWithToolbar(Toolbar toolbar, Map<String, String> properties) {
-    AppCompatActivity activity = mActivityViewWeakReference.get();
-
-    mMenuDrawer = new DrawerBuilder(activity).withToolbar(toolbar)
+    mMenuDrawer = new DrawerBuilder(activity)
         .withTranslucentStatusBar(true)
         .withDrawerGravity(Gravity.END)
         .build();
@@ -57,7 +52,9 @@ public class DebugDrawer implements OnCheckedChangeListener {
     addToggleDrawerItem("Stetho (Chrome debug bridge)", R.id.drawer_dev_item_stetho);
     addToggleDrawerItem("Lynks (logs)", R.id.drawer_dev_item_lynks);
     addToggleDrawerItem("Picasso Logs", R.id.drawer_dev_item_picasso);
+  }
 
+  public DebugDrawer addProperties(Map<String, String> properties) {
     mMenuDrawer.addItems(new DividerDrawerItem());
     for (Map.Entry<String, String> entry : properties.entrySet()) {
       mMenuDrawer.addItems(new SecondaryDrawerItem().withName(entry.getKey())
@@ -65,6 +62,12 @@ public class DebugDrawer implements OnCheckedChangeListener {
           .withDescription(entry.getValue())
           .withSelectable(false));
     }
+
+    return this;
+  }
+
+  public void openDrawer() {
+    mMenuDrawer.openDrawer();
   }
 
   private void addToggleDrawerItem(String text, int id) {
