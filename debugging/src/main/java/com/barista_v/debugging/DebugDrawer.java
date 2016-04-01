@@ -68,9 +68,11 @@ public class DebugDrawer implements OnCheckedChangeListener {
     return this;
   }
 
-  public DebugDrawer withScalpelLayout(ScalpelFrameLayout layout) {
-    mWeakScalpelLayout = new WeakReference<>(layout);
-    addToggleDrawerItem("Scalpel", R.id.drawer_dev_item_scalpel);
+  public DebugDrawer withScalpelLayout(@Nullable ScalpelFrameLayout layout) {
+    if (layout != null) {
+      mWeakScalpelLayout = new WeakReference<>(layout);
+      addToggleDrawerItem("Scalpel", R.id.drawer_dev_item_scalpel);
+    }
     return this;
   }
 
