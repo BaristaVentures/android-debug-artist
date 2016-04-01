@@ -3,9 +3,11 @@ package com.barista_v.debugging;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.Toast;
 import com.barista_v.debugging.item.spinner.SpinnerDrawerItem;
@@ -18,6 +20,7 @@ import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.interfaces.OnCheckedChangeListener;
 import com.mikepenz.materialdrawer.model.DividerDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
+import com.mikepenz.materialdrawer.model.SwitchDrawerItem;
 import com.mikepenz.materialdrawer.model.ToggleDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.squareup.leakcanary.LeakCanary;
@@ -29,7 +32,7 @@ import java.util.Map;
 /**
  * Debug drawer showing some debugging tools and info.
  */
-public class DebugDrawer implements OnCheckedChangeListener {
+public class DebugDrawer implements OnCheckedChangeListener, Drawer.OnDrawerItemClickListener {
   WeakReference<AppCompatActivity> mActivityViewWeakReference;
   WeakReference<Application> mApplicationWeakReference;
   private Drawer mMenuDrawer;
@@ -50,21 +53,28 @@ public class DebugDrawer implements OnCheckedChangeListener {
     addToggleDrawerItem("Picasso Logs", R.id.drawer_dev_item_picasso);
   }
 
+  public void openDrawer() {
+    mMenuDrawer.openDrawer();
+  }
+
   public DebugDrawer withProperties(Map<String, String> properties) {
-    mMenuDrawer.addItems(new DividerDrawerItem());
+    mMenuDrawer.addItem(new DividerDrawerItem());
     for (Map.Entry<String, String> entry : properties.entrySet()) {
-      mMenuDrawer.addItems(new SecondaryDrawerItem().withName(entry.getKey())
-          .withIcon(android.R.drawable.ic_menu_info_details)
+      mMenuDrawer.addItem(new SecondaryDrawerItem().withName(entry.getKey())
+          .withIcon(R.drawable.ic_info_grey_700_24dp)
           .withDescription(entry.getValue())
-          .withSelectable(false));
+          .withIdentifier(R.id.drawer_dev_item_info));
     }
+
+    mMenuDrawer.setOnDrawerItemClickListener(this);
 
     return this;
   }
 
   public DebugDrawer withSpinnerItem(int id, String name, String[] options,
       SpinnerItemListener listener) {
-    mMenuDrawer.addItem(new SpinnerDrawerItem(id, options, listener).withName(name));
+    mMenuDrawer.addItems(new DividerDrawerItem(),
+        new SpinnerDrawerItem(id, options, listener).withName(name));
     return this;
   }
 
@@ -76,16 +86,13 @@ public class DebugDrawer implements OnCheckedChangeListener {
     return this;
   }
 
-  public void openDrawer() {
-    mMenuDrawer.openDrawer();
-  }
-
   private void addToggleDrawerItem(String text, int id) {
-    ToggleDrawerItem item = new ToggleDrawerItem().withName(text).withIdentifier(id);
-    item.setOnCheckedChangeListener(this);
-    mMenuDrawer.addItems(item);
+    SwitchDrawerItem item = new SwitchDrawerItem().withName(text).withIdentifier(id);
+    item.withOnCheckedChangeListener(this);
+    mMenuDrawer.addItem(item);
   }
 
+  //<editor-fold desc="OnCheckedChangeListener">
   @Override
   public void onCheckedChanged(IDrawerItem drawerItem, CompoundButton buttonView,
       boolean isChecked) {
@@ -146,6 +153,20 @@ public class DebugDrawer implements OnCheckedChangeListener {
       Log.i("DEBUG", "Picasso stats:" + picassoStats.toString());
     }
   }
+  //</editor-fold>
+
+  //<editor-fold desc="OnDrawerItemSelectedListener">
+  @Override
+  public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+    long identifier = drawerItem.getIdentifier();
+    if (identifier == R.id.drawer_dev_item_info) {
+      SecondaryDrawerItem secondaryDrawerItem = ((SecondaryDrawerItem) drawerItem);
+      secondaryDrawerItem.withSetSelected(false);
+      showDialog(secondaryDrawerItem.getDescription().getText());
+    }
+    return true;
+  }
+  //</editor-fold>
 
   private void showDialog(String dialog) {
     AppCompatActivity activity = mActivityViewWeakReference.get();
