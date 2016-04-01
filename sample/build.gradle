@@ -1,13 +1,15 @@
 apply plugin: 'com.android.application'
 
 android {
-  signingConfigs {}
-  compileSdkVersion 23
-  buildToolsVersion "23.0.2"
+  compileSdkVersion setup.compileSdk
+  buildToolsVersion setup.buildTools
+
   defaultConfig {
     applicationId "com.barista_v.sample"
-    minSdkVersion 15
-    targetSdkVersion 23
+
+    minSdkVersion setup.minSdk
+    targetSdkVersion setup.targetSdk
+    
     versionCode 1
     versionName "1.0"
   }
@@ -29,6 +31,6 @@ android {
 }
 
 dependencies {
-  compile 'com.android.support:appcompat-v7:23.2.0'
+  compile deps.appCompat
   compile project(':debugging')
 }
