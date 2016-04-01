@@ -8,6 +8,8 @@ import android.util.Log;
 import android.view.Gravity;
 import android.widget.CompoundButton;
 import android.widget.Toast;
+import com.barista_v.debugging.item.spinner.SpinnerDrawerItem;
+import com.barista_v.debugging.item.spinner.SpinnerItemListener;
 import com.facebook.stetho.Stetho;
 import com.github.pedrovgs.lynx.LynxActivity;
 import com.jakewharton.scalpel.ScalpelFrameLayout;
@@ -57,6 +59,12 @@ public class DebugDrawer implements OnCheckedChangeListener {
           .withSelectable(false));
     }
 
+    return this;
+  }
+
+  public DebugDrawer withSpinnerItem(int id, String name, String[] options,
+      SpinnerItemListener listener) {
+    mMenuDrawer.addItem(new SpinnerDrawerItem(id, options, listener).withName(name));
     return this;
   }
 

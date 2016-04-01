@@ -4,13 +4,15 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.widget.Toast;
 import com.barista_v.debugging.DebugDrawer;
 import com.barista_v.debugging.ViewServer;
+import com.barista_v.debugging.item.spinner.SpinnerItemListener;
 import com.jakewharton.scalpel.ScalpelFrameLayout;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements SpinnerItemListener {
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -22,10 +24,12 @@ public class MainActivity extends AppCompatActivity {
       setSupportActionBar(toolbar);
     }
 
+    String[] hosts = new String[] { "http://asdasdasdasdasdasdasdasd.com", "http://445444.com" };
     ViewServer.get(this).addWindow(this);
     new DebugDrawer(MyApplication.sInstance, this)
-        .withProperties(getProperties())
         .withScalpelLayout((ScalpelFrameLayout) findViewById(R.id.scalpel))
+        .withSpinnerItem(1, "Host", hosts, this)
+        .withProperties(getProperties())
         .openDrawer();
   }
 
@@ -48,5 +52,10 @@ public class MainActivity extends AppCompatActivity {
       put("Manufacturer", Build.MANUFACTURER);
       put("Model", Build.MODEL);
     }};
+  }
+
+  @Override
+  public void onItemClick(int itemId, CharSequence title) {
+    Toast.makeText(this, "Selected: " + title, Toast.LENGTH_LONG).show();
   }
 }
