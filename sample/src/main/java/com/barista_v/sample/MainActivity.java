@@ -4,12 +4,19 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.widget.Toast;
 import com.barista_v.debugging.DebugDrawer;
 import com.barista_v.debugging.ViewServer;
+import com.barista_v.debugging.item.input.InputItemListener;
+import com.barista_v.debugging.item.phoenix.RestartListener;
+import com.barista_v.debugging.item.spinner.SpinnerItemListener;
+import com.jakewharton.scalpel.ScalpelFrameLayout;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements SpinnerItemListener,
+    RestartListener, InputItemListener {
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -21,8 +28,15 @@ public class MainActivity extends AppCompatActivity {
       setSupportActionBar(toolbar);
     }
 
+    String[] hosts = new String[] { "Value 1", "Value 2" };
     ViewServer.get(this).addWindow(this);
-    new DebugDrawer(MyApplication.sInstance, this).addWithToolbar(toolbar, getProperties());
+    new DebugDrawer(MyApplication.sInstance, this)
+        .withScalpelLayout((ScalpelFrameLayout) findViewById(R.id.scalpel))
+        .withInputItem(2, "Host", this)
+        .withRestartListener(this)
+        .withSpinnerItem(1, "Spinner Value", hosts, this)
+        .withProperties(getProperties())
+        .openDrawer();
   }
 
   @Override
@@ -45,4 +59,28 @@ public class MainActivity extends AppCompatActivity {
       put("Model", Build.MODEL);
     }};
   }
+
+  @Override
+  public void onItemClick(int itemId, CharSequence title) {
+    Toast.makeText(this, "Selected: " + title, Toast.LENGTH_LONG).show();
+  }
+
+  //<editor-fold desc="RestartListener">
+  @Override
+  public void onAppRestart() {
+    Log.d("DEBUG", "BOOM App");
+  }
+
+  @Override
+  public void onActivityRestart() {
+    Log.d("DEBUG", "BOOM Activity");
+  }
+  //</editor-fold>
+
+  //<editor-fold desc="InputItemListener">
+  @Override
+  public void onOkClick(int itemId, String inputText) {
+    Toast.makeText(this, inputText, Toast.LENGTH_LONG).show();
+  }
+  //</editor-fold>
 }
