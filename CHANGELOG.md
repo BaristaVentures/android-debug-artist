@@ -1,6 +1,14 @@
 CHANGELOG
 ===============
 
+*V 0.2.1*
++ Input item with `withInputItem(...)`
+
+*V 0.2.0*
++ Spinner item with `withSpinnerItem(...)`
++ Restart App item
++ Restart Activity item
+
 *V 0.1.8*
 - Unused button "Shake to"
 

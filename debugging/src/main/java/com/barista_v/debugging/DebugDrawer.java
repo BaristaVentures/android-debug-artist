@@ -1,24 +1,33 @@
 package com.barista_v.debugging;
 
+import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.Toast;
+import com.barista_v.debugging.item.input.InputItemListener;
+import com.barista_v.debugging.item.phoenix.RestartListener;
 import com.barista_v.debugging.item.spinner.SpinnerDrawerItem;
 import com.barista_v.debugging.item.spinner.SpinnerItemListener;
 import com.facebook.stetho.Stetho;
 import com.github.pedrovgs.lynx.LynxActivity;
+import com.jakewharton.processphoenix.ProcessPhoenix;
 import com.jakewharton.scalpel.ScalpelFrameLayout;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.interfaces.OnCheckedChangeListener;
 import com.mikepenz.materialdrawer.model.DividerDrawerItem;
+import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.SwitchDrawerItem;
 import com.mikepenz.materialdrawer.model.ToggleDrawerItem;
@@ -31,12 +40,16 @@ import java.util.Map;
 
 /**
  * Debug drawer showing some debugging tools and info.
+ *
+ * To add dynamic actions check "debugDrawer.with*" methods.
  */
 public class DebugDrawer implements OnCheckedChangeListener, Drawer.OnDrawerItemClickListener {
   WeakReference<AppCompatActivity> mActivityViewWeakReference;
   WeakReference<Application> mApplicationWeakReference;
   private Drawer mMenuDrawer;
   private WeakReference<ScalpelFrameLayout> mWeakScalpelLayout;
+  @Nullable private RestartListener mRestartListener;
+  @Nullable private InputItemListener mInputItemListener;
 
   public DebugDrawer(Application application, AppCompatActivity activity) {
     mActivityViewWeakReference = new WeakReference<>(activity);
@@ -47,10 +60,22 @@ public class DebugDrawer implements OnCheckedChangeListener, Drawer.OnDrawerItem
         .withDrawerGravity(Gravity.END)
         .build();
 
-    addToggleDrawerItem("Leak Canary", R.id.drawer_dev_item_leak);
-    addToggleDrawerItem("Stetho (Chrome debug bridge)", R.id.drawer_dev_item_stetho);
-    addToggleDrawerItem("Lynks (logs)", R.id.drawer_dev_item_lynks);
-    addToggleDrawerItem("Picasso Logs", R.id.drawer_dev_item_picasso);
+    mMenuDrawer.addItem(new PrimaryDrawerItem().withName("Restart App")
+        .withIdentifier(R.id.drawer_dev_item_phoenix_app)
+        .withIcon(R.drawable.ic_gavel_grey_700_18dp));
+
+    mMenuDrawer.addItem(new PrimaryDrawerItem().withName("Restart Activity")
+        .withIdentifier(R.id.drawer_dev_item_phoenix_activity)
+        .withIcon(R.drawable.ic_rowing_grey_700_18dp));
+
+    mMenuDrawer.addItem(new DividerDrawerItem());
+
+    addSwitchDrawerItem("Leak Canary", R.id.drawer_dev_item_leak);
+    addSwitchDrawerItem("Stetho (Chrome debug bridge)", R.id.drawer_dev_item_stetho);
+    addSwitchDrawerItem("Lynks (logs)", R.id.drawer_dev_item_lynks);
+    addSwitchDrawerItem("Picasso Logs", R.id.drawer_dev_item_picasso);
+
+    mMenuDrawer.setOnDrawerItemClickListener(this);
   }
 
   public void openDrawer() {
@@ -66,8 +91,6 @@ public class DebugDrawer implements OnCheckedChangeListener, Drawer.OnDrawerItem
           .withIdentifier(R.id.drawer_dev_item_info));
     }
 
-    mMenuDrawer.setOnDrawerItemClickListener(this);
-
     return this;
   }
 
@@ -78,18 +101,31 @@ public class DebugDrawer implements OnCheckedChangeListener, Drawer.OnDrawerItem
     return this;
   }
 
+  /**
+   * Add an item that shows an input dialog.
+   */
+  public DebugDrawer withInputItem(int id, String name, InputItemListener inputItemListener) {
+    mInputItemListener = inputItemListener;
+
+    mMenuDrawer.addItems(new DividerDrawerItem(),
+        new PrimaryDrawerItem().withName(String.format("Enter value for '%s'", name))
+            .withTag(id)
+            .withIcon(R.drawable.ic_textsms_grey_700_18dp)
+            .withIdentifier(R.id.drawer_dev_item_input));
+    return this;
+  }
+
   public DebugDrawer withScalpelLayout(@Nullable ScalpelFrameLayout layout) {
     if (layout != null) {
       mWeakScalpelLayout = new WeakReference<>(layout);
-      addToggleDrawerItem("Scalpel", R.id.drawer_dev_item_scalpel);
+      addSwitchDrawerItem("Scalpel", R.id.drawer_dev_item_scalpel);
     }
     return this;
   }
 
-  private void addToggleDrawerItem(String text, int id) {
-    SwitchDrawerItem item = new SwitchDrawerItem().withName(text).withIdentifier(id);
-    item.withOnCheckedChangeListener(this);
-    mMenuDrawer.addItem(item);
+  public DebugDrawer withRestartListener(RestartListener restartListener) {
+    mRestartListener = restartListener;
+    return this;
   }
 
   //<editor-fold desc="OnCheckedChangeListener">
@@ -163,7 +199,14 @@ public class DebugDrawer implements OnCheckedChangeListener, Drawer.OnDrawerItem
       SecondaryDrawerItem secondaryDrawerItem = ((SecondaryDrawerItem) drawerItem);
       secondaryDrawerItem.withSetSelected(false);
       showDialog(secondaryDrawerItem.getDescription().getText());
+    } else if (identifier == R.id.drawer_dev_item_phoenix_activity) {
+      restartActivity();
+    } else if (identifier == R.id.drawer_dev_item_phoenix_app) {
+      restartApp();
+    } else if (identifier == R.id.drawer_dev_item_input) {
+      showInputDialog(((PrimaryDrawerItem) drawerItem));
     }
+
     return true;
   }
   //</editor-fold>
@@ -175,6 +218,57 @@ public class DebugDrawer implements OnCheckedChangeListener, Drawer.OnDrawerItem
     }
 
     Toast.makeText(activity, dialog, Toast.LENGTH_LONG).show();
+  }
+
+  private void addSwitchDrawerItem(String text, int id) {
+    SwitchDrawerItem item = new SwitchDrawerItem().withName(text).withIdentifier(id);
+    item.withOnCheckedChangeListener(this);
+    mMenuDrawer.addItem(item);
+  }
+
+  public void restartApp() {
+    Context context = mApplicationWeakReference.get();
+    if (context != null) {
+      if (mRestartListener != null) {
+        mRestartListener.onAppRestart();
+      }
+      ProcessPhoenix.triggerRebirth(context);
+    }
+  }
+
+  public void restartActivity() {
+    Context context = mActivityViewWeakReference.get();
+    if (context != null) {
+      if (mRestartListener != null) {
+        mRestartListener.onActivityRestart();
+      }
+      ProcessPhoenix.triggerRebirth(context);
+    }
+  }
+
+  private void showInputDialog(final PrimaryDrawerItem drawerItem) {
+    final Activity activity = mActivityViewWeakReference.get();
+    if (activity == null) {
+      return;
+    }
+
+    LayoutInflater factory = LayoutInflater.from(activity);
+    final EditText entryView = (EditText) factory.inflate(R.layout.input_view, null);
+
+    new AlertDialog.Builder(activity).
+        setTitle(drawerItem.getName().toString())
+        .setView(entryView)
+        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+          @Override
+          public void onClick(DialogInterface dialog, int which) {
+            if (mInputItemListener != null) {
+              String inputText = entryView.getText().toString();
+              mInputItemListener.onOkClick((int) drawerItem.getTag(), inputText);
+              drawerItem.withDescription(inputText);
+              Toast.makeText(activity, "Selected: " + inputText, Toast.LENGTH_LONG).show();
+            }
+          }
+        }).show();
   }
 }
 
