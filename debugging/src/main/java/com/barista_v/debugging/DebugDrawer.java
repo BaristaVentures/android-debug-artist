@@ -84,9 +84,17 @@ public class DebugDrawer implements OnCheckedChangeListener, Drawer.OnDrawerItem
     return this;
   }
 
-  public DebugDrawer withSpinnerItem(int id, String name, String[] options,
+  public DebugDrawer withSpinnerItem(int id, String name, String[] options, String selectedItem,
       SpinnerItemListener listener) {
-    mMenuDrawer.addItem(new SpinnerDrawerItem(id, options, listener)
+    mMenuDrawer.addItem(new SpinnerDrawerItem(id, options, listener, selectedItem)
+        .withMoreListeners(this)
+        .withName(name));
+    return this;
+  }
+
+  public DebugDrawer withSpinnerItem(int id, String name, String[] options, int selectedItem,
+      SpinnerItemListener listener) {
+    mMenuDrawer.addItem(new SpinnerDrawerItem(id, options, listener, selectedItem)
         .withMoreListeners(this)
         .withName(name));
     return this;
