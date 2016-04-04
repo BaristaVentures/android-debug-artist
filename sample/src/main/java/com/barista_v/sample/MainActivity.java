@@ -10,6 +10,7 @@ import com.barista_v.debugging.DebugDrawer;
 import com.barista_v.debugging.ViewServer;
 import com.barista_v.debugging.item.input.InputItemListener;
 import com.barista_v.debugging.item.phoenix.RestartListener;
+import com.barista_v.debugging.item.spinner.SpinnerDrawerItem;
 import com.barista_v.debugging.item.spinner.SpinnerItemListener;
 import com.jakewharton.scalpel.ScalpelFrameLayout;
 import java.util.LinkedHashMap;
@@ -32,9 +33,11 @@ public class MainActivity extends AppCompatActivity implements SpinnerItemListen
     ViewServer.get(this).addWindow(this);
     new DebugDrawer(MyApplication.sInstance, this)
         .withScalpelLayout((ScalpelFrameLayout) findViewById(R.id.scalpel))
-        .withInputItem(2, "Host", this)
+        .withDivider()
         .withRestartListener(this)
+        .withInputItem(2, "Host", this)
         .withSpinnerItem(1, "Spinner Value", hosts, this)
+        .withDivider()
         .withProperties(getProperties())
         .openDrawer();
   }
@@ -61,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements SpinnerItemListen
   }
 
   @Override
-  public void onItemClick(int itemId, CharSequence title) {
+  public void onSpinnerItemClick(SpinnerDrawerItem item, int itemId, CharSequence title) {
     Toast.makeText(this, "Selected: " + title, Toast.LENGTH_LONG).show();
   }
 

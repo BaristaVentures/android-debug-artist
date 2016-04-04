@@ -6,16 +6,20 @@ import android.view.MenuItem;
 import android.view.View;
 import com.barista_v.debugging.R;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SpinnerDrawerItem extends PrimaryDrawerItem implements View.OnClickListener,
     PopupMenu.OnMenuItemClickListener {
 
   final String[] mItems;
-  final SpinnerItemListener mSpinnerItemListener;
+  final List<SpinnerItemListener> mListeners;
 
-  public SpinnerDrawerItem(int id, String[] items, SpinnerItemListener spinnerItemListener) {
+  public SpinnerDrawerItem(int id, String[] items, final SpinnerItemListener spinnerItemListener) {
     mItems = items;
-    mSpinnerItemListener = spinnerItemListener;
+    mListeners = new ArrayList<SpinnerItemListener>() {{
+      add(spinnerItemListener);
+    }};
 
     withTag(id);
     withDescription(mItems[0]);
@@ -46,8 +50,15 @@ public class SpinnerDrawerItem extends PrimaryDrawerItem implements View.OnClick
   //<editor-fold desc="OnMenuItemClickListener">
   @Override
   public boolean onMenuItemClick(MenuItem item) {
-    mSpinnerItemListener.onItemClick((int) getTag(), item.getTitle());
+    for (int i = 0, length = mListeners.size(); i < length; i++) {
+      mListeners.get(i).onSpinnerItemClick(this, (int) getTag(), item.getTitle());
+    }
     return true;
   }
   //</editor-fold>
+
+  public SpinnerDrawerItem withMoreListeners(SpinnerItemListener listener) {
+    mListeners.add(listener);
+    return this;
+  }
 }

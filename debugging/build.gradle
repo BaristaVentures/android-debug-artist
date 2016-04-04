@@ -30,7 +30,7 @@ android {
 
 dependencies {
   compile deps.appCompat
-  compile('com.mikepenz:materialdrawer:5.1.3@aar') { transitive = true }
+  compile('com.mikepenz:materialdrawer:5.1.7@aar') { transitive = true }
 
   // Features
   compile 'com.squareup.leakcanary:leakcanary-android:1.4-beta1'
