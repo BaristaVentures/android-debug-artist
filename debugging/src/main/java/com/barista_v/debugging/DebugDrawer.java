@@ -277,10 +277,9 @@ public class DebugDrawer implements OnCheckedChangeListener, Drawer.OnDrawerItem
           public void onClick(DialogInterface dialog, int which) {
             if (mInputItemListener != null) {
               String inputText = entryView.getText().toString();
-              mInputItemListener.onOkClick((int) drawerItem.getTag(), inputText);
+              mInputItemListener.onInputOkClick((int) drawerItem.getTag(), inputText);
               drawerItem.withDescription(inputText);
               mMenuDrawer.updateItem(drawerItem);
-              Toast.makeText(activity, "Selected: " + inputText, Toast.LENGTH_LONG).show();
             }
           }
         }).show();

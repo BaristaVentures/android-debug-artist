@@ -1,7 +1,10 @@
 CHANGELOG
 ===============
 
-*V 0.2.3*
+*V 0.2.5*
+- toast after ok click on input item dialog. 
+
+*V 0.2.4*
 + Dont select default value for spinner item if is not found on options array.
 
 *V 0.2.3*

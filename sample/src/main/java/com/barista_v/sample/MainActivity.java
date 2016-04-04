@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements SpinnerItemListen
 
   //<editor-fold desc="InputItemListener">
   @Override
-  public void onOkClick(int itemId, String inputText) {
+  public void onInputOkClick(int itemId, String inputText) {
     Toast.makeText(this, inputText, Toast.LENGTH_LONG).show();
   }
   //</editor-fold>
