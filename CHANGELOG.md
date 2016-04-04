@@ -1,6 +1,12 @@
 CHANGELOG
 ===============
 
+*V 0.2.3*
++ Initial selected item for spinner item.
+
+*V 0.2.2*
+F selected spinner item not reflected on UI. 
+
 *V 0.2.1*
 + Input item with `withInputItem(...)`
 
