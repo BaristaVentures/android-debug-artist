@@ -28,7 +28,11 @@ public class SpinnerDrawerItem extends PrimaryDrawerItem implements View.OnClick
     }};
 
     withTag(id);
-    withDescription(mItems[selectedItemIndex]);
+
+    if (selectedItemIndex != -1) {
+      withDescription(mItems[selectedItemIndex]);
+    }
+
     withIcon(R.drawable.ic_arrow_drop_down_grey_700_24dp);
   }
 

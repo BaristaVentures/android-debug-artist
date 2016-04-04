@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity implements SpinnerItemListen
         .withRestartListener(this)
         .withInputItem(2, "Host", this)
         .withSpinnerItem(1, "Spinner with item selected by index", hosts, 0, this)
-        .withSpinnerItem(3, "Spinner with 2nd item selected", hosts, "Value 2", this)
+        .withSpinnerItem(3, "Spinner with 2nd item selected", hosts, "Value", this)
         .withDivider()
         .withProperties(getProperties())
         .openDrawer();

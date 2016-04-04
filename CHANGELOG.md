@@ -2,6 +2,9 @@ CHANGELOG
 ===============
 
 *V 0.2.3*
++ Dont select default value for spinner item if is not found on options array.
+
+*V 0.2.3*
 + Initial selected item for spinner item.
 
 *V 0.2.2*
