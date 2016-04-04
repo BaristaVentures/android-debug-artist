@@ -43,7 +43,8 @@ import java.util.Map;
  *
  * To add dynamic actions check "debugDrawer.with*" methods.
  */
-public class DebugDrawer implements OnCheckedChangeListener, Drawer.OnDrawerItemClickListener {
+public class DebugDrawer implements OnCheckedChangeListener, Drawer.OnDrawerItemClickListener,
+    SpinnerItemListener {
   WeakReference<AppCompatActivity> mActivityViewWeakReference;
   WeakReference<Application> mApplicationWeakReference;
   private Drawer mMenuDrawer;
@@ -60,16 +61,6 @@ public class DebugDrawer implements OnCheckedChangeListener, Drawer.OnDrawerItem
         .withDrawerGravity(Gravity.END)
         .build();
 
-    mMenuDrawer.addItem(new PrimaryDrawerItem().withName("Restart App")
-        .withIdentifier(R.id.drawer_dev_item_phoenix_app)
-        .withIcon(R.drawable.ic_gavel_grey_700_18dp));
-
-    mMenuDrawer.addItem(new PrimaryDrawerItem().withName("Restart Activity")
-        .withIdentifier(R.id.drawer_dev_item_phoenix_activity)
-        .withIcon(R.drawable.ic_rowing_grey_700_18dp));
-
-    mMenuDrawer.addItem(new DividerDrawerItem());
-
     addSwitchDrawerItem("Leak Canary", R.id.drawer_dev_item_leak);
     addSwitchDrawerItem("Stetho (Chrome debug bridge)", R.id.drawer_dev_item_stetho);
     addSwitchDrawerItem("Lynks (logs)", R.id.drawer_dev_item_lynks);
@@ -83,7 +74,6 @@ public class DebugDrawer implements OnCheckedChangeListener, Drawer.OnDrawerItem
   }
 
   public DebugDrawer withProperties(Map<String, String> properties) {
-    mMenuDrawer.addItem(new DividerDrawerItem());
     for (Map.Entry<String, String> entry : properties.entrySet()) {
       mMenuDrawer.addItem(new SecondaryDrawerItem().withName(entry.getKey())
           .withIcon(R.drawable.ic_info_grey_700_24dp)
@@ -96,8 +86,14 @@ public class DebugDrawer implements OnCheckedChangeListener, Drawer.OnDrawerItem
 
   public DebugDrawer withSpinnerItem(int id, String name, String[] options,
       SpinnerItemListener listener) {
-    mMenuDrawer.addItems(new DividerDrawerItem(),
-        new SpinnerDrawerItem(id, options, listener).withName(name));
+    mMenuDrawer.addItem(new SpinnerDrawerItem(id, options, listener)
+        .withMoreListeners(this)
+        .withName(name));
+    return this;
+  }
+
+  public DebugDrawer withDivider() {
+    mMenuDrawer.addItem(new DividerDrawerItem());
     return this;
   }
 
@@ -107,7 +103,7 @@ public class DebugDrawer implements OnCheckedChangeListener, Drawer.OnDrawerItem
   public DebugDrawer withInputItem(int id, String name, InputItemListener inputItemListener) {
     mInputItemListener = inputItemListener;
 
-    mMenuDrawer.addItems(new DividerDrawerItem(),
+    mMenuDrawer.addItem(
         new PrimaryDrawerItem().withName(String.format("Enter value for '%s'", name))
             .withTag(id)
             .withIcon(R.drawable.ic_textsms_grey_700_18dp)
@@ -125,6 +121,16 @@ public class DebugDrawer implements OnCheckedChangeListener, Drawer.OnDrawerItem
 
   public DebugDrawer withRestartListener(RestartListener restartListener) {
     mRestartListener = restartListener;
+
+    mMenuDrawer.addItems(
+        new PrimaryDrawerItem().withName("Restart App")
+            .withIdentifier(R.id.drawer_dev_item_phoenix_app)
+            .withIcon(R.drawable.ic_gavel_grey_700_18dp),
+
+        new PrimaryDrawerItem().withName("Restart Activity")
+            .withIdentifier(R.id.drawer_dev_item_phoenix_activity)
+            .withIcon(R.drawable.ic_rowing_grey_700_18dp));
+
     return this;
   }
 
@@ -265,10 +271,17 @@ public class DebugDrawer implements OnCheckedChangeListener, Drawer.OnDrawerItem
               String inputText = entryView.getText().toString();
               mInputItemListener.onOkClick((int) drawerItem.getTag(), inputText);
               drawerItem.withDescription(inputText);
+              mMenuDrawer.updateItem(drawerItem);
               Toast.makeText(activity, "Selected: " + inputText, Toast.LENGTH_LONG).show();
             }
           }
         }).show();
+  }
+
+  @Override
+  public void onSpinnerItemClick(SpinnerDrawerItem item, int itemId, CharSequence title) {
+    item.withDescription(title.toString());
+    mMenuDrawer.updateItem(item);
   }
 }
 
