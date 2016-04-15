@@ -269,8 +269,8 @@ public class DebugDrawer implements OnCheckedChangeListener, Drawer.OnDrawerItem
     LayoutInflater factory = LayoutInflater.from(activity);
     final EditText entryView = (EditText) factory.inflate(R.layout.input_view, null);
 
-    new AlertDialog.Builder(activity).
-        setTitle(drawerItem.getName().toString())
+    new AlertDialog.Builder(activity)
+        .setTitle(drawerItem.getName().toString())
         .setView(entryView)
         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
           @Override
