@@ -36,7 +36,8 @@ public class MainActivity extends AppCompatActivity implements SpinnerItemListen
         .withDivider()
         .withRestartListener(this)
         .withInputItem(2, "Host", this)
-        .withSpinnerItem(1, "Spinner Value", hosts, this)
+        .withSpinnerItem(1, "Spinner with item selected by index", hosts, 0, this)
+        .withSpinnerItem(3, "Spinner with 2nd item selected", hosts, "Value", this)
         .withDivider()
         .withProperties(getProperties())
         .openDrawer();
@@ -82,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements SpinnerItemListen
 
   //<editor-fold desc="InputItemListener">
   @Override
-  public void onOkClick(int itemId, String inputText) {
+  public void onInputOkClick(int itemId, String inputText) {
     Toast.makeText(this, inputText, Toast.LENGTH_LONG).show();
   }
   //</editor-fold>

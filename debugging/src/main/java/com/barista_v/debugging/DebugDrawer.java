@@ -84,9 +84,17 @@ public class DebugDrawer implements OnCheckedChangeListener, Drawer.OnDrawerItem
     return this;
   }
 
-  public DebugDrawer withSpinnerItem(int id, String name, String[] options,
+  public DebugDrawer withSpinnerItem(int id, String name, String[] options, String selectedItem,
       SpinnerItemListener listener) {
-    mMenuDrawer.addItem(new SpinnerDrawerItem(id, options, listener)
+    mMenuDrawer.addItem(new SpinnerDrawerItem(id, options, listener, selectedItem)
+        .withMoreListeners(this)
+        .withName(name));
+    return this;
+  }
+
+  public DebugDrawer withSpinnerItem(int id, String name, String[] options, int selectedItem,
+      SpinnerItemListener listener) {
+    mMenuDrawer.addItem(new SpinnerDrawerItem(id, options, listener, selectedItem)
         .withMoreListeners(this)
         .withName(name));
     return this;
@@ -261,18 +269,17 @@ public class DebugDrawer implements OnCheckedChangeListener, Drawer.OnDrawerItem
     LayoutInflater factory = LayoutInflater.from(activity);
     final EditText entryView = (EditText) factory.inflate(R.layout.input_view, null);
 
-    new AlertDialog.Builder(activity).
-        setTitle(drawerItem.getName().toString())
+    new AlertDialog.Builder(activity)
+        .setTitle(drawerItem.getName().toString())
         .setView(entryView)
         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
           @Override
           public void onClick(DialogInterface dialog, int which) {
             if (mInputItemListener != null) {
               String inputText = entryView.getText().toString();
-              mInputItemListener.onOkClick((int) drawerItem.getTag(), inputText);
+              mInputItemListener.onInputOkClick((int) drawerItem.getTag(), inputText);
               drawerItem.withDescription(inputText);
               mMenuDrawer.updateItem(drawerItem);
-              Toast.makeText(activity, "Selected: " + inputText, Toast.LENGTH_LONG).show();
             }
           }
         }).show();
