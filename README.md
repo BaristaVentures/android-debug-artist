@@ -29,7 +29,7 @@ dependencies {
 Check sample module to see how it can be used.
 
 ## Debug Drawer: add a debug drawer with info about the app and some debugging tools.
-![Image2](img/debug_drawer.png)
+![Image2](img/debug_drawer.gif)
 
 - To use `Restart App` and `Restart Activity` you should add `android.intent.category.DEFAULT` to
 the activity you want to launch after rebirth.
