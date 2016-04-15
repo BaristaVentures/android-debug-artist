@@ -15,14 +15,24 @@ public class SpinnerDrawerItem extends PrimaryDrawerItem implements View.OnClick
   final String[] mItems;
   final List<SpinnerItemListener> mListeners;
 
-  public SpinnerDrawerItem(int id, String[] items, final SpinnerItemListener spinnerItemListener) {
+  public SpinnerDrawerItem(int id, String[] items, final SpinnerItemListener spinnerItemListener,
+      String selectedItem) {
+    this(id, items, spinnerItemListener, java.util.Arrays.asList(items).indexOf(selectedItem));
+  }
+
+  public SpinnerDrawerItem(int id, String[] items, final SpinnerItemListener spinnerItemListener,
+      int selectedItemIndex) {
     mItems = items;
     mListeners = new ArrayList<SpinnerItemListener>() {{
       add(spinnerItemListener);
     }};
 
     withTag(id);
-    withDescription(mItems[0]);
+
+    if (selectedItemIndex != -1) {
+      withDescription(mItems[selectedItemIndex]);
+    }
+
     withIcon(R.drawable.ic_arrow_drop_down_grey_700_24dp);
   }
 
