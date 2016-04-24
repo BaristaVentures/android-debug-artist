@@ -1,8 +1,12 @@
 buildscript {
   ext {
-    versions = [supportLibrary: "23.2.1"]
+    versions = [supportLibrary: "23.2.1",
+                kotlin        : "1.0.1-2"]
 
-    deps = [appCompat: "com.android.support:appcompat-v7:${versions.supportLibrary}"]
+    plugs = [kotlin: "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlin"]
+
+    deps = [appCompat   : "com.android.support:appcompat-v7:$versions.supportLibrary",
+            kotlinStdLib: "org.jetbrains.kotlin:kotlin-stdlib:$versions.kotlin"]
 
     setup = [buildTools: "23.0.2", compileSdk: 23, minSdk: 15, targetSdk: 23]
   }

@@ -2,8 +2,12 @@ buildscript {
   repositories {
     jcenter()
   }
+  dependencies {
+    classpath plugs.kotlin
+  }
 }
 apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
 
 android {
   compileSdkVersion setup.compileSdk
@@ -26,11 +30,18 @@ android {
   lintOptions {
     abortOnError false
   }
+
+  // Kotlin
+  sourceSets {
+    main.java.srcDirs += 'src/main/kotlin'
+  }
 }
 
 dependencies {
   compile deps.appCompat
-  compile('com.mikepenz:materialdrawer:5.1.7@aar') { transitive = true }
+  compile deps.kotlinStdLib
+  
+  compile('com.mikepenz:materialdrawer:5.2.1@aar') { transitive = true }
 
   // Features
   compile 'com.squareup.leakcanary:leakcanary-android:1.4-beta1'
