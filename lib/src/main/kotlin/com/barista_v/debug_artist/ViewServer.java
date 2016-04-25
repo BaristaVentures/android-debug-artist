@@ -1,4 +1,4 @@
-package com.barista_v.debugging;
+package com.barista_v.debug_artist;
 
 import android.app.Activity;
 import android.content.Context;
