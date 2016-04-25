@@ -1,7 +1,10 @@
 CHANGELOG
 ===============
 
-*V 0.2.5*
+*V 0.3.0*
+= Rename to Debug Artist.
+
+*V 0.2.5 (DEPRECATED)*
 - toast after ok click on input item dialog. 
 
 *V 0.2.4*
