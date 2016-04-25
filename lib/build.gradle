@@ -16,8 +16,8 @@ android {
   defaultConfig {
     minSdkVersion setup.minSdk
     targetSdkVersion setup.targetSdk
-    versionCode 14
-    versionName "0.2.5"
+    versionCode VERSION_CODE as Integer
+    versionName VERSION_NAME
     consumerProguardFiles 'proguard-rules.pro'
   }
   buildTypes {

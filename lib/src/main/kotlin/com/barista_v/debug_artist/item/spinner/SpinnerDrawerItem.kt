@@ -1,9 +1,9 @@
-package com.barista_v.debugging.item.spinner
+package com.barista_v.debug_artist.item.spinner
 
 import android.support.v7.widget.PopupMenu
 import android.view.MenuItem
 import android.view.View
-import com.barista_v.debugging.R
+import com.barista_v.debug_artist.R
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem
 
 open class SpinnerDrawerItem(id: Int,

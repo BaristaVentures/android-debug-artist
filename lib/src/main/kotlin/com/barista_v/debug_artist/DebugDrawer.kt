@@ -1,4 +1,4 @@
-package com.barista_v.debugging
+package com.barista_v.debug_artist
 
 import android.app.Application
 import android.support.v7.app.AlertDialog
@@ -11,10 +11,10 @@ import android.view.View
 import android.widget.CompoundButton
 import android.widget.EditText
 import android.widget.Toast
-import com.barista_v.debugging.item.input.InputItemListener
-import com.barista_v.debugging.item.phoenix.RestartListener
-import com.barista_v.debugging.item.spinner.SpinnerDrawerItem
-import com.barista_v.debugging.item.spinner.SpinnerItemListener
+import com.barista_v.debug_artist.item.input.InputItemListener
+import com.barista_v.debug_artist.item.phoenix.RestartListener
+import com.barista_v.debug_artist.item.spinner.SpinnerDrawerItem
+import com.barista_v.debug_artist.item.spinner.SpinnerItemListener
 import com.facebook.stetho.Stetho
 import com.github.pedrovgs.lynx.LynxActivity
 import com.jakewharton.processphoenix.ProcessPhoenix
