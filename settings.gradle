@@ -1,1 +1,1 @@
-include ':debugging', ':sample'
+include ':lib', ':sample'
