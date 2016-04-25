@@ -43,14 +43,14 @@ repositories {
 }
 
 dependencies {
-  devCompile 'com.barista_v:debugging:<version>@aar'
+  devCompile 'com.barista_v:debug_artist:<version>@aar'
 }
 ```
 
 
 ## Publish
 
-1. Check `gradle.properties` and `debugging/gradle.properties` for POM setup.
+1. Check `gradle.properties` and `lib/gradle.properties` for POM setup.
 1. Run: `scripts/publish.sh`
 
 ## Using

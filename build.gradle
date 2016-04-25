@@ -1,5 +1,10 @@
 buildscript {
   ext {
+    setup = [buildTools: "23.0.2",
+             compileSdk: 23,
+             minSdk    : 15,
+             targetSdk : 23]
+
     versions = [supportLibrary: "23.2.1",
                 kotlin        : "1.0.1-2"]
 
@@ -8,7 +13,6 @@ buildscript {
     deps = [appCompat   : "com.android.support:appcompat-v7:$versions.supportLibrary",
             kotlinStdLib: "org.jetbrains.kotlin:kotlin-stdlib:$versions.kotlin"]
 
-    setup = [buildTools: "23.0.2", compileSdk: 23, minSdk: 15, targetSdk: 23]
   }
 
   repositories {
@@ -27,4 +31,10 @@ allprojects {
 
 task clean(type: Delete) {
   delete rootProject.buildDir
+}
+
+allprojects {
+  tasks.withType(Javadoc) {
+    options.addStringOption('-x androidJavadocs')
+  }
 }
