@@ -1,4 +1,4 @@
-# Debug Jedi
+# Debug Artist
 
 ![Image](img/android.gif)
 
