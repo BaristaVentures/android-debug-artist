@@ -18,13 +18,7 @@ android {
     targetSdkVersion setup.targetSdk
     versionCode VERSION_CODE as Integer
     versionName VERSION_NAME
-    consumerProguardFiles 'proguard-rules.pro'
-  }
-  buildTypes {
-    release {
-      minifyEnabled false
-      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-    }
+    consumerProguardFiles 'rules.pro'
   }
 
   lintOptions {
@@ -40,7 +34,7 @@ android {
 dependencies {
   compile deps.appCompat
   compile deps.kotlinStdLib
-  
+
   compile('com.mikepenz:materialdrawer:5.2.1@aar') { transitive = true }
 
   // Features
