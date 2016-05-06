@@ -1,11 +1,11 @@
 buildscript {
   ext {
-    setup = [buildTools: "23.0.2",
+    setup = [buildTools: "23.0.3",
              compileSdk: 23,
              minSdk    : 15,
              targetSdk : 23]
 
-    versions = [supportLibrary: "23.2.1",
+    versions = [supportLibrary: "23.3.0",
                 kotlin        : "1.0.1-2"]
 
     plugs = [kotlin: "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlin"]
@@ -19,7 +19,7 @@ buildscript {
     jcenter()
   }
   dependencies {
-    classpath 'com.android.tools.build:gradle:2.0.0'
+    classpath 'com.android.tools.build:gradle:2.1.0'
   }
 }
 
