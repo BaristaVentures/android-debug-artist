@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## V 0.5.1
+- Update kotlin 1.0.2
+- Support library 23.4.0
+
 ## V 0.3.0
 + proguard setup
 
