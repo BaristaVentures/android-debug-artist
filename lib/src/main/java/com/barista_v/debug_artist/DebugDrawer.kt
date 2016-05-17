@@ -58,7 +58,7 @@ class DebugDrawer(application: Application, activity: AppCompatActivity) : OnChe
 
   fun withAllFeatures(): DebugDrawer {
     return this.withLeakCanarySwitch(true)
-        .withLynksSwitch()
+        .withLynksButton()
         .withPicassoLogsSwitch()
         .withStethoSwitch()
   }
@@ -73,11 +73,6 @@ class DebugDrawer(application: Application, activity: AppCompatActivity) : OnChe
     return this
   }
 
-  fun withLynksSwitch(): DebugDrawer {
-    addSwitchDrawerItem("Lynks (logs)", R.id.drawer_dev_item_lynks)
-    return this
-  }
-
   fun withPicassoLogsSwitch(): DebugDrawer {
     addSwitchDrawerItem("Picasso Logs", R.id.drawer_dev_item_picasso)
     return this
@@ -88,6 +83,14 @@ class DebugDrawer(application: Application, activity: AppCompatActivity) : OnChe
       mWeakScalpelLayout = WeakReference(layout)
       addSwitchDrawerItem("Scalpel", R.id.drawer_dev_item_scalpel)
     }
+    return this
+  }
+
+  fun withLynksButton(): DebugDrawer {
+    mMenuDrawer.addItem(PrimaryDrawerItem().withName("Lynks (Logcat)")
+        .withIdentifier(R.id.drawer_dev_item_lynks.toLong())
+        .withIcon(R.drawable.ic_android_grey_700_18dp))
+
     return this
   }
 
@@ -173,15 +176,14 @@ class DebugDrawer(application: Application, activity: AppCompatActivity) : OnChe
         }
       }
       R.id.drawer_dev_item_stetho.toLong() -> {
-        showToast("Stetho cant be disabled. Check: chrome://inspect")
-        Stetho.initializeWithDefaults(activity.applicationContext)
+        showToast("Check: chrome://inspect")
+        Stetho.initializeWithDefaults(activity)
       }
       R.id.drawer_dev_item_leak.toLong() -> {
         showToast("Leak Canary cant be disabled.")
         LeakCanary.install(application)
       }
       R.id.drawer_dev_item_lynks.toLong() -> {
-        buttonView.isChecked = false
         activity.startActivity(LynxActivity.getIntent(activity.applicationContext))
       }
       R.id.drawer_dev_item_picasso.toLong() -> {
