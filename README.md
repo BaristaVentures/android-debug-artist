@@ -40,6 +40,7 @@ Features:
 - [Process Phoenix](https://github.com/JakeWharton/ProcessPhoenix)
 - Custom spinners: used sometimes to select from a list of hosts.
 - Custom text input fields: used sometimes to set the app host.
+- Custom map of properties: map of title -> content that allow you to show  useful info about the app like version, actual host, flavor, etc...
 
 * ViewServer: helps to debug layouts
 
