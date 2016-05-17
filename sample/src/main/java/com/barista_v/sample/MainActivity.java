@@ -29,17 +29,22 @@ public class MainActivity extends AppCompatActivity implements SpinnerItemListen
       setSupportActionBar(toolbar);
     }
 
-    String[] hosts = new String[] { "Value 1", "Value 2" };
     ViewServer.get(this).addWindow(this);
+
+    String[] hosts = new String[] { "Value 1", "Value 2" };
     new DebugDrawer(MyApplication.sInstance, this)
-        .withScalpelLayout((ScalpelFrameLayout) findViewById(R.id.scalpel))
+        .withScalpelSwitch((ScalpelFrameLayout) findViewById(R.id.scalpel))
+        .withLeakCanarySwitch(true)
+        .withPicassoLogsSwitch()
+        .withStethoSwitch()
         .withDivider()
-        .withRestartListener(this)
+        .withLynksButton()
+        .withPhoenixRestartButtons(this)
+        .withDivider()
         .withInputItem(2, "Host", this)
         .withSpinnerItem(1, "Spinner with item selected by index", hosts, 0, this)
-        .withSpinnerItem(3, "Spinner with 2nd item selected", hosts, "Value", this)
         .withDivider()
-        .withProperties(getProperties())
+        .withInfoProperties(getProperties())
         .openDrawer();
   }
 

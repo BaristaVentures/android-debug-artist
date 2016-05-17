@@ -51,25 +51,60 @@ class DebugDrawer(application: Application, activity: AppCompatActivity) : OnChe
     mMenuDrawer = DrawerBuilder(activity).withTranslucentStatusBar(true)
         .withDrawerGravity(Gravity.END)
         .build()
-
-    addSwitchDrawerItem("Leak Canary", R.id.drawer_dev_item_leak)
-    addSwitchDrawerItem("Stetho (Chrome debug bridge)", R.id.drawer_dev_item_stetho)
-    addSwitchDrawerItem("Lynks (logs)", R.id.drawer_dev_item_lynks)
-    addSwitchDrawerItem("Picasso Logs", R.id.drawer_dev_item_picasso)
-
-    mMenuDrawer.onDrawerItemClickListener = this
+        .apply { onDrawerItemClickListener = this@DebugDrawer }
   }
 
   fun openDrawer() = mMenuDrawer.openDrawer()
 
-  fun withProperties(properties: Map<String, String>): DebugDrawer {
-    properties.entries.forEach {
-      mMenuDrawer.addItem(SecondaryDrawerItem()
-          .withName(it.key)
-          .withIcon(R.drawable.ic_info_grey_700_24dp)
-          .withDescription(it.value)
-          .withIdentifier(R.id.drawer_dev_item_info.toLong()))
+  fun withAllFeatures(): DebugDrawer {
+    return this.withLeakCanarySwitch(true)
+        .withLynksButton()
+        .withPicassoLogsSwitch()
+        .withStethoSwitch()
+  }
+
+  fun withLeakCanarySwitch(checked: Boolean = true): DebugDrawer {
+    addSwitchDrawerItem("Leak Canary", R.id.drawer_dev_item_leak).withChecked(checked)
+    return this
+  }
+
+  fun withStethoSwitch(): DebugDrawer {
+    addSwitchDrawerItem("Stetho (Chrome debug bridge)", R.id.drawer_dev_item_stetho)
+    return this
+  }
+
+  fun withPicassoLogsSwitch(): DebugDrawer {
+    addSwitchDrawerItem("Picasso Logs", R.id.drawer_dev_item_picasso)
+    return this
+  }
+
+  fun withScalpelSwitch(layout: ScalpelFrameLayout?): DebugDrawer {
+    if (layout != null) {
+      mWeakScalpelLayout = WeakReference(layout)
+      addSwitchDrawerItem("Scalpel", R.id.drawer_dev_item_scalpel)
     }
+    return this
+  }
+
+  fun withLynksButton(): DebugDrawer {
+    mMenuDrawer.addItem(PrimaryDrawerItem().withName("Lynks (Logcat)")
+        .withIdentifier(R.id.drawer_dev_item_lynks.toLong())
+        .withIcon(R.drawable.ic_android_grey_700_18dp))
+
+    return this
+  }
+
+  fun withPhoenixRestartButtons(restartListener: RestartListener): DebugDrawer {
+    mRestartListener = restartListener
+
+    mMenuDrawer.addItems(
+        PrimaryDrawerItem().withName("Restart App")
+            .withIdentifier(R.id.drawer_dev_item_phoenix_app.toLong())
+            .withIcon(R.drawable.ic_gavel_grey_700_18dp),
+
+        PrimaryDrawerItem().withName("Restart Activity")
+            .withIdentifier(R.id.drawer_dev_item_phoenix_activity.toLong())
+            .withIcon(R.drawable.ic_rowing_grey_700_18dp))
 
     return this
   }
@@ -90,11 +125,6 @@ class DebugDrawer(application: Application, activity: AppCompatActivity) : OnChe
     return this
   }
 
-  fun withDivider(): DebugDrawer {
-    mMenuDrawer.addItem(DividerDrawerItem())
-    return this
-  }
-
   /**
    * Add an item that shows an input dialog.
    */
@@ -110,25 +140,19 @@ class DebugDrawer(application: Application, activity: AppCompatActivity) : OnChe
     return this
   }
 
-  fun withScalpelLayout(layout: ScalpelFrameLayout?): DebugDrawer {
-    if (layout != null) {
-      mWeakScalpelLayout = WeakReference(layout)
-      addSwitchDrawerItem("Scalpel", R.id.drawer_dev_item_scalpel)
-    }
+  fun withDivider(): DebugDrawer {
+    mMenuDrawer.addItem(DividerDrawerItem())
     return this
   }
 
-  fun withRestartListener(restartListener: RestartListener): DebugDrawer {
-    mRestartListener = restartListener
-
-    mMenuDrawer.addItems(
-        PrimaryDrawerItem().withName("Restart App")
-            .withIdentifier(R.id.drawer_dev_item_phoenix_app.toLong())
-            .withIcon(R.drawable.ic_gavel_grey_700_18dp),
-
-        PrimaryDrawerItem().withName("Restart Activity")
-            .withIdentifier(R.id.drawer_dev_item_phoenix_activity.toLong())
-            .withIcon(R.drawable.ic_rowing_grey_700_18dp))
+  fun withInfoProperties(properties: Map<String, String>): DebugDrawer {
+    properties.entries.forEach {
+      mMenuDrawer.addItem(SecondaryDrawerItem()
+          .withName(it.key)
+          .withIcon(R.drawable.ic_info_grey_700_24dp)
+          .withDescription(it.value)
+          .withIdentifier(R.id.drawer_dev_item_info.toLong()))
+    }
 
     return this
   }
@@ -152,25 +176,24 @@ class DebugDrawer(application: Application, activity: AppCompatActivity) : OnChe
         }
       }
       R.id.drawer_dev_item_stetho.toLong() -> {
-        showDialog("Stetho cant be disabled. Check: chrome://inspect")
-        Stetho.initializeWithDefaults(activity.applicationContext)
+        showToast("Check: chrome://inspect")
+        Stetho.initializeWithDefaults(activity)
       }
       R.id.drawer_dev_item_leak.toLong() -> {
-        showDialog("Leak Canary cant be disabled.")
+        showToast("Leak Canary cant be disabled.")
         LeakCanary.install(application)
       }
       R.id.drawer_dev_item_lynks.toLong() -> {
-        buttonView.isChecked = false
         activity.startActivity(LynxActivity.getIntent(activity.applicationContext))
       }
       R.id.drawer_dev_item_picasso.toLong() -> {
-        showDialog("Picasso logs cant be disabled.")
+        showToast("Picasso logs cant be disabled.")
         val picassoStats = Picasso.with(activity).apply {
           setIndicatorsEnabled(true)
           isLoggingEnabled = true
         }.snapshot
 
-        showDialog("Log and Indicators enabled: " +
+        showToast("Log and Indicators enabled: " +
             "\ngreen (memory, best performance)\n" +
             " blue (disk, good performance)\n" +
             " red (network, worst performance)." +
@@ -189,7 +212,7 @@ class DebugDrawer(application: Application, activity: AppCompatActivity) : OnChe
     when (drawerItem.identifier) {
       R.id.drawer_dev_item_info.toLong() -> (drawerItem as SecondaryDrawerItem).apply {
         withSetSelected(false)
-        showDialog(description.text)
+        showToast(description.text)
       }
       R.id.drawer_dev_item_phoenix_activity.toLong() -> restartActivity()
       R.id.drawer_dev_item_phoenix_app.toLong() -> restartApp()
@@ -200,14 +223,15 @@ class DebugDrawer(application: Application, activity: AppCompatActivity) : OnChe
   }
   //</editor-fold>
 
-  private fun showDialog(dialog: String) = mActivityWeakReference.get()?.let {
+  private fun showToast(dialog: String) = mActivityWeakReference.get()?.let {
     Toast.makeText(it, dialog, Toast.LENGTH_LONG).show()
   }
 
-  private fun addSwitchDrawerItem(text: String, id: Int) {
+  private fun addSwitchDrawerItem(text: String, id: Int): SwitchDrawerItem {
     val item = SwitchDrawerItem().withName(text).withIdentifier(id.toLong())
     item.withOnCheckedChangeListener(this)
     mMenuDrawer.addItem(item)
+    return item
   }
 
   fun restartApp() = mApplicationWeakReference.get()?.let {
