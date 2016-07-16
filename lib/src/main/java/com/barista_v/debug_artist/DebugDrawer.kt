@@ -58,9 +58,10 @@ class DebugDrawer(application: Application, activity: AppCompatActivity) : OnChe
 
   fun withAllFeatures(): DebugDrawer {
     return this.withLeakCanarySwitch(true)
-        .withLynksButton()
         .withPicassoLogsSwitch()
         .withStethoSwitch()
+        .withDivider()
+        .withLynksButton()
   }
 
   fun withLeakCanarySwitch(checked: Boolean = true): DebugDrawer {
