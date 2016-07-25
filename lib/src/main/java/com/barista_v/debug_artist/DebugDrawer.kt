@@ -50,11 +50,24 @@ class DebugDrawer(application: Application, activity: AppCompatActivity) : OnChe
 
     mMenuDrawer = DrawerBuilder(activity).withTranslucentStatusBar(true)
         .withDrawerGravity(Gravity.END)
+        .withShowDrawerOnFirstLaunch(true)
         .build()
         .apply { onDrawerItemClickListener = this@DebugDrawer }
+
+    mMenuDrawer.addItems(
+        PrimaryDrawerItem()
+            .withName("Q&A Module")
+            .withDescription("Drag from right to left to open")
+            .withSelectable(false)
+            .withEnabled(false),
+        DividerDrawerItem())
+
   }
 
-  fun openDrawer() = mMenuDrawer.openDrawer()
+  fun openDrawer(): DebugDrawer {
+    mMenuDrawer.openDrawer()
+    return this
+  }
 
   fun withAllFeatures(): DebugDrawer {
     return this.withLeakCanarySwitch(true)
