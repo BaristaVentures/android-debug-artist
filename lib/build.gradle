@@ -1,13 +1,16 @@
 buildscript {
   repositories {
-    jcenter()
+    jcenter() // gradle-versions-plugin
   }
   dependencies {
     classpath plugs.kotlin
+    classpath plugs.gradleVersions
   }
 }
+
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
+apply plugin: 'com.github.ben-manes.versions'
 
 android {
   compileSdkVersion setup.compileSdk
@@ -27,22 +30,22 @@ android {
 
   // Kotlin
   sourceSets {
-//    main.kotlin.srcDirs += 'src/main/kotlin'
-//    main.java.srcDirs += 'src/main/java'
+    //    main.kotlin.srcDirs += 'src/main/kotlin'
+    //    main.java.srcDirs += 'src/main/java'
   }
 }
 
 dependencies {
-  compile deps.appCompat
+  compile deps.supportLibraryCoreUtils
   compile deps.kotlinStdLib
 
-  compile('com.mikepenz:materialdrawer:5.2.1@aar') { transitive = true }
+  compile('com.mikepenz:materialdrawer:5.6.0@aar') { transitive = true }
 
   // Features
-  compile 'com.squareup.leakcanary:leakcanary-android:1.4-beta1'
+  compile 'com.squareup.leakcanary:leakcanary-android:1.4-beta2'
   compile 'com.squareup.picasso:picasso:2.5.2'
   compile 'com.jakewharton.scalpel:scalpel:1.1.2'
-  compile 'com.facebook.stetho:stetho-okhttp:1.3.0'
+  compile 'com.facebook.stetho:stetho-okhttp:1.3.1'
   compile 'com.github.pedrovgs:lynx:1.6'
   compile 'com.jakewharton:process-phoenix:1.0.2'
   compile 'nl.littlerobots.rxlint:rxlint:1.0'

@@ -50,26 +50,40 @@ class DebugDrawer(application: Application, activity: AppCompatActivity) : OnChe
 
     mMenuDrawer = DrawerBuilder(activity).withTranslucentStatusBar(true)
         .withDrawerGravity(Gravity.END)
+        .withShowDrawerOnFirstLaunch(true)
         .build()
         .apply { onDrawerItemClickListener = this@DebugDrawer }
+
+    mMenuDrawer.addItems(
+        PrimaryDrawerItem()
+            .withName("Q&A Module")
+            .withDescription("Drag from right to left to open")
+            .withSelectable(false)
+            .withEnabled(false),
+        DividerDrawerItem())
+
   }
 
-  fun openDrawer() = mMenuDrawer.openDrawer()
+  fun openDrawer(): DebugDrawer {
+    mMenuDrawer.openDrawer()
+    return this
+  }
 
   fun withAllFeatures(): DebugDrawer {
     return this.withLeakCanarySwitch(true)
-        .withLynksButton()
         .withPicassoLogsSwitch()
         .withStethoSwitch()
+        .withDivider()
+        .withLynksButton()
   }
 
   fun withLeakCanarySwitch(checked: Boolean = true): DebugDrawer {
-    addSwitchDrawerItem("Leak Canary", R.id.drawer_dev_item_leak).withChecked(checked)
+    addSwitchDrawerItem("Leak Canary - Memory Leaks", R.id.drawer_dev_item_leak).withChecked(checked)
     return this
   }
 
   fun withStethoSwitch(): DebugDrawer {
-    addSwitchDrawerItem("Stetho (Chrome debug bridge)", R.id.drawer_dev_item_stetho)
+    addSwitchDrawerItem("Stetho - Debug from Chrome)", R.id.drawer_dev_item_stetho)
     return this
   }
 
@@ -81,13 +95,13 @@ class DebugDrawer(application: Application, activity: AppCompatActivity) : OnChe
   fun withScalpelSwitch(layout: ScalpelFrameLayout?): DebugDrawer {
     if (layout != null) {
       mWeakScalpelLayout = WeakReference(layout)
-      addSwitchDrawerItem("Scalpel", R.id.drawer_dev_item_scalpel)
+      addSwitchDrawerItem("Scalpel - 3D layouts", R.id.drawer_dev_item_scalpel)
     }
     return this
   }
 
   fun withLynksButton(): DebugDrawer {
-    mMenuDrawer.addItem(PrimaryDrawerItem().withName("Lynks (Logcat)")
+    mMenuDrawer.addItem(PrimaryDrawerItem().withName("Lynks - Live Device Log")
         .withIdentifier(R.id.drawer_dev_item_lynks.toLong())
         .withIcon(R.drawable.ic_android_grey_700_18dp))
 
@@ -157,14 +171,12 @@ class DebugDrawer(application: Application, activity: AppCompatActivity) : OnChe
     return this
   }
 
-  //<editor-fold desc="OnCheckedChangeListener">
+  //<editor-fold desc="Select events">
+
   override fun onCheckedChanged(drawerItem: IDrawerItem<Any, RecyclerView.ViewHolder>,
                                 buttonView: CompoundButton, isChecked: Boolean) {
-    val activity = mActivityWeakReference.get()
-    val application = mApplicationWeakReference.get()
-    if (activity == null || application == null) {
-      return
-    }
+    val activity = mActivityWeakReference.get() ?: return
+    val application = mApplicationWeakReference.get() ?: return
 
     when (drawerItem.identifier) {
       R.id.drawer_dev_item_scalpel.toLong() -> {
@@ -176,15 +188,12 @@ class DebugDrawer(application: Application, activity: AppCompatActivity) : OnChe
         }
       }
       R.id.drawer_dev_item_stetho.toLong() -> {
-        showToast("Check: chrome://inspect")
+        showToast("On chrome open chrome://inspect")
         Stetho.initializeWithDefaults(activity)
       }
       R.id.drawer_dev_item_leak.toLong() -> {
         showToast("Leak Canary cant be disabled.")
         LeakCanary.install(application)
-      }
-      R.id.drawer_dev_item_lynks.toLong() -> {
-        activity.startActivity(LynxActivity.getIntent(activity.applicationContext))
       }
       R.id.drawer_dev_item_picasso.toLong() -> {
         showToast("Picasso logs cant be disabled.")
@@ -204,9 +213,7 @@ class DebugDrawer(application: Application, activity: AppCompatActivity) : OnChe
     }
 
   }
-  //</editor-fold>
 
-  //<editor-fold desc="OnDrawerItemSelectedListener">
   override fun onItemClick(view: View, position: Int,
                            drawerItem: IDrawerItem<Any, RecyclerView.ViewHolder>): Boolean {
     when (drawerItem.identifier) {
@@ -217,21 +224,23 @@ class DebugDrawer(application: Application, activity: AppCompatActivity) : OnChe
       R.id.drawer_dev_item_phoenix_activity.toLong() -> restartActivity()
       R.id.drawer_dev_item_phoenix_app.toLong() -> restartApp()
       R.id.drawer_dev_item_input.toLong() -> showInputDialog(drawerItem as PrimaryDrawerItem)
+      R.id.drawer_dev_item_lynks.toLong() -> mActivityWeakReference.get()?.apply {
+        startActivity(LynxActivity.getIntent(applicationContext))
+      }
     }
 
     return true
   }
+
+  override fun onSpinnerItemClick(item: SpinnerDrawerItem, itemId: Int, title: CharSequence) {
+    item.withDescription(title.toString())
+    mMenuDrawer.updateItem(item)
+  }
+
   //</editor-fold>
 
   private fun showToast(dialog: String) = mActivityWeakReference.get()?.let {
     Toast.makeText(it, dialog, Toast.LENGTH_LONG).show()
-  }
-
-  private fun addSwitchDrawerItem(text: String, id: Int): SwitchDrawerItem {
-    val item = SwitchDrawerItem().withName(text).withIdentifier(id.toLong())
-    item.withOnCheckedChangeListener(this)
-    mMenuDrawer.addItem(item)
-    return item
   }
 
   fun restartApp() = mApplicationWeakReference.get()?.let {
@@ -259,9 +268,12 @@ class DebugDrawer(application: Application, activity: AppCompatActivity) : OnChe
         }.show()
   }
 
-  override fun onSpinnerItemClick(item: SpinnerDrawerItem, itemId: Int, title: CharSequence) {
-    item.withDescription(title.toString())
-    mMenuDrawer.updateItem(item)
+  private fun addSwitchDrawerItem(text: String, id: Int): SwitchDrawerItem {
+    val item = SwitchDrawerItem().withName(text).withIdentifier(id.toLong())
+    item.withOnCheckedChangeListener(this)
+    mMenuDrawer.addItem(item)
+    return item
   }
+
 }
 

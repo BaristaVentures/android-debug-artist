@@ -32,6 +32,6 @@ android {
 }
 
 dependencies {
-  compile deps.appCompat
+  compile deps.supportLibraryCoreUtils
   compile project(':lib')
 }
