@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v 0.5.4
+- Update support lib 24.2.0, build tools 24.0.2, gradle 2.14.1.
+- Fix Lynks do nothing.
+
 ## v 0.5.3
 - Add menu
 - Start opened
