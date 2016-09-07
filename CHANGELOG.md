@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v 0.5.3
+- Add menu
+- Start opened
+- Support Libary 24.1.1
+- Kotlin 1.0.3
+
 ## V 0.5.2
 - Add features as optionals.
 
