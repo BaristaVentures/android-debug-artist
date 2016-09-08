@@ -24,8 +24,8 @@ open class SpinnerDrawerItem(id: Int,
     withIcon(R.drawable.ic_arrow_drop_down_grey_700_24dp)
   }
 
-  override fun bindView(viewHolder: ViewHolder?, payloads: MutableList<Any?>?) {
-    super.bindView(viewHolder, payloads)
+  override fun bindView(viewHolder: ViewHolder?) {
+    super.bindView(viewHolder)
     viewHolder?.itemView?.setOnClickListener(this)
   }
 

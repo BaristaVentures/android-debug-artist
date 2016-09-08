@@ -36,10 +36,10 @@ android {
 }
 
 dependencies {
-  compile deps.supportLibraryCoreUtils
+  compile deps.appCompat
   compile deps.kotlinStdLib
 
-  compile('com.mikepenz:materialdrawer:5.6.0@aar') { transitive = true }
+  compile('com.mikepenz:materialdrawer:5.3.6@aar') { transitive = true }
 
   // Features
   compile 'com.squareup.leakcanary:leakcanary-android:1.4-beta2'

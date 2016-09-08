@@ -5,14 +5,13 @@ buildscript {
              minSdk    : 15,
              targetSdk : 24]
 
-    versions = [supportLibrary: "24.2.0",
+    versions = [supportLibrary: "24.1.1",
                 kotlin        : "1.0.3"]
 
     plugs = [kotlin        : "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlin",
              gradleVersions: 'com.github.ben-manes:gradle-versions-plugin:0.13.0']
 
     deps = [appCompat              : "com.android.support:appcompat-v7:$versions.supportLibrary",
-            supportLibraryCoreUtils: "com.android.support:support-core-utils:$versions.supportLibrary",
             kotlinStdLib           : "org.jetbrains.kotlin:kotlin-stdlib:$versions.kotlin"]
   }
 

@@ -1,6 +1,10 @@
 # CHANGELOG
 
-## v 0.5.4
+## v 0.5.5
+- Downgrade support lib to 24.1.1.
+Last release broke anchor for Coordinator layouts and FAB.
+
+## v 0.5.4 (Broken)
 - Update support lib 24.2.0, build tools 24.0.2, gradle 2.14.1.
 - Fix Lynks do nothing.
 
