@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v 0.5.6
+- Update leak canary to `1.4`
+
 ## v 0.5.5
 - Downgrade support lib to 24.1.1.
 Last release broke anchor for Coordinator layouts and FAB.
@@ -11,7 +14,7 @@ Last release broke anchor for Coordinator layouts and FAB.
 ## v 0.5.3
 - Add menu
 - Start opened
-- Support Libary 24.1.1
+- Support Library 24.1.1
 - Kotlin 1.0.3
 
 ## V 0.5.2
