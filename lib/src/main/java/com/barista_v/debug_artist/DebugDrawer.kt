@@ -83,12 +83,12 @@ class DebugDrawer(application: Application, activity: AppCompatActivity) : OnChe
   }
 
   fun withStethoSwitch(): DebugDrawer {
-    addSwitchDrawerItem("Stetho - Debug from Chrome)", R.id.drawer_dev_item_stetho)
+    addSwitchDrawerItem("Stetho - Debug from Chrome", R.id.drawer_dev_item_stetho)
     return this
   }
 
   fun withPicassoLogsSwitch(): DebugDrawer {
-    addSwitchDrawerItem("Picasso Logs", R.id.drawer_dev_item_picasso)
+    addSwitchDrawerItem("Picasso Image Cache Logs", R.id.drawer_dev_item_picasso)
     return this
   }
 
