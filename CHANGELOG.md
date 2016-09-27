@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## v 0.5.7
+- Kotlin `1.0.4`
+- Update Stetho okhttp `1.4.1`
+
+
 ## v 0.5.6
 - Update leak canary to `1.4`
 
