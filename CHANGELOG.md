@@ -1,5 +1,9 @@
 # CHANGELOG
 
+# v 0.5.8
+- Fix LeakCanary setup.
+- Clean up
+
 ## v 0.5.7
 - Kotlin `1.0.4`
 - Update Stetho okhttp `1.4.1`
@@ -36,7 +40,7 @@ Last release broke anchor for Coordinator layouts and FAB.
 = Rename to Debug Artist.
 
 ## V 0.2.5 (DEPRECATED)
-- toast after ok click on input item dialog. 
+- toast after ok click on input item dialog.
 
 ## V 0.2.4
 + Dont select default value for spinner item if is not found on options array.
@@ -45,7 +49,7 @@ Last release broke anchor for Coordinator layouts and FAB.
 + Initial selected item for spinner item.
 
 ## V 0.2.2
-F selected spinner item not reflected on UI. 
+F selected spinner item not reflected on UI.
 
 ## V 0.2.1
 + Input item with `withInputItem(...)`
@@ -61,12 +65,12 @@ F selected spinner item not reflected on UI.
 ## V 0.1.7
 = min SDK version 15.
 
-## V 0.1.6 BROKEN BUILD 
+## V 0.1.6 BROKEN BUILD
 = Add scalpel layout with `.withScalpelLayout` instead of using interface.
 
 ## V 0.1.5
 + Clean Debugger init.
-+ Proguard setup. 
++ Proguard setup.
 
 ## V 0.1.2 && 0.1.3
 + Manifest with needed setup
