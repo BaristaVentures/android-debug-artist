@@ -1,6 +1,6 @@
 buildscript {
   ext {
-    setup = [buildTools: "24.0.2",
+    setup = [buildTools: "24.0.3",
              compileSdk: 24,
              minSdk    : 15,
              targetSdk : 24]
@@ -11,15 +11,15 @@ buildscript {
     plugs = [kotlin        : "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlin",
              gradleVersions: 'com.github.ben-manes:gradle-versions-plugin:0.13.0']
 
-    deps = [appCompat              : "com.android.support:appcompat-v7:$versions.supportLibrary",
-            kotlinStdLib           : "org.jetbrains.kotlin:kotlin-stdlib:$versions.kotlin"]
+    deps = [appCompat   : "com.android.support:appcompat-v7:$versions.supportLibrary",
+            kotlinStdLib: "org.jetbrains.kotlin:kotlin-stdlib:$versions.kotlin"]
   }
 
   repositories {
     jcenter()
   }
   dependencies {
-    classpath 'com.android.tools.build:gradle:2.2.0'
+    classpath 'com.android.tools.build:gradle:2.2.1'
   }
 }
 

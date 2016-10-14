@@ -42,7 +42,7 @@ dependencies {
   compile('com.mikepenz:materialdrawer:5.3.6@aar') { transitive = true }
 
   // Features
-  compile 'com.squareup.leakcanary:leakcanary-android:1.4'
+  compile 'com.squareup.leakcanary:leakcanary-android:1.5'
   compile 'com.squareup.picasso:picasso:2.5.2'
   compile 'com.jakewharton.scalpel:scalpel:1.1.2'
   compile 'com.facebook.stetho:stetho-okhttp:1.4.1'
