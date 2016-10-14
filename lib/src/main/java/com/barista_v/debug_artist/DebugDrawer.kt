@@ -36,25 +36,27 @@ import java.lang.ref.WeakReference
 
  * To add dynamic actions check "debugDrawer.with*" methods.
  */
-class DebugDrawer(application: Application, activity: AppCompatActivity) : OnCheckedChangeListener, Drawer.OnDrawerItemClickListener, SpinnerItemListener {
-  internal var mActivityWeakReference: WeakReference<AppCompatActivity>
-  internal var mApplicationWeakReference: WeakReference<Application>
-  private var mWeakScalpelLayout: WeakReference<ScalpelFrameLayout>? = null
-  private val mMenuDrawer: Drawer
-  private var mRestartListener: RestartListener? = null
-  private var mInputItemListener: InputItemListener? = null
+class DebugDrawer(application: Application, activity: AppCompatActivity) : OnCheckedChangeListener,
+    Drawer.OnDrawerItemClickListener, SpinnerItemListener {
+
+  private var activityWeakReference: WeakReference<AppCompatActivity>
+  private var applicationWeakReference: WeakReference<Application>
+  private var weakScalpelLayout: WeakReference<ScalpelFrameLayout>? = null
+  private val menuDrawer: Drawer
+  private var restartListener: RestartListener? = null
+  private var inputItemListener: InputItemListener? = null
 
   init {
-    mActivityWeakReference = WeakReference(activity)
-    mApplicationWeakReference = WeakReference(application)
+    activityWeakReference = WeakReference(activity)
+    applicationWeakReference = WeakReference(application)
 
-    mMenuDrawer = DrawerBuilder(activity).withTranslucentStatusBar(true)
+    menuDrawer = DrawerBuilder(activity).withTranslucentStatusBar(true)
         .withDrawerGravity(Gravity.END)
         .withShowDrawerOnFirstLaunch(true)
         .build()
         .apply { onDrawerItemClickListener = this@DebugDrawer }
 
-    mMenuDrawer.addItems(
+    menuDrawer.addItems(
         PrimaryDrawerItem()
             .withName("Q&A Module")
             .withDescription("Drag from right to left to open")
@@ -65,20 +67,13 @@ class DebugDrawer(application: Application, activity: AppCompatActivity) : OnChe
   }
 
   fun openDrawer(): DebugDrawer {
-    mMenuDrawer.openDrawer()
+    menuDrawer.openDrawer()
     return this
   }
 
-  fun withAllFeatures(): DebugDrawer {
-    return this.withLeakCanarySwitch(true)
-        .withPicassoLogsSwitch()
-        .withStethoSwitch()
-        .withDivider()
-        .withLynksButton()
-  }
-
   fun withLeakCanarySwitch(checked: Boolean = true): DebugDrawer {
-    addSwitchDrawerItem("Leak Canary - Memory Leaks", R.id.drawer_dev_item_leak).withChecked(checked)
+    addSwitchDrawerItem("Leak Canary - Memory Leaks", R.id.drawer_dev_item_leak)
+        .withChecked(checked)
     return this
   }
 
@@ -93,15 +88,16 @@ class DebugDrawer(application: Application, activity: AppCompatActivity) : OnChe
   }
 
   fun withScalpelSwitch(layout: ScalpelFrameLayout?): DebugDrawer {
-    if (layout != null) {
-      mWeakScalpelLayout = WeakReference(layout)
+    layout?.let {
+      weakScalpelLayout = WeakReference(it)
       addSwitchDrawerItem("Scalpel - 3D layouts", R.id.drawer_dev_item_scalpel)
     }
+
     return this
   }
 
   fun withLynksButton(): DebugDrawer {
-    mMenuDrawer.addItem(PrimaryDrawerItem().withName("Lynks - Live Device Log")
+    menuDrawer.addItem(PrimaryDrawerItem().withName("Lynks - Live Device Log")
         .withIdentifier(R.id.drawer_dev_item_lynks.toLong())
         .withIcon(R.drawable.ic_android_grey_700_18dp))
 
@@ -109,9 +105,9 @@ class DebugDrawer(application: Application, activity: AppCompatActivity) : OnChe
   }
 
   fun withPhoenixRestartButtons(restartListener: RestartListener): DebugDrawer {
-    mRestartListener = restartListener
+    this.restartListener = restartListener
 
-    mMenuDrawer.addItems(
+    menuDrawer.addItems(
         PrimaryDrawerItem().withName("Restart App")
             .withIdentifier(R.id.drawer_dev_item_phoenix_app.toLong())
             .withIcon(R.drawable.ic_gavel_grey_700_18dp),
@@ -125,17 +121,19 @@ class DebugDrawer(application: Application, activity: AppCompatActivity) : OnChe
 
   fun withSpinnerItem(id: Int, name: String, options: Array<String>, selectedItem: String,
                       listener: SpinnerItemListener): DebugDrawer {
-    mMenuDrawer.addItem(SpinnerDrawerItem(id, options, listener, options.indexOf(selectedItem))
+    menuDrawer.addItem(SpinnerDrawerItem(id, options, listener, options.indexOf(selectedItem))
         .withMoreListeners(this)
         .withName(name))
+
     return this
   }
 
   fun withSpinnerItem(id: Int, name: String, options: Array<String>, selectedItem: Int,
                       listener: SpinnerItemListener): DebugDrawer {
-    mMenuDrawer.addItem(SpinnerDrawerItem(id, options, listener, selectedItem)
+    menuDrawer.addItem(SpinnerDrawerItem(id, options, listener, selectedItem)
         .withMoreListeners(this)
         .withName(name))
+
     return this
   }
 
@@ -143,9 +141,9 @@ class DebugDrawer(application: Application, activity: AppCompatActivity) : OnChe
    * Add an item that shows an input dialog.
    */
   fun withInputItem(id: Int, name: String, inputItemListener: InputItemListener): DebugDrawer {
-    mInputItemListener = inputItemListener
+    this.inputItemListener = inputItemListener
 
-    mMenuDrawer.addItem(PrimaryDrawerItem()
+    menuDrawer.addItem(PrimaryDrawerItem()
         .withName(String.format("Enter value for '%s'", name))
         .withTag(id)
         .withIcon(R.drawable.ic_textsms_grey_700_18dp)
@@ -155,13 +153,13 @@ class DebugDrawer(application: Application, activity: AppCompatActivity) : OnChe
   }
 
   fun withDivider(): DebugDrawer {
-    mMenuDrawer.addItem(DividerDrawerItem())
+    menuDrawer.addItem(DividerDrawerItem())
     return this
   }
 
   fun withInfoProperties(properties: Map<String, String>): DebugDrawer {
     properties.entries.forEach {
-      mMenuDrawer.addItem(SecondaryDrawerItem()
+      menuDrawer.addItem(SecondaryDrawerItem()
           .withName(it.key)
           .withIcon(R.drawable.ic_info_grey_700_24dp)
           .withDescription(it.value)
@@ -171,17 +169,55 @@ class DebugDrawer(application: Application, activity: AppCompatActivity) : OnChe
     return this
   }
 
+  private fun showToast(dialog: String) = activityWeakReference.get()?.let {
+    Toast.makeText(it, dialog, Toast.LENGTH_LONG).show()
+  }
+
+  fun restartApp() = applicationWeakReference.get()?.let {
+    restartListener?.onAppRestart()
+    ProcessPhoenix.triggerRebirth(it)
+  }
+
+  fun restartActivity() = activityWeakReference.get()?.let {
+    restartListener?.onActivityRestart()
+    ProcessPhoenix.triggerRebirth(it)
+  }
+
+  private fun showInputDialog(drawerItem: PrimaryDrawerItem) = activityWeakReference.get()?.let {
+    val factory = LayoutInflater.from(it)
+    val entryView = factory.inflate(R.layout.input_view, null) as EditText
+
+    AlertDialog.Builder(it)
+        .setTitle(drawerItem.name.toString())
+        .setView(entryView)
+        .setPositiveButton("OK") { dialog, which ->
+          val inputText = entryView.text.toString()
+          inputItemListener?.onInputOkClick(drawerItem.tag as Int, inputText)
+          drawerItem.withDescription(inputText)
+          menuDrawer.updateItem(drawerItem)
+        }.show()
+  }
+
+  private fun addSwitchDrawerItem(text: String, id: Int): SwitchDrawerItem {
+    val item = SwitchDrawerItem().withName(text).withIdentifier(id.toLong()).apply {
+      withOnCheckedChangeListener(this@DebugDrawer)
+    }
+    menuDrawer.addItem(item)
+
+    return item
+  }
+
   //<editor-fold desc="Select events">
 
   override fun onCheckedChanged(drawerItem: IDrawerItem<Any, RecyclerView.ViewHolder>,
                                 buttonView: CompoundButton, isChecked: Boolean) {
-    val activity = mActivityWeakReference.get() ?: return
-    val application = mApplicationWeakReference.get() ?: return
+    val activity = activityWeakReference.get() ?: return
+    val application = applicationWeakReference.get() ?: return
 
     when (drawerItem.identifier) {
       R.id.drawer_dev_item_scalpel.toLong() -> {
         val toggleDrawerItem = drawerItem as SwitchDrawerItem
-        mWeakScalpelLayout?.get()?.apply {
+        weakScalpelLayout?.get()?.apply {
           isLayerInteractionEnabled = toggleDrawerItem.isChecked
           setDrawViews(toggleDrawerItem.isChecked)
           chromeShadowColor = android.R.color.black
@@ -211,11 +247,10 @@ class DebugDrawer(application: Application, activity: AppCompatActivity) : OnChe
         Log.i("DEBUG", "Picasso stats:" + picassoStats.toString())
       }
     }
-
   }
 
-  override fun onItemClick(view: View, position: Int,
-                           drawerItem: IDrawerItem<Any, RecyclerView.ViewHolder>): Boolean {
+  override fun onItemClick(view: View, position: Int, drawerItem: IDrawerItem<Any,
+      RecyclerView.ViewHolder>): Boolean {
     when (drawerItem.identifier) {
       R.id.drawer_dev_item_info.toLong() -> (drawerItem as SecondaryDrawerItem).apply {
         withSetSelected(false)
@@ -224,7 +259,7 @@ class DebugDrawer(application: Application, activity: AppCompatActivity) : OnChe
       R.id.drawer_dev_item_phoenix_activity.toLong() -> restartActivity()
       R.id.drawer_dev_item_phoenix_app.toLong() -> restartApp()
       R.id.drawer_dev_item_input.toLong() -> showInputDialog(drawerItem as PrimaryDrawerItem)
-      R.id.drawer_dev_item_lynks.toLong() -> mActivityWeakReference.get()?.apply {
+      R.id.drawer_dev_item_lynks.toLong() -> activityWeakReference.get()?.apply {
         startActivity(LynxActivity.getIntent(applicationContext))
       }
     }
@@ -234,46 +269,10 @@ class DebugDrawer(application: Application, activity: AppCompatActivity) : OnChe
 
   override fun onSpinnerItemClick(item: SpinnerDrawerItem, itemId: Int, title: CharSequence) {
     item.withDescription(title.toString())
-    mMenuDrawer.updateItem(item)
+    menuDrawer.updateItem(item)
   }
 
   //</editor-fold>
-
-  private fun showToast(dialog: String) = mActivityWeakReference.get()?.let {
-    Toast.makeText(it, dialog, Toast.LENGTH_LONG).show()
-  }
-
-  fun restartApp() = mApplicationWeakReference.get()?.let {
-    mRestartListener?.onAppRestart()
-    ProcessPhoenix.triggerRebirth(it)
-  }
-
-  fun restartActivity() = mActivityWeakReference.get()?.let {
-    mRestartListener?.onActivityRestart()
-    ProcessPhoenix.triggerRebirth(it)
-  }
-
-  private fun showInputDialog(drawerItem: PrimaryDrawerItem) = mActivityWeakReference.get()?.let {
-    val factory = LayoutInflater.from(it)
-    val entryView = factory.inflate(R.layout.input_view, null) as EditText
-
-    AlertDialog.Builder(it)
-        .setTitle(drawerItem.name.toString())
-        .setView(entryView)
-        .setPositiveButton("OK") { dialog, which ->
-          val inputText = entryView.text.toString()
-          mInputItemListener?.onInputOkClick(drawerItem.tag as Int, inputText)
-          drawerItem.withDescription(inputText)
-          mMenuDrawer.updateItem(drawerItem)
-        }.show()
-  }
-
-  private fun addSwitchDrawerItem(text: String, id: Int): SwitchDrawerItem {
-    val item = SwitchDrawerItem().withName(text).withIdentifier(id.toLong())
-    item.withOnCheckedChangeListener(this)
-    mMenuDrawer.addItem(item)
-    return item
-  }
 
 }
 
