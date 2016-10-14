@@ -19,10 +19,16 @@ import java.util.Map;
 public class MainActivity extends AppCompatActivity implements SpinnerItemListener,
     RestartListener, InputItemListener {
 
+  // Memory leak 1
+  public static MainActivity activityLeaked;
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
+
+    // Memory leak 2
+    activityLeaked = this;
 
     Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
     if (toolbar != null) {
