@@ -74,6 +74,7 @@ class DebugDrawer(application: Application, activity: AppCompatActivity) : OnChe
   fun withLeakCanarySwitch(checked: Boolean = true): DebugDrawer {
     addSwitchDrawerItem("Leak Canary - Memory Leaks", R.id.drawer_dev_item_leak)
         .withChecked(checked)
+    enableLeakCanary()
     return this
   }
 
@@ -207,12 +208,23 @@ class DebugDrawer(application: Application, activity: AppCompatActivity) : OnChe
     return item
   }
 
+  private fun enableLeakCanary() {
+    showToast("Leak Canary cant be disabled.")
+
+    applicationWeakReference.get()?.let {
+      // This process is dedicated to LeakCanary for heap analysis.
+      // You should not init your app in this process.
+      if (LeakCanary.isInAnalyzerProcess(it)) return
+
+      LeakCanary.install(it)
+    }
+  }
+
   //<editor-fold desc="Select events">
 
   override fun onCheckedChanged(drawerItem: IDrawerItem<Any, RecyclerView.ViewHolder>,
                                 buttonView: CompoundButton, isChecked: Boolean) {
     val activity = activityWeakReference.get() ?: return
-    val application = applicationWeakReference.get() ?: return
 
     when (drawerItem.identifier) {
       R.id.drawer_dev_item_scalpel.toLong() -> {
@@ -227,10 +239,7 @@ class DebugDrawer(application: Application, activity: AppCompatActivity) : OnChe
         showToast("On chrome open chrome://inspect")
         Stetho.initializeWithDefaults(activity)
       }
-      R.id.drawer_dev_item_leak.toLong() -> {
-        showToast("Leak Canary cant be disabled.")
-        LeakCanary.install(application)
-      }
+      R.id.drawer_dev_item_leak.toLong() -> enableLeakCanary()
       R.id.drawer_dev_item_picasso.toLong() -> {
         showToast("Picasso logs cant be disabled.")
         val picassoStats = Picasso.with(activity).apply {
