@@ -209,8 +209,6 @@ class DebugDrawer(application: Application, activity: AppCompatActivity) : OnChe
   }
 
   private fun enableLeakCanary() {
-    showToast("Leak Canary cant be disabled.")
-
     applicationWeakReference.get()?.let {
       // This process is dedicated to LeakCanary for heap analysis.
       // You should not init your app in this process.
