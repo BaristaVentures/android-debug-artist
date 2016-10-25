@@ -1,11 +1,12 @@
 # Debug Artist
 
-![Image](img/android.gif)
+![](img/logo.png)
 
-The idea is make the developers life easier with some tools.
+This library make developers life easier with some tools, you can add it to your debug builds and have some debug
+libraries like [Leakcanary](https://github.com/square/leakcanary) and others without extra work.
 
-- Debug Drawer: add a right menu that enable some features like LeakCanary, stetho and others. ** Add just for debug builds **
-
+Features:
+- Debug Drawer: add a right menu that enable some features like LeakCanary, stetho and others. ** use just for debug builds **
 - [ViewServer](https://github.com/romainguy/ViewServer): helps to debug layouts with more devices.
 
 ## Debug Drawer
