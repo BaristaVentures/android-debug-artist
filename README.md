@@ -1,23 +1,16 @@
-# Debug Artist
-
 ![](img/logo.png)
 
 This library make developers life easier with some tools, you can add it to your debug builds and have some debug
 libraries like [Leakcanary](https://github.com/square/leakcanary) and others without extra work.
 
-Features:
-- Debug Drawer: add a right menu that enable some features like LeakCanary, stetho and others. ** use just for debug builds **
+- Debug Drawer: add a right menu that enable some features like LeakCanary, stetho and others. *use just for debug builds*
 - [ViewServer](https://github.com/romainguy/ViewServer): helps to debug layouts with more devices.
 
-## Debug Drawer
+![](img/debug_drawer.jpg)
 
-Add it _without any feature_ simply adding this on each activity `onCreate`:
+## How to use it
 
-```
-new DebugDrawer(MyApplication.sInstance, this)
-```
-
-Add features with `debugDrawer.with*`:
+Add this on each activity `setContentView` so your child activities always add it to each activity:
 
 ```
 new DebugDrawer(MyApplication.sInstance, this)
@@ -49,16 +42,8 @@ Features:
 - Custom text input fields: used to set the app api host dynamically.
 - Custom map of properties: map of `title` -> `content` that allow you to show  useful info about the app like version, current host, flavor, etc...
 
-Sample:
-![Image2](img/debug_drawer.gif)
-
-## How to use it
-
-Include it in your `gradle.properties`:
-
-```
-debugCompile 'com.barista_v:debug_artist:<version>@aar'
-```
+## Add to gradle project
+//TODO
 
 ## Publish
 
@@ -67,3 +52,5 @@ Check `gradle.properties` and `lib/gradle.properties` for POM setup.
 ## Thanks to
 - All feature developers!
 - [Barista Ventures](http://barista-v.com/)
+- [AndroidTool-mac](https://github.com/mortenjust/androidtool-mac): helped to create the gif from device.
+- [ImageOptim](https://github.com/ImageOptim/ImageOptim): optimize gif generated from ^^ :P
