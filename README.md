@@ -34,6 +34,25 @@ For each feature you need to setup it correctly, sometimes no extra work is need
 Features:
 - [Links](https://github.com/pedrovgs/Lynx): show logcat live phone.
 - [Leakcanary](https://github.com/square/leakcanary): track Memory leaks.
+
+You need to avoid other thing initialization on `Application` `onCreate` since LeakCanary creates another process and
+may cause crashes:
+
+```
+class MyCustomApp {
+
+    @Override
+    void onCreate(){
+      if (LeakCanary.isInAnalyzerProcess(this)) return // <-------------- This
+
+      // Setup Firebase
+      // Setup Other Services
+    }
+
+}
+
+```
+
 - [Picasso logs](https://github.com/square/picasso): enable debug logs.
 - [Scalpel](https://github.com/JakeWharton/scalpel): see 3d layouts.
 - [Stetho](https://github.com/facebook/stetho): if you want custom interceptors you can add them and it will use them _automatically_.
