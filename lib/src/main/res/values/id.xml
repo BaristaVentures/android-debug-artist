@@ -6,7 +6,6 @@
   <item name="drawer_dev_item_leak" type="id" />
   <item name="drawer_dev_item_picasso" type="id" />
   <item name="drawer_dev_item_info" type="id" />
-  <item name="drawer_dev_item_phoenix_activity" type="id" />
   <item name="drawer_dev_item_phoenix_app" type="id" />
   <item name="drawer_dev_item_input" type="id" />
 </resources>

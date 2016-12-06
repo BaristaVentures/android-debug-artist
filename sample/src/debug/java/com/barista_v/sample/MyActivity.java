@@ -5,8 +5,8 @@ import android.support.annotation.LayoutRes;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
-import com.barista_v.debug_artist.DebugDrawer;
 import com.barista_v.debug_artist.ViewServer;
+import com.barista_v.debug_artist.drawer.DebugDrawer;
 import com.barista_v.debug_artist.item.input.InputItemListener;
 import com.barista_v.debug_artist.item.phoenix.RestartListener;
 import com.barista_v.debug_artist.item.spinner.SpinnerDrawerItem;
@@ -15,9 +15,10 @@ import com.jakewharton.scalpel.ScalpelFrameLayout;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class MyActivity
-    extends AppCompatActivity
+public class MyActivity extends AppCompatActivity
     implements SpinnerItemListener, RestartListener, InputItemListener {
+
+  private DebugDrawer mDebugDrawer;
 
   @Override
   public void setContentView(@LayoutRes int layoutResID) {
@@ -26,7 +27,7 @@ public class MyActivity
     ViewServer.get(this).addWindow(this);
 
     String[] hosts = new String[] { "Value 1", "Value 2" };
-    new DebugDrawer(MyApplication.sInstance, this)
+    mDebugDrawer = new DebugDrawer(MyApplication.sInstance, this)
         .withScalpelSwitch((ScalpelFrameLayout) findViewById(R.id.scalpel))
         .withLeakCanarySwitch(true)
         .withPicassoLogsSwitch()
@@ -42,6 +43,12 @@ public class MyActivity
         .openDrawer();
   }
 
+  @Override
+  protected void onDestroy() {
+    super.onDestroy();
+    mDebugDrawer.release();
+  }
+
   /**
    * Return a map with keys and values referencing environment variables
    */
@@ -51,35 +58,23 @@ public class MyActivity
       put("AppVersion", BuildConfig.VERSION_NAME);
       put("BuildNumber", String.valueOf(BuildConfig.VERSION_CODE));
       put("AndroidVersion", Build.VERSION.RELEASE);
-      //put("GitSHA", BuildConfig.GIT_SHA);
       put("Manufacturer", Build.MANUFACTURER);
       put("Model", Build.MODEL);
     }};
   }
 
-  //<editor-fold desc="SpinnerItemListener">
   @Override
   public void onSpinnerItemClick(SpinnerDrawerItem item, int itemId, CharSequence title) {
     Toast.makeText(this, "Selected: " + title, Toast.LENGTH_LONG).show();
   }
-  //</editor-fold>
 
-  //<editor-fold desc="RestartListener">
   @Override
-  public void onAppRestart() {
+  public void onAppRestarted() {
     Log.d("DEBUG", "BOOM App");
   }
 
   @Override
-  public void onActivityRestart() {
-    Log.d("DEBUG", "BOOM Activity");
-  }
-  //</editor-fold>
-
-  //<editor-fold desc="InputItemListener">
-  @Override
-  public void onInputOkClick(int itemId, String inputText) {
+  public void onTextInputEnter(int itemId, String inputText) {
     Toast.makeText(this, inputText, Toast.LENGTH_LONG).show();
   }
-  //</editor-fold>
 }

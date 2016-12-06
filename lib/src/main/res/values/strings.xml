@@ -1,3 +1,10 @@
 <resources>
   <string name="app_name">debug</string>
+  <string name="leak_canary">Leak Canary - Memory Leaks</string>
+  <string name="stetho">Stetho - Debug from Chrome</string>
+  <string name="picasso">Picasso Image Cache Logs</string>
+  <string name="scalpel">Scalpel - 3D layouts</string>
+  <string name="lynks">Lynks - Live Device Log</string>
+  <string name="restart_app">Restart App</string>
+  <string name="enter_value_for">Enter value for \'%s\'</string>
 </resources>
