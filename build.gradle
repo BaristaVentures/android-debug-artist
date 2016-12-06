@@ -6,7 +6,8 @@ buildscript {
              targetSdk : 24]
 
     versions = [supportLibrary: "24.1.1",
-                kotlin        : "1.0.4"]
+                kotlin        : "1.0.5-2",
+                spek          : "1.1.0-beta2"]
 
     plugs = [kotlin        : "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlin",
              gradleVersions: 'com.github.ben-manes:gradle-versions-plugin:0.13.0']
