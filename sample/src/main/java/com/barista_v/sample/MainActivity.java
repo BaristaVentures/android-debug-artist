@@ -6,7 +6,6 @@ import com.barista_v.debug_artist.ViewServer;
 
 public class MainActivity extends MyActivity {
 
-  // Memory leak 1
   public static MainActivity activityLeaked;
 
   @Override
@@ -14,15 +13,13 @@ public class MainActivity extends MyActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
 
-    // Memory leak 2
+    // Intentionally to leak memory and see it with leak canary
     activityLeaked = this;
 
     Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
     if (toolbar != null) {
       setSupportActionBar(toolbar);
     }
-
-
   }
 
   @Override
@@ -30,6 +27,5 @@ public class MainActivity extends MyActivity {
     super.onDestroy();
     ViewServer.get(this).removeWindow(this);
   }
-
 
 }
