@@ -41,8 +41,17 @@ dependencies {
   compile 'com.jakewharton.scalpel:scalpel:1.1.2'
   compile 'com.facebook.stetho:stetho-okhttp:1.4.1'
   compile 'com.github.pedrovgs:lynx:1.6'
-  compile 'com.jakewharton:process-phoenix:1.1.0'
+  compile 'com.jakewharton:process-phoenix:1.1.1'
   compile 'nl.littlerobots.rxlint:rxlint:1.0'
+
+  testCompile 'junit:junit:4.12'
+  testCompile "org.mockito:mockito-core:2.2.28"
+
+  testCompile "org.jetbrains.spek:spek-api:$versions.spek"
+  testCompile "org.jetbrains.spek:spek-junit-platform-engine:$versions.spek"
+  testCompile "org.jetbrains.kotlin:kotlin-test-junit:$versions.kotlin"
+
+  testCompile 'org.junit.platform:junit-platform-runner:1.0.0-M3'
 }
 
 // To publish ./gradlew clean build generateRelease
