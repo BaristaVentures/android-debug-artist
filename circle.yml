@@ -8,7 +8,7 @@ machine:
 dependencies:
   pre:
     - wget "https://services.gradle.org/distributions/gradle-2.14.1-bin.zip"; unzip gradle-2.14.1-bin.zip
-    - echo y | android update sdk --no-ui --all --filter android-25,build-tools-25.0.0,tool,extra-android-m2repository,extra-android-support,extra-google-google_play_services,extra-google-m2repository
+    - echo y | android update sdk --no-ui --all --filter android-24,build-tools-25.0.0,tool,extra-android-m2repository,extra-android-support,extra-google-google_play_services,extra-google-m2repository
     - PROPERTIES_FILE=bintray.properties sh scripts/cp-env-to-properties.sh
 
 test:
