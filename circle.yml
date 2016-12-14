@@ -1,0 +1,31 @@
+machine:
+  environment:
+    PATH: "~/$CIRCLE_PROJECT_REPONAME/gradle-2.14.1/bin:$PATH"
+    TERM: "dumb"
+    ADB_INSTALL_TIMEOUT: "10"
+    GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx2048m -XX:+HeapDumpOnOutOfMemoryError"'
+
+dependencies:
+  pre:
+    - wget "https://services.gradle.org/distributions/gradle-2.14.1-bin.zip"; unzip gradle-2.14.1-bin.zip
+    - echo y | android update sdk --no-ui --all --filter android-25,build-tools-25.0.0,tool,extra-android-m2repository,extra-android-support,extra-google-google_play_services,extra-google-m2repository
+    - PROPERTIES_FILE=bintray.properties sh scripts/cp-env-to-properties.sh
+
+test:
+  override:
+    # start the emulator
+    - mksdcard -l e 512M mysdcard.img # Screenshots
+    - emulator -avd circleci-android22 -no-audio -no-window -sdcard mysdcard.img:
+        background: true
+        parallel: true
+    - circle-android wait-for-boot
+
+    # unlock the emulator screen
+    - sleep 30
+    - adb shell input keyevent 82
+
+    # run tests  against the emulator.
+    - ./gradlew testDebugUnitTest -PdisablePreDex --stacktrace
+
+    # copy the build outputs to artifacts
+    - cp -r app/build/reports $CIRCLE_TEST_REPORTS
