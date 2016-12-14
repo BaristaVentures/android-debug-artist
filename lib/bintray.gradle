@@ -170,9 +170,13 @@ afterEvaluate { project ->
   }
 }
 
+
+Properties properties = new Properties()
+properties.load(project.file('bintray.properties').newDataInputStream())
+
 bintray {
-  user = BINTRAY_USER
-  key = BINTRAY_API_KEY
+  user = properties.getProperty("BINTRAY_USER")
+  key = properties.getProperty("BINTRAY_API_KEY")
 
   override = false
   publish = true
@@ -190,7 +194,7 @@ bintray {
 
     githubRepo = POM_SCM_CONNECTION
     githubReleaseNotesFile = 'README.md'
-    userOrg = BINTRAY_USER_ORG
+    userOrg =  properties.getProperty("BINTRAY_USER_ORG")
 
     version {
       desc = POM_DESCRIPTION
@@ -198,7 +202,7 @@ bintray {
 
       gpg {
         sign = true //Determines whether to GPG sign the files. The default is false
-        passphrase = BINTRAY_GPG_PASSPHRASE
+        passphrase = properties.getProperty("BINTRAY_GPG_PASSPHRASE")
       }
     }
   }

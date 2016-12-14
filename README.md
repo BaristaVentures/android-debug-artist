@@ -70,7 +70,7 @@ dependencies {
 
 ## Publish
 
-You need to create `lib/gradle.properties` with the variables declared on `lib/gradle.properties.example`.
+You need to create `lib/bintray.properties` with the variables declared on `lib/bintray.properties.example`.
 
 ```
 cp lib/gradle.properties.example lib/gradle.properties
