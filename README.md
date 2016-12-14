@@ -50,7 +50,6 @@ class MyCustomApp {
     }
 
 }
-
 ```
 
 - [Picasso logs](https://github.com/square/picasso): enable debug logs.
@@ -62,11 +61,20 @@ class MyCustomApp {
 - Custom map of properties: map of `title` -> `content` that allow you to show  useful info about the app like version, current host, flavor, etc...
 
 ## Add to gradle project
-//TODO
+
+```groovy
+dependencies {
+  compile "com.barista-v:debug-artist:0.5.9"
+}
+```
 
 ## Publish
 
-Check `gradle.properties` and `lib/gradle.properties` for POM setup.
+You need to create `lib/gradle.properties` with the variables declared on `lib/gradle.properties.example`.
+
+```
+cp lib/gradle.properties.example lib/gradle.properties
+```
 
 ## Thanks to
 - All feature developers!

@@ -1,7 +1,5 @@
 buildscript {
-  repositories {
-    jcenter() // gradle-versions-plugin
-  }
+  repositories { jcenter() }
   dependencies {
     classpath plugs.kotlin
     classpath plugs.gradleVersions
@@ -22,6 +20,7 @@ android {
     versionCode VERSION_CODE as Integer
     versionName VERSION_NAME
     consumerProguardFiles 'rules.pro'
+    archivesBaseName = POM_ARTIFACT_ID // used by bintray plugin as artifact id
   }
 
   lintOptions {
@@ -54,5 +53,5 @@ dependencies {
   testCompile 'org.junit.platform:junit-platform-runner:1.0.0-M3'
 }
 
-// To publish ./gradlew clean build generateRelease
-apply from: 'https://raw.github.com/danielgomezrico/gradle-mvn-push/master/gradle-mvn-push.gradle'
+// Must be at the bottom
+apply from: 'bintray.gradle'

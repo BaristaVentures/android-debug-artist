@@ -1,12 +1,17 @@
 # CHANGELOG
 
-# v 0.5.9
-- Remove toast enabling CanaryLeak
-- Update readme.
-
-# v 0.5.8
-- Fix LeakCanary setup.
-- Clean up
+# v 0.5.9 - First public release
+- Kotlin `1.0.5-2`
+- Features:
+  - [Links](https://github.com/pedrovgs/Lynx): show logcat live phone.
+  - [Leakcanary](https://github.com/square/leakcanary): track Memory leaks.
+  - [Picasso logs](https://github.com/square/picasso): enable debug logs.
+  - [Scalpel](https://github.com/JakeWharton/scalpel): see 3d layouts.
+  - [Stetho](https://github.com/facebook/stetho): if you want custom interceptors you can add them and it will use them _automatically_.
+  - [Process Phoenix](https://github.com/JakeWharton/ProcessPhoenix): restart app/activity.
+  - Custom spinners: used sometimes to select from a list of hosts.
+  - Custom text input fields: used to set the app api host dynamically.
+  - Custom map of properties: map of `title` -> `content` that allow you to show  useful info about the app like version, current host, flavor, etc...
 
 ## v 0.5.7
 - Kotlin `1.0.4`
