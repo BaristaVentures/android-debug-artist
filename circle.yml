@@ -28,4 +28,4 @@ test:
     - ./gradlew testDebugUnitTest -PdisablePreDex --stacktrace
 
     # copy the build outputs to artifacts
-    - cp -r app/build/reports $CIRCLE_TEST_REPORTS
+    - cp -r lib/build/reports $CIRCLE_TEST_REPORTS
