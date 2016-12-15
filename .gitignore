@@ -1,5 +1,3 @@
-infer-out/
-
 .gradle
 /local.properties
 /.idea/workspace.xml
@@ -7,11 +5,6 @@ infer-out/
 .DS_Store
 /build
 /captures
-
-app/gradle.properties
-app/newrelic.properties
-app/fabric.properties
-captures/
 
 # Created by https://www.gitignore.io
 

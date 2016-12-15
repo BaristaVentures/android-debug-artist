@@ -1,7 +1,5 @@
 buildscript {
-  repositories {
-    jcenter() // gradle-versions-plugin
-  }
+  repositories { jcenter() }
   dependencies {
     classpath plugs.kotlin
     classpath plugs.gradleVersions
@@ -11,6 +9,7 @@ buildscript {
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'com.github.ben-manes.versions'
+apply from: '../jacoco.gradle'
 
 android {
   compileSdkVersion setup.compileSdk
@@ -22,6 +21,13 @@ android {
     versionCode VERSION_CODE as Integer
     versionName VERSION_NAME
     consumerProguardFiles 'rules.pro'
+    archivesBaseName = POM_ARTIFACT_ID // used by bintray plugin as artifact id
+  }
+
+  buildTypes {
+    debug {
+      testCoverageEnabled = true
+    }
   }
 
   lintOptions {
@@ -54,5 +60,5 @@ dependencies {
   testCompile 'org.junit.platform:junit-platform-runner:1.0.0-M3'
 }
 
-// To publish ./gradlew clean build generateRelease
-apply from: 'https://raw.github.com/danielgomezrico/gradle-mvn-push/master/gradle-mvn-push.gradle'
+// Must be at the bottom
+apply from: 'bintray.gradle'

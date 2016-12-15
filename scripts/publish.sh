@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Assemble the app, backup it and upload the apks to crashlytics
+# Publish to bintray
 #
 
-sh gradlew clean build lib:uploadArchives --daemon -x androidJavadocs
+gw clean build lib:install lib:bintrayUpload --info

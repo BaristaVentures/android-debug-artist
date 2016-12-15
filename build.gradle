@@ -1,6 +1,6 @@
 buildscript {
   ext {
-    setup = [buildTools: "24.0.3",
+    setup = [buildTools: "25.0.0",
              compileSdk: 24,
              minSdk    : 15,
              targetSdk : 24]
@@ -16,11 +16,11 @@ buildscript {
             kotlinStdLib: "org.jetbrains.kotlin:kotlin-stdlib:$versions.kotlin"]
   }
 
-  repositories {
-    jcenter()
-  }
+  repositories { jcenter() }
+
   dependencies {
-    classpath 'com.android.tools.build:gradle:2.2.2'
+    classpath 'com.android.tools.build:gradle:2.2.3'
+    classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
   }
 }
 
@@ -32,10 +32,4 @@ allprojects {
 
 task clean(type: Delete) {
   delete rootProject.buildDir
-}
-
-allprojects {
-  tasks.withType(Javadoc) {
-    options.addStringOption('-x androidJavadocs')
-  }
 }

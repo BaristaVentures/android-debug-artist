@@ -1,0 +1,27 @@
+machine:
+  environment:
+    PATH: "~/$CIRCLE_PROJECT_REPONAME/gradle-2.14.1/bin:$PATH"
+    TERM: "dumb"
+    ADB_INSTALL_TIMEOUT: "10"
+    GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx2048m -XX:+HeapDumpOnOutOfMemoryError"'
+
+dependencies:
+  cache_directories:
+    - ~/.android
+    - ~/android
+  pre:
+    - wget "https://services.gradle.org/distributions/gradle-2.14.1-bin.zip"; unzip gradle-2.14.1-bin.zip
+    - echo y | android update sdk --no-ui --all --filter android-24,build-tools-25.0.0,tool,extra-android-m2repository,extra-android-support,extra-google-google_play_services,extra-google-m2repository
+    - PROPERTIES_FILE=lib/bintray.properties sh scripts/cp-env-to-properties.sh
+
+test:
+  override:
+    - ./gradlew testDebugUnitTestCoverage -PdisablePreDex --stacktrace
+
+    # copy the build outputs to artifacts
+    - cp -r lib/build/reports $CIRCLE_TEST_REPORTS
+    - cp -r lib/build/jacoco $CIRCLE_TEST_REPORTS
+    - cp -r lib/build/test-results $CIRCLE_TEST_REPORTS
+
+  post:
+    - bash <(curl -s https://codecov.io/bash) -s "$CIRCLE_TEST_REPORTS"

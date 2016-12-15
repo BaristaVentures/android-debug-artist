@@ -1,6 +1,9 @@
 ![](img/logo.png)
 
-This library make developers life easier with some tools, you can add it to your debug builds and have some debug
+- master: [![codecov](https://codecov.io/gh/BaristaVentures/debug-artist/branch/master/graph/badge.svg)](https://codecov.io/gh/BaristaVentures/debug-artist)
+- develop: [![codecov](https://codecov.io/gh/BaristaVentures/debug-artist/branch/develop/graph/badge.svg)](https://codecov.io/gh/BaristaVentures/debug-artist)
+
+Make developers life easier with some tools, you can add it to your debug builds and have some debug
 libraries like [Leakcanary](https://github.com/square/leakcanary) and others without extra work.
 
 - Debug Drawer: add a right menu that enable some features like LeakCanary, stetho and others. *use just for debug builds*
@@ -50,7 +53,6 @@ class MyCustomApp {
     }
 
 }
-
 ```
 
 - [Picasso logs](https://github.com/square/picasso): enable debug logs.
@@ -62,11 +64,20 @@ class MyCustomApp {
 - Custom map of properties: map of `title` -> `content` that allow you to show  useful info about the app like version, current host, flavor, etc...
 
 ## Add to gradle project
-//TODO
+
+```groovy
+dependencies {
+  compile "com.barista-v:debug-artist:0.5.9"
+}
+```
 
 ## Publish
 
-Check `gradle.properties` and `lib/gradle.properties` for POM setup.
+You need to create `lib/bintray.properties` with the variables declared on `lib/bintray.properties.example`.
+
+```
+cp lib/gradle.properties.example lib/gradle.properties
+```
 
 ## Thanks to
 - All feature developers!
