@@ -24,4 +24,4 @@ test:
     - cp -r lib/build/test-results $CIRCLE_TEST_REPORTS
 
   post:
-    - bash <(curl -s https://codecov.io/bash) -s "$CIRCLE_TEST_REPORTS"
+    - bash <(curl -s https://codecov.io/bash) -f "$CIRCLE_TEST_REPORTS/reports/jacoco/testDebugUnitTestCoverage/testDebugUnitTestCoverage.xml"
