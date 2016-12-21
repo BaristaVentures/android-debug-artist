@@ -1,6 +1,8 @@
 # CHANGELOG
 
-# v 0.5.9 - First public release
+# v 0.5.10 - FIX 0.5.9 broken version
+
+# v 0.5.9 - First public release (*DONT USE*)
 - Kotlin `1.0.5-2`
 - Features:
   - [Links](https://github.com/pedrovgs/Lynx): show logcat live phone.
