@@ -66,8 +66,12 @@ class MyCustomApp {
 ## Add to gradle project
 
 ```groovy
+repositories {
+  jcenter()
+}
+
 dependencies {
-  compile "com.barista-v:debug-artist:0.5.9"
+  compile("com.barista-v:debug-artist:0.5.10@aar") { transitive = true }
 }
 ```
 

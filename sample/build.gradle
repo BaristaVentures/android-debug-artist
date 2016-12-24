@@ -9,7 +9,7 @@ android {
 
     minSdkVersion setup.minSdk
     targetSdkVersion setup.targetSdk
-    
+
     versionCode 1
     versionName "1.0"
   }
@@ -34,5 +34,7 @@ android {
 dependencies {
   compile deps.appCompat
   compile project(':lib')
-  //compile "com.barista-v:debug-artist:<version>"
+//  compile("com.barista-v:debug-artist:0.5.10@aar") {
+//    transitive = true
+//  }
 }
