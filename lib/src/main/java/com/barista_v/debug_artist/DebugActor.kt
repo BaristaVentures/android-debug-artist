@@ -17,7 +17,7 @@ class DebugActor(application: Application, activity: Activity) : Actor {
   val TAG = "DebugActor"
   val applicationWeakReference = WeakReference(application)
   val activityWeakReference = WeakReference(activity)
-  var scalpelFrameLayout: ScalpelFrameLayout? = null
+  override var scalpelFrameLayout: ScalpelFrameLayout? = null
 
   override fun enableLeakCanary() {
     applicationWeakReference.get()?.let {
