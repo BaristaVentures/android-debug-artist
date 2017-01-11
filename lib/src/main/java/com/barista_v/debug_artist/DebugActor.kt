@@ -26,6 +26,7 @@ class DebugActor(application: Application, activity: Activity) : Actor {
       if (LeakCanary.isInAnalyzerProcess(it)) return
 
       LeakCanary.install(it)
+      Log.i(TAG, "Leak Canary enabled")
     }
   }
 
@@ -36,7 +37,7 @@ class DebugActor(application: Application, activity: Activity) : Actor {
         isLoggingEnabled = true
       }.snapshot
 
-      Log.i(TAG, "Picasso stats:" + stats.toString())
+      Log.i(TAG, "Picasso stats enabled: $stats")
     } ?: Log.e(TAG, "scalpelFrameLayout property is not set.")
   }
 
@@ -45,7 +46,10 @@ class DebugActor(application: Application, activity: Activity) : Actor {
   override fun disableScalpelLayout() = enableScalpelLayout(false)
 
   override fun enableStetho() {
-    activityWeakReference.get()?.let { Stetho.initializeWithDefaults(it) }
+    activityWeakReference.get()?.let {
+      Stetho.initializeWithDefaults(it)
+      Log.i(TAG, "Stetho enabled")
+    }
   }
 
   override fun enableLynx() {
@@ -53,12 +57,16 @@ class DebugActor(application: Application, activity: Activity) : Actor {
       val intent = applicationWeakReference.get()?.let { LynxActivity.getIntent(it) }
       if (intent != null) {
         it.startActivity(intent)
+        Log.i(TAG, "Lynx enabled")
       }
     }
   }
 
   override fun triggerAppRebirth() {
-    applicationWeakReference.get()?.let { ProcessPhoenix.triggerRebirth(it) }
+    applicationWeakReference.get()?.let {
+      ProcessPhoenix.triggerRebirth(it)
+      Log.i(TAG, "App Rebirth enabled")
+    }
   }
 
   private fun enableScalpelLayout(enabled: Boolean) {
@@ -66,6 +74,8 @@ class DebugActor(application: Application, activity: Activity) : Actor {
       isLayerInteractionEnabled = enabled
       setDrawViews(enabled)
       chromeShadowColor = R.color.black
+
+      Log.i(TAG, "Scalpel Layout enabled:" + if (enabled) "true" else "false")
     } ?: Log.e(TAG, "scalpelFrameLayout property is not set.")
   }
 }
