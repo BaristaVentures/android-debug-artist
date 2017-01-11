@@ -8,26 +8,28 @@ import com.jakewharton.scalpel.ScalpelFrameLayout
 open class MenuItem
 open class DividerMenuItem : MenuItem()
 
-open class SwitchMenuItem(val checked: Boolean = false) : MenuItem()
+open class SwitchMenuItem(var checked: Boolean = false) : MenuItem()
+
 open class ButtonMenuItem : MenuItem()
 open class LabelMenuItem(val properties: Map<String, String>) : MenuItem()
 
-class StethoSwitchMenuItem(checked: Boolean = false) : SwitchMenuItem(checked)
-class LeakCanarySwitchMenuItem(checked: Boolean = false) : SwitchMenuItem(checked)
-class PicassoLogsSwitchMenuItem(checked: Boolean = false) : SwitchMenuItem(checked)
-class ScalpelSwitchMenuItem(val layout: ScalpelFrameLayout,
-                            checked: Boolean = false) : SwitchMenuItem(checked)
+open class StethoSwitchMenuItem(checked: Boolean = false) : SwitchMenuItem(checked)
+open class LeakCanarySwitchMenuItem(checked: Boolean = false) : SwitchMenuItem(checked)
+open class PicassoLogsSwitchMenuItem(checked: Boolean = false) : SwitchMenuItem(checked)
 
-class LynksButtonMenuItem : ButtonMenuItem()
+open class ScalpelSwitchMenuItem(val layout: ScalpelFrameLayout?, checked: Boolean = false)
+  : SwitchMenuItem(checked)
 
-class PhoenixButtonMenuItem(val restartListener: RestartListener) : ButtonMenuItem()
+open class LynksButtonMenuItem : ButtonMenuItem()
 
-class SpinnerMenuItem(val id: Int,
-                      val name: String,
-                      val options: Array<String>,
-                      val selectedItem: Int,
-                      val listener: SpinnerItemListener) : ButtonMenuItem()
+open class PhoenixButtonMenuItem(val restartListener: RestartListener) : ButtonMenuItem()
 
-class InputMenuItem(val id: Int,
-                    val name: String,
-                    val inputItemListener: InputItemListener) : ButtonMenuItem()
+open class SpinnerMenuItem(val id: Int,
+                           val name: String,
+                           val options: Array<String>,
+                           val selectedItem: Int,
+                           val listener: SpinnerItemListener) : ButtonMenuItem()
+
+open class InputMenuItem(val id: Int,
+                         val name: String,
+                         val inputItemListener: InputItemListener) : ButtonMenuItem()
