@@ -14,6 +14,7 @@ import java.lang.ref.WeakReference
 
 class DebugActor(application: Application, activity: Activity) : Actor {
 
+  val TAG = "DebugActor"
   val applicationWeakReference = WeakReference(application)
   val activityWeakReference = WeakReference(activity)
   var scalpelFrameLayout: ScalpelFrameLayout? = null
@@ -35,8 +36,8 @@ class DebugActor(application: Application, activity: Activity) : Actor {
         isLoggingEnabled = true
       }.snapshot
 
-      Log.i("DEBUG", "Picasso stats:" + stats.toString())
-    } ?: Log.e("DebugActor", "scalpelFrameLayout property is not set.")
+      Log.i(TAG, "Picasso stats:" + stats.toString())
+    } ?: Log.e(TAG, "scalpelFrameLayout property is not set.")
   }
 
   override fun enableScalpelLayout() = enableScalpelLayout(true)
@@ -65,6 +66,6 @@ class DebugActor(application: Application, activity: Activity) : Actor {
       isLayerInteractionEnabled = enabled
       setDrawViews(enabled)
       chromeShadowColor = R.color.black
-    } ?: Log.e("DebugActor", "scalpelFrameLayout property is not set.")
+    } ?: Log.e(TAG, "scalpelFrameLayout property is not set.")
   }
 }
