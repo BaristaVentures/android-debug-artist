@@ -51,7 +51,7 @@ dependencies {
   compile 'nl.littlerobots.rxlint:rxlint:1.0'
 
   testCompile 'junit:junit:4.12'
-  testCompile "org.mockito:mockito-core:2.2.28"
+  testCompile "org.mockito:mockito-core:2.5.7"
 
   testCompile "org.jetbrains.spek:spek-api:$versions.spek"
   testCompile "org.jetbrains.spek:spek-junit-platform-engine:$versions.spek"
