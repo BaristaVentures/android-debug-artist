@@ -1,6 +1,7 @@
 package com.barista_v.debug_artist.drawer
 
 import android.support.annotation.VisibleForTesting
+import com.barista_v.debug_artist.DebugActor
 import com.barista_v.debug_artist.item.*
 import com.barista_v.debug_artist.item.input.InputItemListener
 import com.barista_v.debug_artist.item.phoenix.RestartListener
@@ -59,7 +60,6 @@ class DebugDrawerPresenter {
     inputItemListener?.onTextInputEnter(id, text)
   }
 
-
   fun onItemAdded(item: MenuItem) {
     when (item) {
       is DividerDrawerItem -> view?.addDividerItem()
@@ -77,7 +77,14 @@ class DebugDrawerPresenter {
       }
       is ScalpelSwitchMenuItem -> {
         view?.addScalpelSwitch(item.checked)
-        if (item.checked) actor?.enableScalpelLayout()
+
+        (actor as? DebugActor)?.let {
+          it.scalpelFrameLayout = item.layout
+
+          if (item.checked) {
+            it.enableScalpelLayout()
+          }
+        }
       }
       is LynksButtonMenuItem -> view?.addLynksButton()
       is PhoenixButtonMenuItem -> {
