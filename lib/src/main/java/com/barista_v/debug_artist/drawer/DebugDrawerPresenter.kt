@@ -1,10 +1,12 @@
 package com.barista_v.debug_artist.drawer
 
 import android.support.annotation.VisibleForTesting
+import com.barista_v.debug_artist.item.*
 import com.barista_v.debug_artist.item.input.InputItemListener
 import com.barista_v.debug_artist.item.phoenix.RestartListener
+import com.mikepenz.materialdrawer.model.DividerDrawerItem
 
-class DebugDrawerPresenter() {
+class DebugDrawerPresenter {
 
   @VisibleForTesting internal var view: DebugDrawerView? = null
   @VisibleForTesting internal var actor: Actor? = null
@@ -57,9 +59,37 @@ class DebugDrawerPresenter() {
     inputItemListener?.onTextInputEnter(id, text)
   }
 
-  fun onLeakCanarySwitchAdded(checked: Boolean) {
-    if (checked) {
-      actor?.enableLeakCanary()
+
+  fun onItemAdded(item: MenuItem) {
+    when (item) {
+      is DividerDrawerItem -> view?.addDividerItem()
+      is StethoSwitchMenuItem -> {
+        view?.addStethoSwitch(item.checked)
+        if (item.checked) actor?.enableStetho()
+      }
+      is LeakCanarySwitchMenuItem -> {
+        view?.addLeakCanarySwitch(item.checked)
+        if (item.checked) actor?.enableLeakCanary()
+      }
+      is PicassoLogsSwitchMenuItem -> {
+        view?.addPicassoLogsSwitch(item.checked)
+        if (item.checked) actor?.enablePicassoLogs()
+      }
+      is ScalpelSwitchMenuItem -> {
+        view?.addScalpelSwitch(item.checked)
+        if (item.checked) actor?.enableScalpelLayout()
+      }
+      is LynksButtonMenuItem -> view?.addLynksButton()
+      is PhoenixButtonMenuItem -> {
+        view?.addPhoenixButton()
+        restartListener = item.restartListener
+      }
+      is InputMenuItem -> {
+        view?.addInputItem(item)
+        inputItemListener = item.inputItemListener
+      }
+      is SpinnerMenuItem -> view?.addSpinnerItem(item)
+      is LabelMenuItem -> item.properties.forEach { view?.addLabelItem(it.key, it.value) }
     }
   }
 
