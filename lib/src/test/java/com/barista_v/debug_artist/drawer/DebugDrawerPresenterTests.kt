@@ -107,7 +107,7 @@ class DebugDrawerPresenterTests : Spek({
       presenter.onItemAdded(MockFactory.scalpelSwitchMenuItem())
 
       it("should enable it") {
-        verifyZeroInteractions(actor)
+        verify(actor, times(0)).enableScalpelLayout()
         verify(view).addScalpelSwitch(false)
       }
     }
