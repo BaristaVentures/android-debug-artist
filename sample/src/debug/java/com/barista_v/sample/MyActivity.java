@@ -47,6 +47,7 @@ public class MyActivity extends AppCompatActivity
   protected void onDestroy() {
     super.onDestroy();
     mDebugDrawer.release();
+    ViewServer.get(this).removeWindow(this);
   }
 
   /**

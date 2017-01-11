@@ -22,10 +22,4 @@ public class MainActivity extends MyActivity {
     }
   }
 
-  @Override
-  protected void onDestroy() {
-    super.onDestroy();
-    ViewServer.get(this).removeWindow(this);
-  }
-
 }
