@@ -5,12 +5,12 @@ import com.barista_v.debug_artist.item.phoenix.RestartListener
 import com.barista_v.debug_artist.item.spinner.SpinnerItemListener
 import com.jakewharton.scalpel.ScalpelFrameLayout
 
-interface MenuItem
-open class DividerMenuItem : MenuItem
+open class MenuItem
+open class DividerMenuItem : MenuItem()
 
-open class SwitchMenuItem(val checked: Boolean = false) : MenuItem
-open class ButtonMenuItem : MenuItem
-open class LabelMenuItem(val properties: Map<String, String>) : MenuItem
+open class SwitchMenuItem(val checked: Boolean = false) : MenuItem()
+open class ButtonMenuItem : MenuItem()
+open class LabelMenuItem(val properties: Map<String, String>) : MenuItem()
 
 class StethoSwitchMenuItem(checked: Boolean = false) : SwitchMenuItem(checked)
 class LeakCanarySwitchMenuItem(checked: Boolean = false) : SwitchMenuItem(checked)
