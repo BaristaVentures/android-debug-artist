@@ -1,7 +1,8 @@
 ![](img/logo.png)
 
-- master: [![codecov](https://codecov.io/gh/BaristaVentures/debug-artist/branch/master/graph/badge.svg)](https://codecov.io/gh/BaristaVentures/debug-artist)
-- develop: [![codecov](https://codecov.io/gh/BaristaVentures/debug-artist/branch/develop/graph/badge.svg)](https://codecov.io/gh/BaristaVentures/debug-artist)
+[![codecov](https://codecov.io/gh/BaristaVentures/debug-artist/branch/master/graph/badge.svg)](https://codecov.io/gh/BaristaVentures/debug-artist)
+[![codecov](https://codecov.io/gh/BaristaVentures/debug-artist/branch/develop/graph/badge.svg)](https://codecov.io/gh/BaristaVentures/debug-artist)
+[![codebeat badge](https://codebeat.co/badges/17e3bfd1-d2d2-4240-94f0-480da37d32d6)](https://codebeat.co/projects/github-com-baristaventures-debug-artist)
 
 Make developers life easier with some tools, you can add it to your debug builds and have some debug
 libraries like [Leakcanary](https://github.com/square/leakcanary) and others without extra work.
@@ -16,19 +17,19 @@ libraries like [Leakcanary](https://github.com/square/leakcanary) and others wit
 Add this on each activity `setContentView` so your child activities always add it to each activity:
 
 ```
-new DebugDrawer(MyApplication.sInstance, this)
-        .withScalpelSwitch((ScalpelFrameLayout) findViewById(R.id.scalpel))
+mDebugDrawer = new DebugDrawer(appInstance, activityInstance)
+        .withScalpelSwitch((ScalpelFrameLayout) findViewById(R.id.scalpelLayout))
         .withLeakCanarySwitch(true)
-        .withPicassoLogsSwitch()
-        .withStethoSwitch()
+        .withPicassoLogsSwitch(false)
+        .withStethoSwitch(true)
         .withDivider()
         .withLynksButton()
-        .withPhoenixRestartButtons(this)
+        .withPhoenixRestartButton(this)
+        .withDivider()
         .withInputItem(2, "Host", this)
         .withSpinnerItem(1, "Spinner with item selected by index", hosts, 0, this)
-        .withSpinnerItem(3, "Spinner with 2nd item selected", hosts, "Value", this)
         .withDivider()
-        .withInfoProperties(getProperties())
+        .withInfoProperties(getProperties());
 ```
 
 ### Features:
@@ -77,11 +78,14 @@ dependencies {
 
 ## Publish
 
-You need to create `lib/bintray.properties` with the variables declared on `lib/bintray.properties.example`.
+- You need to create `lib/bintray.properties` with the variables declared on `lib/bintray.properties.example`.
 
 ```
 cp lib/gradle.properties.example lib/gradle.properties
 ```
+
+- To Sync with Maven Central you need to get auth tokens from: https://oss.sonatype.org/
+- Run `scripts/deploy.sh` to upload to BinTray (jcenter).
 
 ## Thanks to
 - All feature developers!

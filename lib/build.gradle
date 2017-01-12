@@ -45,13 +45,13 @@ dependencies {
   compile 'com.squareup.leakcanary:leakcanary-android:1.5'
   compile 'com.squareup.picasso:picasso:2.5.2'
   compile 'com.jakewharton.scalpel:scalpel:1.1.2'
-  compile 'com.facebook.stetho:stetho-okhttp:1.4.1'
+  compile 'com.facebook.stetho:stetho-okhttp:1.4.2'
   compile 'com.github.pedrovgs:lynx:1.6'
   compile 'com.jakewharton:process-phoenix:1.1.1'
   compile 'nl.littlerobots.rxlint:rxlint:1.0'
 
   testCompile 'junit:junit:4.12'
-  testCompile "org.mockito:mockito-core:2.2.28"
+  testCompile "org.mockito:mockito-core:2.5.7"
 
   testCompile "org.jetbrains.spek:spek-api:$versions.spek"
   testCompile "org.jetbrains.spek:spek-junit-platform-engine:$versions.spek"

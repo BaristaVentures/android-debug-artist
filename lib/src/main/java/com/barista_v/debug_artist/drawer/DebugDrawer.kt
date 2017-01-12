@@ -12,6 +12,7 @@ import android.widget.CompoundButton
 import android.widget.EditText
 import com.barista_v.debug_artist.DebugActor
 import com.barista_v.debug_artist.R
+import com.barista_v.debug_artist.item.*
 import com.barista_v.debug_artist.item.input.InputItemListener
 import com.barista_v.debug_artist.item.phoenix.RestartListener
 import com.barista_v.debug_artist.item.spinner.SpinnerDrawerItem
@@ -32,125 +33,137 @@ import java.lang.ref.WeakReference
 
  * To add dynamic actions check "debugDrawer.with*" methods.
  */
-class DebugDrawer(application: Application, activity: AppCompatActivity) : OnCheckedChangeListener,
-    Drawer.OnDrawerItemClickListener, SpinnerItemListener, DebugDrawerView {
+class DebugDrawer @JvmOverloads constructor(application: Application,
+                                            activity: AppCompatActivity,
+                                            showDrawerOnFirstLaunch: Boolean = false)
+  : OnCheckedChangeListener, Drawer.OnDrawerItemClickListener, SpinnerItemListener, DebugDrawerView {
 
   private var activityWeakReference = WeakReference(activity)
-
-  private var presenter: DebugDrawerPresenter? = null
-  private val menuDrawer: Drawer
+  private var presenter = DebugDrawerPresenter()
   private val debugActor = DebugActor(application, activity)
+  private val menuDrawer = DrawerBuilder(activity)
+      .withTranslucentStatusBar(true)
+      .withDrawerGravity(Gravity.END)
+      .withShowDrawerOnFirstLaunch(showDrawerOnFirstLaunch)
+      .build()
+      .apply {
+        onDrawerItemClickListener = this@DebugDrawer
+
+        addItems(PrimaryDrawerItem().withName("Debug Artist - Q&A Module")
+            .withDescription("Drag from right to left to open")
+            .withSelectable(false)
+            .withEnabled(false),
+            DividerDrawerItem())
+      }
 
   init {
-    menuDrawer = DrawerBuilder(activity)
-        .withTranslucentStatusBar(true)
-        .withDrawerGravity(Gravity.END)
-        .withShowDrawerOnFirstLaunch(true)
-        .build()
-        .apply {
-          onDrawerItemClickListener = this@DebugDrawer
-
-          addItems(PrimaryDrawerItem().withName("Q&A Module")
-              .withDescription("Drag from right to left to open")
-              .withSelectable(false)
-              .withEnabled(false),
-              DividerDrawerItem())
-        }
-
-    presenter = DebugDrawerPresenter().apply {
-      onAttach(this@DebugDrawer, debugActor)
-    }
+    presenter.onAttach(this@DebugDrawer, debugActor)
   }
 
-  fun release() = presenter?.onDetach()
+  fun release() = presenter.onDetach()
 
   fun openDrawer(): DebugDrawer {
     menuDrawer.openDrawer()
     return this
   }
 
-  fun withLeakCanarySwitch(checked: Boolean = true): DebugDrawer {
+  fun withMenuItem(item: MenuItem): DebugDrawer {
+    presenter.onItemAdded(item)
+    return this
+  }
+
+  //<editor-fold desc="Builder Helpers">
+  fun withDivider() = withMenuItem(DividerMenuItem())
+
+  @JvmOverloads
+  fun withStethoSwitch(checked: Boolean = false) = withMenuItem(StethoSwitchMenuItem(checked))
+
+  @JvmOverloads
+  fun withLeakCanarySwitch(checked: Boolean = false) = withMenuItem(LeakCanarySwitchMenuItem(checked))
+
+  @JvmOverloads
+  fun withScalpelSwitch(layout: ScalpelFrameLayout, checked: Boolean = false) =
+      withMenuItem(ScalpelSwitchMenuItem(layout, checked))
+
+  @JvmOverloads
+  fun withPicassoLogsSwitch(checked: Boolean = false) = withMenuItem(PicassoLogsSwitchMenuItem(checked))
+
+  fun withLynksButton() = withMenuItem(LynksButtonMenuItem())
+
+  fun withPhoenixRestartButton(listener: RestartListener) = withMenuItem(PhoenixButtonMenuItem(listener))
+
+  fun withInputItem(id: Int, name: String, inputItemListener: InputItemListener) =
+      withMenuItem(InputMenuItem(id, name, inputItemListener))
+
+  @JvmOverloads
+  fun withSpinnerItem(id: Int,
+                      name: String,
+                      options: Array<String>,
+                      selectedItem: Int,
+                      listener: SpinnerItemListener) =
+      withMenuItem(SpinnerMenuItem(id, name, options, selectedItem, listener))
+
+  fun withInfoProperties(properties: Map<String, String>) = withMenuItem(LabelMenuItem(properties))
+
+  //</editor-fold>
+
+  //<editor-fold desc="DebugDrawerView">
+  override fun addStethoSwitch(checked: Boolean) {
+    addSwitchDrawerItem(R.string.stetho, R.id.drawer_dev_item_stetho).withChecked(checked)
+  }
+
+  override fun addDividerItem() {
+    menuDrawer.addItem(DividerDrawerItem())
+  }
+
+  override fun addLeakCanarySwitch(checked: Boolean) {
     addSwitchDrawerItem(R.string.leak_canary, R.id.drawer_dev_item_leak).withChecked(checked)
-    presenter?.onLeakCanarySwitchAdded(checked)
-    return this
   }
 
-  fun withStethoSwitch(): DebugDrawer {
-    addSwitchDrawerItem(R.string.stetho, R.id.drawer_dev_item_stetho)
-    return this
+  override fun addPicassoLogsSwitch(checked: Boolean) {
+    addSwitchDrawerItem(R.string.picasso, R.id.drawer_dev_item_picasso).withChecked(checked)
   }
 
-  fun withPicassoLogsSwitch(): DebugDrawer {
-    addSwitchDrawerItem(R.string.picasso, R.id.drawer_dev_item_picasso)
-    return this
+  override fun addScalpelSwitch(checked: Boolean) {
+    addSwitchDrawerItem(R.string.scalpel, R.id.drawer_dev_item_scalpel).withChecked(checked)
   }
 
-  fun withScalpelSwitch(layout: ScalpelFrameLayout): DebugDrawer {
-    debugActor.scalpelFrameLayout = layout
-    addSwitchDrawerItem(R.string.scalpel, R.id.drawer_dev_item_scalpel)
-
-    return this
-  }
-
-  fun withLynksButton(): DebugDrawer {
+  override fun addLynksButton() {
     menuDrawer.addItem(PrimaryDrawerItem().withName(R.string.lynks)
         .withIdentifier(R.id.drawer_dev_item_lynks.toLong())
         .withIcon(R.drawable.ic_android_grey_700_18dp))
-
-    return this
   }
 
-  fun withPhoenixRestartButtons(restartListener: RestartListener): DebugDrawer {
-    presenter?.restartListener = restartListener
-
+  override fun addPhoenixButton() {
     menuDrawer.addItems(PrimaryDrawerItem().withName(R.string.restart_app)
         .withIdentifier(R.id.drawer_dev_item_phoenix_app.toLong())
         .withIcon(R.drawable.ic_gavel_grey_700_18dp))
-
-    return this
   }
 
-  fun withSpinnerItem(id: Int, name: String, options: Array<String>, selectedItem: Int,
-                      listener: SpinnerItemListener): DebugDrawer {
-    menuDrawer.addItem(SpinnerDrawerItem(id, options, listener, selectedItem)
+  override fun addSpinnerItem(it: SpinnerMenuItem) {
+    menuDrawer.addItem(SpinnerDrawerItem(it.id, it.options, it.listener, it.selectedItem)
         .withMoreListeners(this)
-        .withName(name))
-
-    return this
+        .withName(it.name))
   }
 
-  /**
-   * Add an item that shows an input dialog.
-   */
-  fun withInputItem(id: Int, name: String, inputItemListener: InputItemListener): DebugDrawer {
-    presenter?.inputItemListener = inputItemListener
-    val text = activityWeakReference.get()?.getString(R.string.enter_value_for, name) ?: ""
+  override fun addLabelItem(id: String, text: String) {
+    menuDrawer.addItem(SecondaryDrawerItem()
+        .withName(id)
+        .withIcon(R.drawable.ic_info_grey_700_24dp)
+        .withDescription(text)
+        .withIdentifier(R.id.drawer_dev_item_info.toLong()))
+  }
+
+  override fun addInputItem(item: InputMenuItem) {
+    val text = activityWeakReference.get()?.getString(R.string.enter_value_for, item.name) ?: ""
 
     menuDrawer.addItem(PrimaryDrawerItem()
         .withName(text)
-        .withTag(id)
+        .withTag(item.id)
         .withIcon(R.drawable.ic_textsms_grey_700_18dp)
         .withIdentifier(R.id.drawer_dev_item_input.toLong()))
-
-    return this
   }
-
-  fun withDivider(): DebugDrawer {
-    menuDrawer.addItem(DividerDrawerItem())
-    return this
-  }
-
-  fun withInfoProperties(properties: Map<String, String>): DebugDrawer {
-    properties.entries.forEach {
-      menuDrawer.addItem(SecondaryDrawerItem()
-          .withName(it.key)
-          .withIcon(R.drawable.ic_info_grey_700_24dp)
-          .withDescription(it.value)
-          .withIdentifier(R.id.drawer_dev_item_info.toLong()))
-    }
-
-    return this
-  }
+  //</editor-fold>
 
   private fun showInputDialog(drawerItem: PrimaryDrawerItem) = activityWeakReference.get()?.let {
     val factory = LayoutInflater.from(it)
@@ -161,7 +174,7 @@ class DebugDrawer(application: Application, activity: AppCompatActivity) : OnChe
         .setView(entryView)
         .setPositiveButton(android.R.string.yes) { dialog, which ->
           val inputText = entryView.text.toString()
-          presenter?.onTextInputEntered(drawerItem.tag as Int, inputText)
+          presenter.onTextInputEntered(drawerItem.tag as Int, inputText)
 
           drawerItem.withDescription(inputText)
           menuDrawer.updateItem(drawerItem)
@@ -182,19 +195,19 @@ class DebugDrawer(application: Application, activity: AppCompatActivity) : OnChe
   override fun onCheckedChanged(drawerItem: IDrawerItem<Any, RecyclerView.ViewHolder>,
                                 buttonView: CompoundButton, isChecked: Boolean) {
     when (drawerItem.identifier) {
-      R.id.drawer_dev_item_stetho.toLong() -> presenter?.onStethoItemSelected()
-      R.id.drawer_dev_item_leak.toLong() -> presenter?.onLeakCanaryItemSelected()
-      R.id.drawer_dev_item_picasso.toLong() -> presenter?.onPicassoItemSelected()
-      R.id.drawer_dev_item_scalpel.toLong() -> presenter?.onScalpelItemSelected(isChecked)
+      R.id.drawer_dev_item_stetho.toLong() -> presenter.onStethoItemSelected()
+      R.id.drawer_dev_item_leak.toLong() -> presenter.onLeakCanaryItemSelected()
+      R.id.drawer_dev_item_picasso.toLong() -> presenter.onPicassoItemSelected()
+      R.id.drawer_dev_item_scalpel.toLong() -> presenter.onScalpelItemSelected(isChecked)
     }
   }
 
   override fun onItemClick(view: View, position: Int,
                            drawerItem: IDrawerItem<Any, RecyclerView.ViewHolder>): Boolean {
     when (drawerItem.identifier) {
-      R.id.drawer_dev_item_phoenix_app.toLong() -> presenter?.onPhoenixItemSelected()
+      R.id.drawer_dev_item_phoenix_app.toLong() -> presenter.onPhoenixItemSelected()
       R.id.drawer_dev_item_input.toLong() -> showInputDialog(drawerItem as PrimaryDrawerItem)
-      R.id.drawer_dev_item_lynks.toLong() -> presenter?.onLynksItemSelected()
+      R.id.drawer_dev_item_lynks.toLong() -> presenter.onLynksItemSelected()
     }
 
     return true
