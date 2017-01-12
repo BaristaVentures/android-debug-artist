@@ -17,19 +17,19 @@ libraries like [Leakcanary](https://github.com/square/leakcanary) and others wit
 Add this on each activity `setContentView` so your child activities always add it to each activity:
 
 ```
-new DebugDrawer(MyApplication.sInstance, this)
-        .withScalpelSwitch((ScalpelFrameLayout) findViewById(R.id.scalpel))
+mDebugDrawer = new DebugDrawer(appInstance, activityInstance)
+        .withScalpelSwitch((ScalpelFrameLayout) findViewById(R.id.scalpelLayout))
         .withLeakCanarySwitch(true)
-        .withPicassoLogsSwitch()
-        .withStethoSwitch()
+        .withPicassoLogsSwitch(false)
+        .withStethoSwitch(true)
         .withDivider()
         .withLynksButton()
-        .withPhoenixRestartButtons(this)
+        .withPhoenixRestartButton(this)
+        .withDivider()
         .withInputItem(2, "Host", this)
         .withSpinnerItem(1, "Spinner with item selected by index", hosts, 0, this)
-        .withSpinnerItem(3, "Spinner with 2nd item selected", hosts, "Value", this)
         .withDivider()
-        .withInfoProperties(getProperties())
+        .withInfoProperties(getProperties());
 ```
 
 ### Features:
@@ -78,11 +78,14 @@ dependencies {
 
 ## Publish
 
-You need to create `lib/bintray.properties` with the variables declared on `lib/bintray.properties.example`.
+- You need to create `lib/bintray.properties` with the variables declared on `lib/bintray.properties.example`.
 
 ```
 cp lib/gradle.properties.example lib/gradle.properties
 ```
+
+- To Sync with Maven Central you need to get auth tokens from: https://oss.sonatype.org/
+- Run `scripts/deploy.sh` to upload to BinTray (jcenter).
 
 ## Thanks to
 - All feature developers!

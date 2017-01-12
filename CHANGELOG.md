@@ -1,5 +1,11 @@
 # CHANGELOG
 
+# v 0.5.11
+
+- Update to Kotlin 1.0.6.
+- Allow to set initial state for switch's (true/false).
+- Show drawer on first launch now can be set from constructor.
+
 # v 0.5.10 - FIX 0.5.9 broken version
 
 # v 0.5.9 - First public release (*DONT USE*)
