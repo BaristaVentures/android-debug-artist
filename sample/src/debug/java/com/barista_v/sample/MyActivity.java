@@ -24,29 +24,32 @@ public class MyActivity extends AppCompatActivity
   public void setContentView(@LayoutRes int layoutResID) {
     super.setContentView(layoutResID);
 
-    ViewServer.get(this).addWindow(this);
-
     String[] hosts = new String[] { "Value 1", "Value 2" };
+
     mDebugDrawer = new DebugDrawer(MyApplication.sInstance, this)
-        .withScalpelSwitch((ScalpelFrameLayout) findViewById(R.id.scalpel))
+        .withScalpelSwitch((ScalpelFrameLayout) findViewById(R.id.scalpelLayout))
         .withLeakCanarySwitch(true)
-        .withPicassoLogsSwitch()
-        .withStethoSwitch()
+        .withPicassoLogsSwitch(true)
+        .withStethoSwitch(true)
         .withDivider()
         .withLynksButton()
-        .withPhoenixRestartButtons(this)
+        .withPhoenixRestartButton(this)
         .withDivider()
         .withInputItem(2, "Host", this)
         .withSpinnerItem(1, "Spinner with item selected by index", hosts, 0, this)
         .withDivider()
-        .withInfoProperties(getProperties())
-        .openDrawer();
+        .withInfoProperties(getProperties());
+
+    ViewServer.get(this).addWindow(this);
   }
 
   @Override
   protected void onDestroy() {
     super.onDestroy();
+
     mDebugDrawer.release();
+
+    ViewServer.get(this).removeWindow(this);
   }
 
   /**
