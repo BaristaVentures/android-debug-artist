@@ -3,6 +3,6 @@
 # Publish to bintray
 #
 
-gw build
-gw lib:uploadArchives
-gw lib:bintrayUpload
+./gradlew build
+./gradlew lib:uploadArchives
+./gradlew lib:bintrayUpload
