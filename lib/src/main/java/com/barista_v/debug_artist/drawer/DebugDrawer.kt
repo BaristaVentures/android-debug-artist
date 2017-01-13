@@ -14,7 +14,7 @@ import com.barista_v.debug_artist.DebugActor
 import com.barista_v.debug_artist.R
 import com.barista_v.debug_artist.item.*
 import com.barista_v.debug_artist.item.input.InputItemListener
-import com.barista_v.debug_artist.item.issue_reporter.ShakeDetector
+import com.barista_v.debug_artist.item.issue_reporter.AndroidShakeDetector
 import com.barista_v.debug_artist.item.phoenix.RestartListener
 import com.barista_v.debug_artist.item.spinner.SpinnerDrawerItem
 import com.barista_v.debug_artist.item.spinner.SpinnerItemListener
@@ -58,7 +58,7 @@ class DebugDrawer @JvmOverloads constructor(application: Application,
       }
 
   init {
-    presenter.onAttach(this@DebugDrawer, debugActor, ShakeDetector(activity))
+    presenter.onAttach(this@DebugDrawer, debugActor, AndroidShakeDetector(activity))
   }
 
   fun release() = presenter.deAttach()

@@ -200,7 +200,7 @@ class DebugDrawerPresenterTests : Spek({
       presenter.onBugReporterItemSelected(true)
 
       it("should start listening for shakes") {
-        verify(shakeDetector.start())
+        verify(shakeDetector).start()
       }
     }
 
@@ -208,7 +208,7 @@ class DebugDrawerPresenterTests : Spek({
       presenter.onBugReporterItemSelected(false)
 
       it("should pause listening for shakes") {
-        verify(shakeDetector.pause())
+        verify(shakeDetector).pause()
       }
     }
 
