@@ -3,6 +3,7 @@ package com.barista_v.debug_artist.drawer
 import android.support.annotation.VisibleForTesting
 import com.barista_v.debug_artist.item.*
 import com.barista_v.debug_artist.item.input.InputItemListener
+import com.barista_v.debug_artist.item.issue_reporter.ShakeDetector
 import com.barista_v.debug_artist.item.phoenix.RestartListener
 import com.mikepenz.materialdrawer.model.DividerDrawerItem
 
@@ -10,20 +11,24 @@ class DebugDrawerPresenter {
 
   @VisibleForTesting internal var view: DebugDrawerView? = null
   @VisibleForTesting internal var actor: Actor? = null
+  internal var shakeDetector: ShakeDetector? = null
 
   var restartListener: RestartListener? = null
   var inputItemListener: InputItemListener? = null
 
-  fun onAttach(view: DebugDrawerView, actor: Actor) {
+  fun onAttach(view: DebugDrawerView, actor: Actor, shakeDetector: ShakeDetector) {
     this.view = view
     this.actor = actor
+    this.shakeDetector = shakeDetector
   }
 
-  fun onDetach() {
+  fun deAttach() {
     view = null
     actor = null
     restartListener = null
     inputItemListener = null
+
+    shakeDetector?.pause()
   }
 
   fun onPicassoItemSelected() {
@@ -36,6 +41,14 @@ class DebugDrawerPresenter {
 
   fun onStethoItemSelected() {
     actor?.enableStetho()
+  }
+
+  fun onBugReporterItemSelected(checked: Boolean) {
+    if (checked) {
+      shakeDetector?.start()
+    } else {
+      shakeDetector?.pause()
+    }
   }
 
   fun onScalpelItemSelected(enabled: Boolean) {

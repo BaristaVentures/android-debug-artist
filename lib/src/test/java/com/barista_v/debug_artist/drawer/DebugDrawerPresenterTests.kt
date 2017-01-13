@@ -5,6 +5,7 @@ import com.barista_v.debug_artist.item.LynksButtonMenuItem
 import com.barista_v.debug_artist.item.PicassoLogsSwitchMenuItem
 import com.barista_v.debug_artist.item.StethoSwitchMenuItem
 import com.barista_v.debug_artist.item.input.InputItemListener
+import com.barista_v.debug_artist.item.issue_reporter.ShakeDetector
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.api.dsl.it
@@ -19,24 +20,25 @@ import kotlin.test.assertNull
 class DebugDrawerPresenterTests : Spek({
 
   describe("a new DebugDrawer presenter") {
-    var view = Mockito.mock(DebugDrawerView::class.java)
-    var actor = Mockito.mock(Actor::class.java)
-    var presenter = DebugDrawerPresenter().apply { onAttach(view, actor) }
+    val view = mock(DebugDrawerView::class.java)
+    val actor = mock(Actor::class.java)
+    val shakeDetector = mock(ShakeDetector::class.java)
+    var presenter = DebugDrawerPresenter().apply { onAttach(view, actor, shakeDetector) }
 
     beforeEachTest {
-      view = Mockito.mock(DebugDrawerView::class.java)
-      actor = Mockito.mock(Actor::class.java)
-      presenter = DebugDrawerPresenter().apply { onAttach(view, actor) }
+      Mockito.reset(view, actor, shakeDetector)
+      presenter = DebugDrawerPresenter().apply { onAttach(view, actor, shakeDetector) }
     }
 
-    on("onDetach") {
-      presenter.onDetach()
+    on("pause") {
+      presenter.deAttach()
 
-      it("should release resources onDetach") {
+      it("should release resources") {
         assertNull(presenter.view)
         assertNull(presenter.actor)
         assertNull(presenter.inputItemListener)
         assertNull(presenter.restartListener)
+        verify(shakeDetector).pause()
       }
     }
 
@@ -191,6 +193,22 @@ class DebugDrawerPresenterTests : Spek({
 
       it("should enable stetho") {
         verify(actor).enableStetho()
+      }
+    }
+
+    on("bug-reporter item checked") {
+      presenter.onBugReporterItemSelected(true)
+
+      it("should start listening for shakes") {
+        verify(shakeDetector.start())
+      }
+    }
+
+    on("bug-reporter item checked") {
+      presenter.onBugReporterItemSelected(false)
+
+      it("should pause listening for shakes") {
+        verify(shakeDetector.pause())
       }
     }
 
