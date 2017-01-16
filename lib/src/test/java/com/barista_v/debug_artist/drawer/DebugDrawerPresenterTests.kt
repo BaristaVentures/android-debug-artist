@@ -23,7 +23,7 @@ class DebugDrawerPresenterTests : Spek({
     val view = mock(DebugDrawerView::class.java)
     val actor = mock(Actor::class.java)
     val shakeDetector = mock(ShakeDetector::class.java)
-    var presenter = DebugDrawerPresenter().apply { onAttach(view, actor, shakeDetector) }
+    var presenter = DebugDrawerPresenter()
 
     beforeEachTest {
       Mockito.reset(view, actor, shakeDetector)
@@ -200,7 +200,7 @@ class DebugDrawerPresenterTests : Spek({
       presenter.onBugReporterItemSelected(true)
 
       it("should start listening for shakes") {
-        verify(shakeDetector).start()
+        verify(shakeDetector).start(presenter)
       }
     }
 

@@ -3,11 +3,12 @@ package com.barista_v.debug_artist.drawer
 import android.support.annotation.VisibleForTesting
 import com.barista_v.debug_artist.item.*
 import com.barista_v.debug_artist.item.input.InputItemListener
+import com.barista_v.debug_artist.item.issue_reporter.OnShakeListener
 import com.barista_v.debug_artist.item.issue_reporter.ShakeDetector
 import com.barista_v.debug_artist.item.phoenix.RestartListener
 import com.mikepenz.materialdrawer.model.DividerDrawerItem
 
-class DebugDrawerPresenter {
+class DebugDrawerPresenter : OnShakeListener {
 
   @VisibleForTesting internal var view: DebugDrawerView? = null
   @VisibleForTesting internal var actor: Actor? = null
@@ -45,7 +46,7 @@ class DebugDrawerPresenter {
 
   fun onBugReporterItemSelected(checked: Boolean) {
     if (checked) {
-      shakeDetector?.start()
+      shakeDetector?.start(this@DebugDrawerPresenter)
     } else {
       shakeDetector?.pause()
     }
@@ -107,6 +108,10 @@ class DebugDrawerPresenter {
       is SpinnerMenuItem -> view?.addSpinnerItem(item)
       is LabelMenuItem -> item.properties.forEach { view?.addLabelItem(it.key, it.value) }
     }
+  }
+
+  override fun onShake(count: Int) {
+
   }
 
 }

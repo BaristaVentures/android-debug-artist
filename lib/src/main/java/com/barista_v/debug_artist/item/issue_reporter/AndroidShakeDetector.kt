@@ -11,12 +11,14 @@ import android.hardware.SensorManager
  * source: http://jasonmcreynolds.com/?p=388
  */
 class AndroidShakeDetector(val context: Context) : ShakeDetector, SensorEventListener {
-  override var listener: OnShakeListener? = null
+  var listener: OnShakeListener? = null
   private var shakeTimestamp: Long = 0
   private var shakeCount: Int = 0
   private var sensorManager: SensorManager? = null
 
-  override fun start() {
+  override fun start(listener: OnShakeListener) {
+    this.listener = listener
+
     sensorManager = (context.getSystemService(Context.SENSOR_SERVICE) as SensorManager).apply {
       val accelerometerSensor = getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
       registerListener(this@AndroidShakeDetector, accelerometerSensor, SensorManager.SENSOR_DELAY_UI);
@@ -25,6 +27,7 @@ class AndroidShakeDetector(val context: Context) : ShakeDetector, SensorEventLis
 
   override fun pause() {
     sensorManager?.unregisterListener(this)
+    listener = null
   }
 
   override fun onAccuracyChanged(sensor: Sensor, accuracy: Int) {}
