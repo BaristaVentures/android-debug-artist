@@ -124,11 +124,15 @@ class DebugDrawerPresenter : OnShakeListener {
 
     view?.showProgressDialog()
 
-    bugReportRepository?.createBug("My title", "Some descr")
+    bugReportRepository?.createBug("Bug found", "Some descr")
         ?.composeForIoTasks()
         ?.doOnTerminate { view?.dismissProgressDialog() }
         ?.subscribe({
-          view?.showSuccessToast()
+          if (it.error == null) {
+            view?.showSuccessToast()
+          } else {
+            view?.showErrorDialog(it.error.cause.toString())
+          }
         }, {
           view?.showErrorDialog(it.message ?: "Something hapened")
         })

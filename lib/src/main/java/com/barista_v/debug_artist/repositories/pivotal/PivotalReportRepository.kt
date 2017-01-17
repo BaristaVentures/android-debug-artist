@@ -1,11 +1,11 @@
 package com.barista_v.debug_artist.repositories.pivotal
 
+import com.barista_v.debug_artist.repositories.Answer
 import com.barista_v.debug_artist.repositories.BugReportRepository
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.GsonBuilder
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
-import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
@@ -37,21 +37,21 @@ class PivotalReportRepository(apiToken: String, val projectId: String) : BugRepo
 
 
   override fun createBug(name: String, description: String)
-      : Observable<Response<Any>> {
+      : Observable<Answer<Any>> {
     //TODO: manage errors
     val fullDescription = if (properties.isEmpty()) {
       description
     } else {
-      "$description \n${toListOfItems((properties))}"
+      "$description \n\n${toListOfItems((properties))}"
     }
 
-    return service.postStory(projectId, Story(name, fullDescription))
+    return service.postStory(projectId, Story(name, fullDescription)).map { Answer.from(it) }
   }
 
   private fun toListOfItems(properties: Map<String, String>): String {
-    return StringBuilder("*Properties*:").apply {
+    return StringBuilder("**Properties**:\n").apply {
       for ((k, v) in properties) {
-        append("\n- ").append(k).append(": ").append(v)
+        append("\n- *").append(k).append("*: ").append(v)
       }
     }.toString()
   }

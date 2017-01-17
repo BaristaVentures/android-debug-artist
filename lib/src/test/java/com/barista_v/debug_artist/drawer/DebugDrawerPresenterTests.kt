@@ -1,5 +1,6 @@
 package com.barista_v.debug_artist.drawer
 
+import com.barista_v.debug_artist.drawer.MockFactory.answer
 import com.barista_v.debug_artist.item.LeakCanarySwitchMenuItem
 import com.barista_v.debug_artist.item.LynksButtonMenuItem
 import com.barista_v.debug_artist.item.PicassoLogsSwitchMenuItem
@@ -14,10 +15,9 @@ import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.api.dsl.on
 import org.junit.platform.runner.JUnitPlatform
 import org.junit.runner.RunWith
-import org.mockito.ArgumentMatchers.anyObject
+import org.mockito.ArgumentMatchers.anyString
 import org.mockito.Mockito
 import org.mockito.Mockito.*
-import rx.Observable
 import rx.Observable.error
 import kotlin.test.assertNull
 
@@ -155,6 +155,15 @@ class DebugDrawerPresenterTests : Spek({
       }
     }
 
+    on("add button report bug") {
+      val item = MockFactory.reportBugItem(true)
+      presenter.onItemAdded(item)
+
+      it("should add") {
+        verify(view).addBugReportSwitch(true)
+      }
+    }
+
     on("lynks item selected") {
       presenter.onLynksItemSelected()
 
@@ -219,23 +228,24 @@ class DebugDrawerPresenterTests : Spek({
       }
     }
 
-    on("onShake with count 1") {
+    on("onShake with count 2") {
       val spiedPresenter = spy(presenter)
-      spiedPresenter.onShake(1)
+      spiedPresenter.onShake(2)
 
       it("should do nothing") {
         verifyZeroInteractions(presenter, view, actor, shakeDetector)
       }
     }
 
-    on("onShake with count 0") {
+    on("onShake with right count") {
       val bugReportRepository = mock(BugReportRepository::class.java)
 
       it("should createBug device info") {
-        `when`(bugReportRepository.createBug(anyObject())).thenReturn(Observable.just(""))
+        `when`(bugReportRepository.createBug(anyString(), anyString())).thenReturn(answer())
 
+        presenter.bugReportRepository = bugReportRepository
         presenter.onBugReporterItemSelected(true)
-        presenter.onShake(0)
+        presenter.onShake(1)
 
         verify(view).apply {
           showProgressDialog()
@@ -245,16 +255,16 @@ class DebugDrawerPresenterTests : Spek({
       }
     }
 
-    on("onShake with count 0") {
+    on("onShake with right count") {
       val bugReportRepository = mock(BugReportRepository::class.java)
 
       it("should show dialog with error") {
         val error = Throwable("Something happened")
-        `when`(bugReportRepository.createBug(anyObject())).thenReturn(error(error))
+        `when`(bugReportRepository.createBug(anyString(), anyString())).thenReturn(error(error))
 
         presenter.bugReportRepository = bugReportRepository
         presenter.onBugReporterItemSelected(true)
-        presenter.onShake(0)
+        presenter.onShake(1)
 
         verify(view).apply {
           showProgressDialog()
@@ -264,13 +274,9 @@ class DebugDrawerPresenterTests : Spek({
       }
     }
 
-    describe("new text listener") {
-      var inputListener = mock(InputItemListener::class.java)
-
-      beforeEachTest {
-        inputListener = mock(InputItemListener::class.java)
-        presenter.inputItemListener = inputListener
-      }
+    on("text input") {
+      val inputListener = mock(InputItemListener::class.java)
+      presenter.inputItemListener = inputListener
 
       on("text input entered") {
         presenter.onTextInputEntered(1, "asd")
