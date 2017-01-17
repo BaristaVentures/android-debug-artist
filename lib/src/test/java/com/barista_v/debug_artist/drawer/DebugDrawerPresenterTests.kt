@@ -6,14 +6,19 @@ import com.barista_v.debug_artist.item.PicassoLogsSwitchMenuItem
 import com.barista_v.debug_artist.item.StethoSwitchMenuItem
 import com.barista_v.debug_artist.item.input.InputItemListener
 import com.barista_v.debug_artist.item.issue_reporter.ShakeDetector
+import com.barista_v.debug_artist.repositories.BugReportRepository
+import com.barista_v.winwin.mockSchedulers
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.api.dsl.on
 import org.junit.platform.runner.JUnitPlatform
 import org.junit.runner.RunWith
+import org.mockito.ArgumentMatchers.anyObject
 import org.mockito.Mockito
 import org.mockito.Mockito.*
+import rx.Observable
+import rx.Observable.error
 import kotlin.test.assertNull
 
 @RunWith(JUnitPlatform::class)
@@ -26,6 +31,8 @@ class DebugDrawerPresenterTests : Spek({
     var presenter = DebugDrawerPresenter()
 
     beforeEachTest {
+      mockSchedulers()
+
       Mockito.reset(view, actor, shakeDetector)
       presenter = DebugDrawerPresenter().apply { onAttach(view, actor, shakeDetector) }
     }
@@ -212,6 +219,51 @@ class DebugDrawerPresenterTests : Spek({
       }
     }
 
+    on("onShake with count 1") {
+      val spiedPresenter = spy(presenter)
+      spiedPresenter.onShake(1)
+
+      it("should do nothing") {
+        verifyZeroInteractions(presenter, view, actor, shakeDetector)
+      }
+    }
+
+    on("onShake with count 0") {
+      val bugReportRepository = mock(BugReportRepository::class.java)
+
+      it("should createBug device info") {
+        `when`(bugReportRepository.createBug(anyObject())).thenReturn(Observable.just(""))
+
+        presenter.onBugReporterItemSelected(true)
+        presenter.onShake(0)
+
+        verify(view).apply {
+          showProgressDialog()
+          dismissProgressDialog()
+          showSuccessToast()
+        }
+      }
+    }
+
+    on("onShake with count 0") {
+      val bugReportRepository = mock(BugReportRepository::class.java)
+
+      it("should show dialog with error") {
+        val error = Throwable("Something happened")
+        `when`(bugReportRepository.createBug(anyObject())).thenReturn(error(error))
+
+        presenter.bugReportRepository = bugReportRepository
+        presenter.onBugReporterItemSelected(true)
+        presenter.onShake(0)
+
+        verify(view).apply {
+          showProgressDialog()
+          dismissProgressDialog()
+          showErrorDialog(error.message!!)
+        }
+      }
+    }
+
     describe("new text listener") {
       var inputListener = mock(InputItemListener::class.java)
 
@@ -227,8 +279,8 @@ class DebugDrawerPresenterTests : Spek({
           verify(inputListener).onTextInputEnter(1, "asd")
         }
       }
-
     }
+
   }
 
 })

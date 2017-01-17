@@ -10,6 +10,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.CompoundButton
 import android.widget.EditText
+import android.widget.Toast
+import android.widget.Toast.LENGTH_LONG
+import android.widget.Toast.LENGTH_SHORT
 import com.barista_v.debug_artist.DebugActor
 import com.barista_v.debug_artist.R
 import com.barista_v.debug_artist.item.*
@@ -18,6 +21,7 @@ import com.barista_v.debug_artist.item.issue_reporter.AndroidShakeDetector
 import com.barista_v.debug_artist.item.phoenix.RestartListener
 import com.barista_v.debug_artist.item.spinner.SpinnerDrawerItem
 import com.barista_v.debug_artist.item.spinner.SpinnerItemListener
+import com.barista_v.debug_artist.repositories.BugReportRepository
 import com.jakewharton.scalpel.ScalpelFrameLayout
 import com.mikepenz.materialdrawer.Drawer
 import com.mikepenz.materialdrawer.DrawerBuilder
@@ -89,6 +93,10 @@ class DebugDrawer @JvmOverloads constructor(application: Application,
   @JvmOverloads
   fun withPicassoLogsSwitch(checked: Boolean = false) = withMenuItem(PicassoLogsSwitchMenuItem(checked))
 
+  @JvmOverloads
+  fun withReportBugReportSwitch(checked: Boolean = false, bugReportRepository: BugReportRepository) =
+      withMenuItem(ReportBugSwitchMenuItem(checked, bugReportRepository))
+
   fun withLynksButton() = withMenuItem(LynksButtonMenuItem())
 
   fun withPhoenixRestartButton(listener: RestartListener) = withMenuItem(PhoenixButtonMenuItem(listener))
@@ -96,7 +104,6 @@ class DebugDrawer @JvmOverloads constructor(application: Application,
   fun withInputItem(id: Int, name: String, inputItemListener: InputItemListener) =
       withMenuItem(InputMenuItem(id, name, inputItemListener))
 
-  @JvmOverloads
   fun withSpinnerItem(id: Int,
                       name: String,
                       options: Array<String>,
@@ -127,6 +134,10 @@ class DebugDrawer @JvmOverloads constructor(application: Application,
 
   override fun addScalpelSwitch(checked: Boolean) {
     addSwitchDrawerItem(R.string.scalpel, R.id.drawer_dev_item_scalpel).withChecked(checked)
+  }
+
+  override fun addBugReportSwitch(checked: Boolean) {
+    addSwitchDrawerItem(R.string.report_bug, R.id.drawer_dev_item_bug_report).withChecked(checked)
   }
 
   override fun addLynksButton() {
@@ -164,6 +175,26 @@ class DebugDrawer @JvmOverloads constructor(application: Application,
         .withIcon(R.drawable.ic_textsms_grey_700_18dp)
         .withIdentifier(R.id.drawer_dev_item_input.toLong()))
   }
+
+  override fun showProgressDialog() {
+
+  }
+
+  override fun dismissProgressDialog() {
+  }
+
+  override fun showErrorDialog(message: String) {
+    activityWeakReference.get()?.let {
+      Toast.makeText(it, message, LENGTH_LONG).show()
+    }
+  }
+
+  override fun showSuccessToast() {
+    activityWeakReference.get()?.let {
+      Toast.makeText(it, "Success", LENGTH_SHORT).show()
+    }
+  }
+
   //</editor-fold>
 
   private fun showInputDialog(drawerItem: PrimaryDrawerItem) = activityWeakReference.get()?.let {
@@ -200,6 +231,7 @@ class DebugDrawer @JvmOverloads constructor(application: Application,
       R.id.drawer_dev_item_leak.toLong() -> presenter.onLeakCanaryItemSelected()
       R.id.drawer_dev_item_picasso.toLong() -> presenter.onPicassoItemSelected()
       R.id.drawer_dev_item_scalpel.toLong() -> presenter.onScalpelItemSelected(isChecked)
+      R.id.drawer_dev_item_bug_report.toLong() -> presenter.onBugReporterItemSelected(isChecked)
     }
   }
 

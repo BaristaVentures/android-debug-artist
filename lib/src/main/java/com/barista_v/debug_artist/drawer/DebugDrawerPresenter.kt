@@ -1,18 +1,23 @@
 package com.barista_v.debug_artist.drawer
 
 import android.support.annotation.VisibleForTesting
+import android.util.Log
+import com.barista_v.debug_artist.extensions.composeForIoTasks
 import com.barista_v.debug_artist.item.*
 import com.barista_v.debug_artist.item.input.InputItemListener
 import com.barista_v.debug_artist.item.issue_reporter.OnShakeListener
 import com.barista_v.debug_artist.item.issue_reporter.ShakeDetector
 import com.barista_v.debug_artist.item.phoenix.RestartListener
+import com.barista_v.debug_artist.repositories.BugReportRepository
 import com.mikepenz.materialdrawer.model.DividerDrawerItem
 
 class DebugDrawerPresenter : OnShakeListener {
+  val TAG = "DebugDrawerPresenter"
 
   @VisibleForTesting internal var view: DebugDrawerView? = null
   @VisibleForTesting internal var actor: Actor? = null
-  internal var shakeDetector: ShakeDetector? = null
+  @VisibleForTesting internal var bugReportRepository: BugReportRepository? = null
+  @VisibleForTesting internal var shakeDetector: ShakeDetector? = null
 
   var restartListener: RestartListener? = null
   var inputItemListener: InputItemListener? = null
@@ -105,13 +110,29 @@ class DebugDrawerPresenter : OnShakeListener {
         view?.addInputItem(item)
         inputItemListener = item.inputItemListener
       }
+      is ReportBugSwitchMenuItem -> {
+        view?.addBugReportSwitch(item.checked)
+        bugReportRepository = item.bugReportRepository
+      }
       is SpinnerMenuItem -> view?.addSpinnerItem(item)
       is LabelMenuItem -> item.properties.forEach { view?.addLabelItem(it.key, it.value) }
     }
   }
 
   override fun onShake(count: Int) {
+    if (count > 1) return
 
+    view?.showProgressDialog()
+
+    bugReportRepository?.createBug("My title", "Some descr")
+        ?.composeForIoTasks()
+        ?.doOnTerminate { view?.dismissProgressDialog() }
+        ?.subscribe({
+          view?.showSuccessToast()
+        }, {
+          view?.showErrorDialog(it.message ?: "Something hapened")
+        })
+        ?: Log.w(TAG, "You need to set BugReportRepository first before.")
   }
 
 }

@@ -11,6 +11,7 @@ import com.barista_v.debug_artist.item.input.InputItemListener;
 import com.barista_v.debug_artist.item.phoenix.RestartListener;
 import com.barista_v.debug_artist.item.spinner.SpinnerDrawerItem;
 import com.barista_v.debug_artist.item.spinner.SpinnerItemListener;
+import com.barista_v.debug_artist.repositories.PivotalReportRepository;
 import com.jakewharton.scalpel.ScalpelFrameLayout;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -31,6 +32,8 @@ public class MyActivity extends AppCompatActivity
         .withLeakCanarySwitch(true)
         .withPicassoLogsSwitch(true)
         .withStethoSwitch(true)
+        .withReportBugReportSwitch(true,
+            new PivotalReportRepository("8d4f9d99c2a4c818746fe1cb9015e2c9", "1954523"))
         .withDivider()
         .withLynksButton()
         .withPhoenixRestartButton(this)

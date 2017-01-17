@@ -8,4 +8,5 @@
   <item name="drawer_dev_item_info" type="id" />
   <item name="drawer_dev_item_phoenix_app" type="id" />
   <item name="drawer_dev_item_input" type="id" />
+  <item name="drawer_dev_item_bug_report" type="id" />
 </resources>
