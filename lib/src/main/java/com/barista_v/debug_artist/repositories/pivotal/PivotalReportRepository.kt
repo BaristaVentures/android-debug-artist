@@ -1,5 +1,6 @@
-package com.barista_v.debug_artist.repositories
+package com.barista_v.debug_artist.repositories.pivotal
 
+import com.barista_v.debug_artist.repositories.BugReportRepository
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.GsonBuilder
 import okhttp3.Interceptor
@@ -14,8 +15,9 @@ class PivotalReportRepository(apiToken: String, val projectId: String) : BugRepo
   private val url = "https://www.pivotaltracker.com/"
   private val service: PivotalService
 
-  init {
+  var properties = mapOf<String, String>()
 
+  init {
     val okHttpClient = OkHttpClient.Builder().apply {
       addInterceptor(PivotalTrackerHeaderInterceptor(apiToken))
     }.build()
@@ -34,9 +36,24 @@ class PivotalReportRepository(apiToken: String, val projectId: String) : BugRepo
   }
 
 
-  override fun createBug(name: String, description: String): Observable<Response<Any>> {
+  override fun createBug(name: String, description: String)
+      : Observable<Response<Any>> {
     //TODO: manage errors
-    return service.postStory(projectId, Story(name, description))
+    val fullDescription = if (properties.isEmpty()) {
+      description
+    } else {
+      "$description \n${toListOfItems((properties))}"
+    }
+
+    return service.postStory(projectId, Story(name, fullDescription))
+  }
+
+  private fun toListOfItems(properties: Map<String, String>): String {
+    return StringBuilder("*Properties*:").apply {
+      for ((k, v) in properties) {
+        append("\n- ").append(k).append(": ").append(v)
+      }
+    }.toString()
   }
 
 }

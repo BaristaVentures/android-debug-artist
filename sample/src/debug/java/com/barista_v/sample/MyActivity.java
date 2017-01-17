@@ -11,10 +11,13 @@ import com.barista_v.debug_artist.item.input.InputItemListener;
 import com.barista_v.debug_artist.item.phoenix.RestartListener;
 import com.barista_v.debug_artist.item.spinner.SpinnerDrawerItem;
 import com.barista_v.debug_artist.item.spinner.SpinnerItemListener;
-import com.barista_v.debug_artist.repositories.PivotalReportRepository;
+import com.barista_v.debug_artist.repositories.pivotal.PivotalReportRepository;
 import com.jakewharton.scalpel.ScalpelFrameLayout;
 import java.util.LinkedHashMap;
 import java.util.Map;
+
+import static android.os.Build.MANUFACTURER;
+import static android.os.Build.MODEL;
 
 public class MyActivity extends AppCompatActivity
     implements SpinnerItemListener, RestartListener, InputItemListener {
@@ -27,13 +30,17 @@ public class MyActivity extends AppCompatActivity
 
     String[] hosts = new String[] { "Value 1", "Value 2" };
 
+    PivotalReportRepository pivotalRepository =
+        new PivotalReportRepository("8d4f9d99c2a4c818746fe1cb9015e2c9", "1954523");
+
+    pivotalRepository.setProperties(getProperties());
+
     mDebugDrawer = new DebugDrawer(MyApplication.sInstance, this)
         .withScalpelSwitch((ScalpelFrameLayout) findViewById(R.id.scalpelLayout))
         .withLeakCanarySwitch(true)
         .withPicassoLogsSwitch(true)
         .withStethoSwitch(true)
-        .withReportBugReportSwitch(true,
-            new PivotalReportRepository("8d4f9d99c2a4c818746fe1cb9015e2c9", "1954523"))
+        .withReportBugReportSwitch(true, pivotalRepository)
         .withDivider()
         .withLynksButton()
         .withPhoenixRestartButton(this)
@@ -64,8 +71,8 @@ public class MyActivity extends AppCompatActivity
       put("AppVersion", BuildConfig.VERSION_NAME);
       put("BuildNumber", String.valueOf(BuildConfig.VERSION_CODE));
       put("AndroidVersion", Build.VERSION.RELEASE);
-      put("Manufacturer", Build.MANUFACTURER);
-      put("Model", Build.MODEL);
+      put("Manufacturer", MANUFACTURER);
+      put("Model", MODEL);
     }};
   }
 
