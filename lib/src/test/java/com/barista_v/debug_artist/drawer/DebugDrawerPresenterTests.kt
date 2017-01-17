@@ -157,8 +157,9 @@ class DebugDrawerPresenterTests : Spek({
       val item = MockFactory.reportBugItem(true)
       presenter.onItemAdded(item)
 
-      it("should add") {
+      it("should add and start shake detector") {
         verify(view).addBugReportSwitch(true)
+        verify(shakeDetector).start(presenter)
       }
     }
 
@@ -218,7 +219,7 @@ class DebugDrawerPresenterTests : Spek({
       }
     }
 
-    on("bug-reporter item checked") {
+    on("bug-reporter item unchecked") {
       presenter.onBugReporterItemSelected(false)
 
       it("should pause listening for shakes") {

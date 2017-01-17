@@ -113,6 +113,7 @@ class DebugDrawerPresenter : OnShakeListener {
       }
       is ReportBugSwitchMenuItem -> {
         view?.addBugReportSwitch(item.checked)
+        shakeDetector?.start(this)
         bugRepositoryBuilder = item.repositoryBuilder
       }
       is SpinnerMenuItem -> view?.addSpinnerItem(item)
