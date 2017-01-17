@@ -16,15 +16,21 @@ class ReportBugPresenterTests : Spek({
   describe("a new ReportBug presenter") {
     val view = mock(ReportBugView::class.java)
     val bugReportRepository = mock(BugReportRepository::class.java)
+    val extrasHandler = mock(ExtrasHandler::class.java)
     var presenter = ReportBugPresenter()
 
     beforeEachTest {
       mockSchedulers()
 
-      Mockito.reset(view, bugReportRepository)
-      presenter = ReportBugPresenter().apply { attach(view, bugReportRepository) }
+      Mockito.reset(view, bugReportRepository, extrasHandler)
+      presenter = ReportBugPresenter().apply { attach(view, extrasHandler) }
     }
 
+    on("attach") {
+      it("should build repository") {
+        verify(extrasHandler).extraRepositoryBuilder
+      }
+    }
 
     on("sendButton") {
       presenter.onSendButtonClick("title", "description")
@@ -37,6 +43,7 @@ class ReportBugPresenterTests : Spek({
         }
       }
     }
+
 
     on("sendButton with success") {
       `when`(bugReportRepository.createBug("title", "description")).thenReturn(answer())

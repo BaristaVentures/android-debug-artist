@@ -24,6 +24,7 @@
     android:padding="@dimen/spacing_medium">
 
     <EditText
+      android:id="@+id/titleEditText"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:hint="@string/title"
@@ -31,6 +32,7 @@
       tools:text="Title" />
 
     <EditText
+      android:id="@+id/descriptionEditText"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_marginTop="@dimen/spacing_small"
@@ -39,7 +41,7 @@
       tools:text="Description" />
 
     <Button
-      android:id="@+id/button"
+      android:id="@+id/sendButton"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_gravity="center_horizontal"

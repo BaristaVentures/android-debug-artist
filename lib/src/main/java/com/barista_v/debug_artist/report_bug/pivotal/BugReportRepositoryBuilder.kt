@@ -6,7 +6,7 @@ import com.barista_v.debug_artist.repositories.BugReportRepository
 
 class BugReportRepositoryBuilder(val apiKey: String,
                                  val projectId: String,
-                                 val properties: Map<String, String>)
+                                 val properties: MutableMap<String, String>)
   : BugReportRepository.Builder {
 
   override fun build(): BugReportRepository {
@@ -21,7 +21,7 @@ class BugReportRepositoryBuilder(val apiKey: String,
   }
 
   constructor(source: Parcel) : this(source.readString(), source.readString(),
-      mapOf<String, String>().apply { source.readMap(this, Map::class.java.classLoader) })
+      mutableMapOf<String, String>().apply { source.readMap(this, MutableMap::class.java.classLoader) })
 
   override fun describeContents() = 0
 
