@@ -8,4 +8,7 @@
   <string name="restart_app">Restart App</string>
   <string name="enter_value_for">Enter value for \'%s\'</string>
   <string name="report_bug">Report Bug</string>
+  <string name="title">title</string>
+  <string name="description">description</string>
+  <string name="send">send</string>
 </resources>

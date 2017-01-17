@@ -1,4 +1,4 @@
-package com.barista_v.debug_artist.item.issue_reporter
+package com.barista_v.debug_artist.drawer.item.issue_reporter
 
 import android.content.Context
 import android.hardware.Sensor

@@ -7,11 +7,11 @@ import android.util.Log;
 import android.widget.Toast;
 import com.barista_v.debug_artist.ViewServer;
 import com.barista_v.debug_artist.drawer.DebugDrawer;
-import com.barista_v.debug_artist.item.input.InputItemListener;
-import com.barista_v.debug_artist.item.phoenix.RestartListener;
-import com.barista_v.debug_artist.item.spinner.SpinnerDrawerItem;
-import com.barista_v.debug_artist.item.spinner.SpinnerItemListener;
-import com.barista_v.debug_artist.repositories.pivotal.PivotalReportRepository;
+import com.barista_v.debug_artist.drawer.item.input.InputItemListener;
+import com.barista_v.debug_artist.drawer.item.phoenix.RestartListener;
+import com.barista_v.debug_artist.drawer.item.spinner.SpinnerDrawerItem;
+import com.barista_v.debug_artist.drawer.item.spinner.SpinnerItemListener;
+import com.barista_v.debug_artist.report_bug.pivotal.BugReportRepositoryBuilder;
 import com.jakewharton.scalpel.ScalpelFrameLayout;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -30,17 +30,16 @@ public class MyActivity extends AppCompatActivity
 
     String[] hosts = new String[] { "Value 1", "Value 2" };
 
-    PivotalReportRepository pivotalRepository =
-        new PivotalReportRepository("8d4f9d99c2a4c818746fe1cb9015e2c9", "1954523");
-
-    pivotalRepository.setProperties(getProperties());
+    BugReportRepositoryBuilder repositoryBuilder =
+        new BugReportRepositoryBuilder("8d4f9d99c2a4c818746fe1cb9015e2c9", "1954523",
+            getProperties());
 
     mDebugDrawer = new DebugDrawer(MyApplication.sInstance, this)
         .withScalpelSwitch((ScalpelFrameLayout) findViewById(R.id.scalpelLayout))
         .withLeakCanarySwitch(true)
         .withPicassoLogsSwitch(true)
         .withStethoSwitch(true)
-        .withReportBugReportSwitch(true, pivotalRepository)
+        .withReportBugReportSwitch(true, repositoryBuilder)
         .withDivider()
         .withLynksButton()
         .withPhoenixRestartButton(this)

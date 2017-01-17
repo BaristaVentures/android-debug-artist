@@ -1,4 +1,4 @@
-package com.barista_v.debug_artist.item.spinner
+package com.barista_v.debug_artist.drawer.item.spinner
 
 import android.support.v7.widget.PopupMenu
 import android.view.MenuItem

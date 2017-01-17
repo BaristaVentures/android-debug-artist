@@ -1,13 +1,11 @@
 package com.barista_v.debug_artist.drawer
 
 import android.support.annotation.VisibleForTesting
-import android.util.Log
-import com.barista_v.debug_artist.extensions.composeForIoTasks
-import com.barista_v.debug_artist.item.*
-import com.barista_v.debug_artist.item.input.InputItemListener
-import com.barista_v.debug_artist.item.issue_reporter.OnShakeListener
-import com.barista_v.debug_artist.item.issue_reporter.ShakeDetector
-import com.barista_v.debug_artist.item.phoenix.RestartListener
+import com.barista_v.debug_artist.drawer.item.*
+import com.barista_v.debug_artist.drawer.item.input.InputItemListener
+import com.barista_v.debug_artist.drawer.item.issue_reporter.OnShakeListener
+import com.barista_v.debug_artist.drawer.item.issue_reporter.ShakeDetector
+import com.barista_v.debug_artist.drawer.item.phoenix.RestartListener
 import com.barista_v.debug_artist.repositories.BugReportRepository
 import com.mikepenz.materialdrawer.model.DividerDrawerItem
 
@@ -16,14 +14,17 @@ class DebugDrawerPresenter : OnShakeListener {
 
   @VisibleForTesting internal var view: DebugDrawerView? = null
   @VisibleForTesting internal var actor: Actor? = null
-  @VisibleForTesting internal var bugReportRepository: BugReportRepository? = null
+  @VisibleForTesting internal var bugRepositoryBuilder: BugReportRepository.Builder? = null
   @VisibleForTesting internal var shakeDetector: ShakeDetector? = null
+  @VisibleForTesting internal var restartListener: RestartListener? = null
+  @VisibleForTesting internal var inputItemListener: InputItemListener? = null
 
-  var restartListener: RestartListener? = null
-  var inputItemListener: InputItemListener? = null
+  private var traveler: DebugDrawerTraveler? = null
 
-  fun onAttach(view: DebugDrawerView, actor: Actor, shakeDetector: ShakeDetector) {
+  fun attach(view: DebugDrawerView, traveler: DebugDrawerTraveler,
+             actor: Actor, shakeDetector: ShakeDetector) {
     this.view = view
+    this.traveler = traveler
     this.actor = actor
     this.shakeDetector = shakeDetector
   }
@@ -112,7 +113,7 @@ class DebugDrawerPresenter : OnShakeListener {
       }
       is ReportBugSwitchMenuItem -> {
         view?.addBugReportSwitch(item.checked)
-        bugReportRepository = item.bugReportRepository
+        bugRepositoryBuilder = item.repositoryBuilder
       }
       is SpinnerMenuItem -> view?.addSpinnerItem(item)
       is LabelMenuItem -> item.properties.forEach { view?.addLabelItem(it.key, it.value) }
@@ -122,21 +123,9 @@ class DebugDrawerPresenter : OnShakeListener {
   override fun onShake(count: Int) {
     if (count > 1) return
 
-    view?.showProgressDialog()
-
-    bugReportRepository?.createBug("Bug found", "Some descr")
-        ?.composeForIoTasks()
-        ?.doOnTerminate { view?.dismissProgressDialog() }
-        ?.subscribe({
-          if (it.error == null) {
-            view?.showSuccessToast()
-          } else {
-            view?.showErrorDialog(it.error.cause.toString())
-          }
-        }, {
-          view?.showErrorDialog(it.message ?: "Something hapened")
-        })
-        ?: Log.w(TAG, "You need to set BugReportRepository first before.")
+    bugRepositoryBuilder?.let {
+      traveler?.startBugReportView(it)
+    }
   }
 
 }

@@ -6,7 +6,13 @@
   <uses-permission android:name="android.permission.INTERNET" />
 
   <application>
+
     <activity android:name="com.github.pedrovgs.lynx.LynxActivity" />
+
+    <activity
+      android:name=".report_bug.ReportBugActivity"
+      android:label="Report Bug" />
+
   </application>
 
 </manifest>

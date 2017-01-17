@@ -1,40 +1,38 @@
 package com.barista_v.debug_artist.drawer
 
-import com.barista_v.debug_artist.drawer.MockFactory.answer
-import com.barista_v.debug_artist.item.LeakCanarySwitchMenuItem
-import com.barista_v.debug_artist.item.LynksButtonMenuItem
-import com.barista_v.debug_artist.item.PicassoLogsSwitchMenuItem
-import com.barista_v.debug_artist.item.StethoSwitchMenuItem
-import com.barista_v.debug_artist.item.input.InputItemListener
-import com.barista_v.debug_artist.item.issue_reporter.ShakeDetector
-import com.barista_v.debug_artist.repositories.BugReportRepository
-import com.barista_v.winwin.mockSchedulers
+import com.barista_v.debug_artist.MockFactory
+import com.barista_v.debug_artist.MockFactory.bugRepositoryBuilder
+import com.barista_v.debug_artist.drawer.item.LeakCanarySwitchMenuItem
+import com.barista_v.debug_artist.drawer.item.LynksButtonMenuItem
+import com.barista_v.debug_artist.drawer.item.PicassoLogsSwitchMenuItem
+import com.barista_v.debug_artist.drawer.item.StethoSwitchMenuItem
+import com.barista_v.debug_artist.drawer.item.input.InputItemListener
+import com.barista_v.debug_artist.drawer.item.issue_reporter.ShakeDetector
+import com.barista_v.debug_artist.mockSchedulers
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.api.dsl.on
-import org.junit.platform.runner.JUnitPlatform
-import org.junit.runner.RunWith
-import org.mockito.ArgumentMatchers.anyString
+import org.mockito.ArgumentMatchers.anyObject
 import org.mockito.Mockito
 import org.mockito.Mockito.*
-import rx.Observable.error
 import kotlin.test.assertNull
 
-@RunWith(JUnitPlatform::class)
+//@RunWith(JUnitPlatform::class)
 class DebugDrawerPresenterTests : Spek({
 
   describe("a new DebugDrawer presenter") {
     val view = mock(DebugDrawerView::class.java)
     val actor = mock(Actor::class.java)
     val shakeDetector = mock(ShakeDetector::class.java)
+    val traveler = mock(DebugDrawerTraveler::class.java)
     var presenter = DebugDrawerPresenter()
 
     beforeEachTest {
       mockSchedulers()
 
-      Mockito.reset(view, actor, shakeDetector)
-      presenter = DebugDrawerPresenter().apply { onAttach(view, actor, shakeDetector) }
+      Mockito.reset(view, traveler, actor, shakeDetector)
+      presenter = DebugDrawerPresenter().apply { attach(view, traveler, actor, shakeDetector) }
     }
 
     on("pause") {
@@ -233,46 +231,19 @@ class DebugDrawerPresenterTests : Spek({
       spiedPresenter.onShake(2)
 
       it("should do nothing") {
-        verifyZeroInteractions(presenter, view, actor, shakeDetector)
+        verifyZeroInteractions(presenter, view, actor, traveler, shakeDetector)
       }
     }
 
     on("onShake with right count") {
-      val bugReportRepository = mock(BugReportRepository::class.java)
+      presenter.bugRepositoryBuilder = bugRepositoryBuilder()
+      presenter.onShake(1)
 
-      it("should createBug device info") {
-        `when`(bugReportRepository.createBug(anyString(), anyString())).thenReturn(answer())
-
-        presenter.bugReportRepository = bugReportRepository
-        presenter.onBugReporterItemSelected(true)
-        presenter.onShake(1)
-
-        verify(view).apply {
-          showProgressDialog()
-          dismissProgressDialog()
-          showSuccessToast()
-        }
+      it("should start report bug view") {
+        verify(traveler).startBugReportView(anyObject())
       }
     }
 
-    on("onShake with right count") {
-      val bugReportRepository = mock(BugReportRepository::class.java)
-
-      it("should show dialog with error") {
-        val error = Throwable("Something happened")
-        `when`(bugReportRepository.createBug(anyString(), anyString())).thenReturn(error(error))
-
-        presenter.bugReportRepository = bugReportRepository
-        presenter.onBugReporterItemSelected(true)
-        presenter.onShake(1)
-
-        verify(view).apply {
-          showProgressDialog()
-          dismissProgressDialog()
-          showErrorDialog(error.message!!)
-        }
-      }
-    }
 
     on("text input") {
       val inputListener = mock(InputItemListener::class.java)

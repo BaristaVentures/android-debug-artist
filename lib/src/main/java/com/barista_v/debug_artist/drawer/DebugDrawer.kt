@@ -15,12 +15,12 @@ import android.widget.Toast.LENGTH_LONG
 import android.widget.Toast.LENGTH_SHORT
 import com.barista_v.debug_artist.DebugActor
 import com.barista_v.debug_artist.R
-import com.barista_v.debug_artist.item.*
-import com.barista_v.debug_artist.item.input.InputItemListener
-import com.barista_v.debug_artist.item.issue_reporter.AndroidShakeDetector
-import com.barista_v.debug_artist.item.phoenix.RestartListener
-import com.barista_v.debug_artist.item.spinner.SpinnerDrawerItem
-import com.barista_v.debug_artist.item.spinner.SpinnerItemListener
+import com.barista_v.debug_artist.drawer.item.*
+import com.barista_v.debug_artist.drawer.item.input.InputItemListener
+import com.barista_v.debug_artist.drawer.item.issue_reporter.AndroidShakeDetector
+import com.barista_v.debug_artist.drawer.item.phoenix.RestartListener
+import com.barista_v.debug_artist.drawer.item.spinner.SpinnerDrawerItem
+import com.barista_v.debug_artist.drawer.item.spinner.SpinnerItemListener
 import com.barista_v.debug_artist.repositories.BugReportRepository
 import com.jakewharton.scalpel.ScalpelFrameLayout
 import com.mikepenz.materialdrawer.Drawer
@@ -62,7 +62,7 @@ class DebugDrawer @JvmOverloads constructor(application: Application,
       }
 
   init {
-    presenter.onAttach(this@DebugDrawer, debugActor, AndroidShakeDetector(activity))
+    presenter.attach(this@DebugDrawer, DebugDrawerTraveler(activity), debugActor, AndroidShakeDetector(activity))
   }
 
   fun release() = presenter.deAttach()
@@ -94,7 +94,7 @@ class DebugDrawer @JvmOverloads constructor(application: Application,
   fun withPicassoLogsSwitch(checked: Boolean = false) = withMenuItem(PicassoLogsSwitchMenuItem(checked))
 
   @JvmOverloads
-  fun withReportBugReportSwitch(checked: Boolean = false, bugReportRepository: BugReportRepository) =
+  fun withReportBugReportSwitch(checked: Boolean = false, bugReportRepository: BugReportRepository.Builder) =
       withMenuItem(ReportBugSwitchMenuItem(checked, bugReportRepository))
 
   fun withLynksButton() = withMenuItem(LynksButtonMenuItem())

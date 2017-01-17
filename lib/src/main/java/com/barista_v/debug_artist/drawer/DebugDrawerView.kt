@@ -1,7 +1,7 @@
 package com.barista_v.debug_artist.drawer
 
-import com.barista_v.debug_artist.item.InputMenuItem
-import com.barista_v.debug_artist.item.SpinnerMenuItem
+import com.barista_v.debug_artist.drawer.item.InputMenuItem
+import com.barista_v.debug_artist.drawer.item.SpinnerMenuItem
 
 interface DebugDrawerView {
   fun addDividerItem()

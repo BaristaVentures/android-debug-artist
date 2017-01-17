@@ -1,4 +1,4 @@
-package com.barista_v.debug_artist.repositories.pivotal
+package com.barista_v.debug_artist.report_bug.pivotal
 
 import com.barista_v.debug_artist.repositories.Answer
 import com.barista_v.debug_artist.repositories.BugReportRepository
@@ -11,11 +11,13 @@ import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import rx.Observable
 
-class PivotalReportRepository(apiToken: String, val projectId: String) : BugReportRepository {
+class PivotalReportRepository(apiToken: String,
+                              val projectId: String,
+                              var properties: Map<String, String> = mapOf<String, String>())
+  : BugReportRepository {
+
   private val url = "https://www.pivotaltracker.com/"
   private val service: PivotalService
-
-  var properties = mapOf<String, String>()
 
   init {
     val okHttpClient = OkHttpClient.Builder().apply {
@@ -34,7 +36,6 @@ class PivotalReportRepository(apiToken: String, val projectId: String) : BugRepo
 
     service = retrofit.create(PivotalService::class.java)
   }
-
 
   override fun createBug(name: String, description: String)
       : Observable<Answer<Any>> {

@@ -1,4 +1,4 @@
-package com.barista_v.debug_artist.repositories.pivotal
+package com.barista_v.debug_artist.report_bug.pivotal
 
 import com.google.gson.annotations.SerializedName
 

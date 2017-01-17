@@ -1,4 +1,4 @@
-package com.barista_v.winwin
+package com.barista_v.debug_artist
 
 import rx.android.plugins.RxAndroidPlugins
 import rx.android.plugins.RxAndroidSchedulersHook
