@@ -4,5 +4,5 @@ interface ReportBugView {
   fun showProgressDialog()
   fun dismissProgressDialog()
   fun showSuccessToast()
-  fun  showErrorDialog(toString: String)
+  fun showErrorDialog(text: String)
 }

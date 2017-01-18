@@ -64,3 +64,8 @@
 -keepclasseswithmembers class * {
     @retrofit2.http.* <methods>;
 }
+
+-keepclasseswithmembers class com.barista_v.debug_artist.report_bug.pivotal.Story { *; }
+-keepclasseswithmembers class com.barista_v.debug_artist.report_bug.pivotal.StoryRequestBody { *; }
+-keepclasseswithmembers class com.barista_v.debug_artist.report_bug.pivotal.Comment { *; }
+-keepclasseswithmembers class com.barista_v.debug_artist.report_bug.pivotal.Attachment { *; }

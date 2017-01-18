@@ -4,12 +4,16 @@ import com.barista_v.debug_artist.repositories.Answer
 import com.barista_v.debug_artist.repositories.BugReportRepository
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.GsonBuilder
-import okhttp3.Interceptor
-import okhttp3.OkHttpClient
+import okhttp3.*
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import rx.Observable
+import rx.Observable.just
+import rx.Observable.zip
+import java.io.File
+
 
 class PivotalReportRepository(apiToken: String,
                               val projectId: String,
@@ -20,7 +24,11 @@ class PivotalReportRepository(apiToken: String,
   private val service: PivotalService
 
   init {
+    val logger = HttpLoggingInterceptor(SimpleHttpLogger("PivotalTrackerRepo")).apply {
+      level = HttpLoggingInterceptor.Level.BODY
+    }
     val okHttpClient = OkHttpClient.Builder().apply {
+      addInterceptor(logger)
       addInterceptor(PivotalTrackerHeaderInterceptor(apiToken))
     }.build()
 
@@ -37,16 +45,43 @@ class PivotalReportRepository(apiToken: String,
     service = retrofit.create(PivotalService::class.java)
   }
 
-  override fun createBug(name: String, description: String)
-      : Observable<Answer<Any>> {
-    //TODO: manage errors
+  override fun createBug(name: String, description: String, screenshotFilePath: String?): Observable<Answer<Any>> {
+    val uploadFileObservable = screenshotFilePath?.let {
+      uploadFile(it)
+    } ?: just(null)
+
+    return zip(createStory(name, description), uploadFileObservable, { story, uploadedFile ->
+      if (story.body == null) {
+        just(story)
+      } else if (uploadedFile?.body == null) {
+        just(uploadedFile)
+      } else {
+        createComment(story.body.id, uploadedFile?.body.filename, arrayOf(uploadedFile?.body))
+      }
+    }).switchMap { observable -> observable }
+  }
+
+  private fun createStory(name: String, description: String): Observable<Answer<Story>> {
     val fullDescription = if (properties.isEmpty()) {
       description
     } else {
       "$description \n\n${toListOfItems((properties))}"
     }
 
-    return service.postStory(projectId, Story(name, fullDescription)).map { Answer.from(it) }
+    return service.postStory(projectId, StoryRequestBody(name, fullDescription)).map { Answer.from(it) }
+  }
+
+  private fun uploadFile(filePath: String): Observable<Answer<Attachment>> {
+    val file = File(filePath)
+    val requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file)
+    val body = MultipartBody.Part.createFormData("file", file.name, requestFile)
+
+    return service.upload(projectId, body).map { Answer.from(it) }
+  }
+
+  private fun createComment(storyId: String, text: String, attachments: Array<Attachment>): Observable<Answer<Any>> {
+    return service.postComment(projectId, storyId, Comment(text, attachments))
+        .map { Answer.from(it) }
   }
 
   private fun toListOfItems(properties: Map<String, String>): String {

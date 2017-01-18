@@ -11,4 +11,6 @@
   <string name="title">title</string>
   <string name="description">description</string>
   <string name="send">send</string>
+  <string name="loading">Loading...</string>
+  <string name="success">Success</string>
 </resources>

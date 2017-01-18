@@ -62,7 +62,8 @@ class DebugDrawer @JvmOverloads constructor(application: Application,
       }
 
   init {
-    presenter.attach(this@DebugDrawer, DebugDrawerTraveler(activity), debugActor, AndroidShakeDetector(activity))
+    presenter.attach(this@DebugDrawer, DebugDrawerTraveler(activity), debugActor,
+        AndroidShakeDetector(activity), ScreenshotPicker(activity))
   }
 
   fun release() = presenter.deAttach()
