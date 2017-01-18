@@ -14,6 +14,7 @@ import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.api.dsl.on
 import org.mockito.ArgumentMatchers.anyObject
+import org.mockito.ArgumentMatchers.anyString
 import org.mockito.Mockito
 import org.mockito.Mockito.*
 import kotlin.test.assertNull
@@ -26,13 +27,14 @@ class DebugDrawerPresenterTests : Spek({
     val actor = mock(Actor::class.java)
     val shakeDetector = mock(ShakeDetector::class.java)
     val traveler = mock(DebugDrawerTraveler::class.java)
+    val androidDevice = mock(AndroidDevice::class.java)
     var presenter = DebugDrawerPresenter()
 
     beforeEachTest {
       mockSchedulers()
 
-      Mockito.reset(view, traveler, actor, shakeDetector)
-      presenter = DebugDrawerPresenter().apply { attach(view, traveler, actor, shakeDetector) }
+      Mockito.reset(view, traveler, actor, shakeDetector, androidDevice)
+      presenter = DebugDrawerPresenter().apply { attach(view, traveler, actor, shakeDetector, androidDevice) }
     }
 
     on("pause") {
@@ -227,7 +229,7 @@ class DebugDrawerPresenterTests : Spek({
       }
     }
 
-    on("onShake with count 2") {
+    on("shake with count 2") {
       val spiedPresenter = spy(presenter)
       spiedPresenter.onShake(2)
 
@@ -236,15 +238,43 @@ class DebugDrawerPresenterTests : Spek({
       }
     }
 
-    on("onShake with right count") {
+    on("shake with right count and files loaded right") {
+      `when`(androidDevice.takeScreenshot(anyString())).thenReturn("any.jpg")
+      `when`(androidDevice.readLogFile()).thenReturn("log.log")
+
       presenter.bugRepositoryBuilder = bugRepositoryBuilder()
       presenter.onShake(1)
 
       it("should start report bug view") {
-        verify(traveler).startBugReportView(anyObject())
+        verify(traveler).startBugReportView(anyObject(), anyString(), anyString())
       }
     }
 
+    on("shake with right count and null screenshot file") {
+      val spiedPresenter = spy(presenter)
+      `when`(androidDevice.takeScreenshot(anyString())).thenReturn(null)
+      `when`(androidDevice.readLogFile()).thenReturn("log.log")
+
+      spiedPresenter.bugRepositoryBuilder = bugRepositoryBuilder()
+      spiedPresenter.onShake(1)
+
+      it("should do nothing") {
+        verifyNoMoreInteractions(spiedPresenter)
+      }
+    }
+
+    on("shake with right count and null log file") {
+      val spiedPresenter = spy(presenter)
+      `when`(androidDevice.takeScreenshot(anyString())).thenReturn("any.jpg")
+      `when`(androidDevice.readLogFile()).thenReturn(null)
+
+      spiedPresenter.bugRepositoryBuilder = bugRepositoryBuilder()
+      spiedPresenter.onShake(1)
+
+      it("should do nothing") {
+        verifyNoMoreInteractions(spiedPresenter)
+      }
+    }
 
     on("text input") {
       val inputListener = mock(InputItemListener::class.java)
@@ -260,5 +290,4 @@ class DebugDrawerPresenterTests : Spek({
     }
 
   }
-
 })

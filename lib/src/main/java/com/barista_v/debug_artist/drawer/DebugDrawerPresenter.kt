@@ -20,15 +20,15 @@ class DebugDrawerPresenter : OnShakeListener {
   @VisibleForTesting internal var inputItemListener: InputItemListener? = null
 
   private var traveler: DebugDrawerTraveler? = null
-  private var screenshotPicker: AndroidDevice? = null
+  private var androidDevice: AndroidDevice? = null
 
   fun attach(view: DebugDrawerView, traveler: DebugDrawerTraveler,
-             actor: Actor, shakeDetector: ShakeDetector, screenshotPicker: AndroidDevice) {
+             actor: Actor, shakeDetector: ShakeDetector, androidDevice: AndroidDevice) {
     this.view = view
     this.traveler = traveler
     this.actor = actor
     this.shakeDetector = shakeDetector
-    this.screenshotPicker = screenshotPicker
+    this.androidDevice = androidDevice
   }
 
   fun deAttach() {
@@ -127,8 +127,8 @@ class DebugDrawerPresenter : OnShakeListener {
     if (count > 1) return
 
     bugRepositoryBuilder?.let {
-      val screenshotPath = screenshotPicker?.takeScreenshot("screenshot.jpg") ?: return
-      val logPath = screenshotPicker?.readLogFile() ?: return
+      val screenshotPath = androidDevice?.takeScreenshot("screenshot.jpg") ?: return
+      val logPath = androidDevice?.readLogFile() ?: return
 
       traveler?.startBugReportView(it, screenshotPath, logPath)
     }

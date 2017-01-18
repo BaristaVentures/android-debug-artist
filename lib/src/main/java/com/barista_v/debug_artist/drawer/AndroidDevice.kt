@@ -8,7 +8,7 @@ import java.io.*
 /**
  * Know how to pick things from an Android Device.
  */
-class AndroidDevice(val activity: AppCompatActivity) {
+open class AndroidDevice(val activity: AppCompatActivity) {
 
   val TAG = "AndroidDevice"
 

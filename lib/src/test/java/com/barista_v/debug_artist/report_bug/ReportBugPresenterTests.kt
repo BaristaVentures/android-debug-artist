@@ -46,7 +46,7 @@ class ReportBugPresenterTests : Spek({
 
 
     on("sendButton with success") {
-      `when`(bugReportRepository.createBug("title", "description")).thenReturn(answer())
+      `when`(bugReportRepository.createBug("title", "description", "http://any", "http://any")).thenReturn(answer())
       presenter.onSendButtonClick("title", "description")
 
       it("should create bug and close") {
@@ -60,7 +60,7 @@ class ReportBugPresenterTests : Spek({
 
     on("sendButton with error") {
       val error = Throwable("Something happened")
-      `when`(bugReportRepository.createBug("title", "description")).thenReturn(error(error))
+      `when`(bugReportRepository.createBug("title", "description", "http://any", "http://any")).thenReturn(error(error))
 
       presenter.onSendButtonClick("title", "description")
 
