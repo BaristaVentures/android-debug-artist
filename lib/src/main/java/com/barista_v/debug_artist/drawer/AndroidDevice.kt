@@ -1,12 +1,16 @@
 package com.barista_v.debug_artist.drawer
 
 import android.support.v7.app.AppCompatActivity
-import android.widget.Toast
+import android.util.Log
 import com.jraska.falcon.Falcon
 import java.io.*
 
-
+/**
+ * Know how to pick things from an Android Device.
+ */
 class AndroidDevice(val activity: AppCompatActivity) {
+
+  val TAG = "AndroidDevice"
 
   fun takeScreenshot(fileName: String): String {
     val outFile = File(activity.cacheDir, fileName)
@@ -15,6 +19,9 @@ class AndroidDevice(val activity: AppCompatActivity) {
   }
 
   /**
+   * Read logcat output, write in [AppCompatActivity.getCacheDir()].
+   * @return path with the log file
+   *
    * Source: http://stackoverflow.com/a/22174245/273119
    */
   fun readLogFile(): String {
@@ -48,13 +55,13 @@ class AndroidDevice(val activity: AppCompatActivity) {
       out.close()
 
     } catch (e: IOException) {
-      Toast.makeText(activity, e.toString(), Toast.LENGTH_SHORT).show()
+      Log.e(TAG, "Reading logcat output", e)
     }
 
     try {
       Runtime.getRuntime().exec("logcat -c")
     } catch (e: IOException) {
-      Toast.makeText(activity, e.toString(), Toast.LENGTH_SHORT).show()
+      Log.e(TAG, "Closing logcat (logcat -c)", e)
     }
 
     return file.path
