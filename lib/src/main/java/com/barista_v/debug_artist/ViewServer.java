@@ -141,7 +141,6 @@ public class ViewServer implements Runnable {
    * flag set in its manifest, the server returned by this method will
    * be a dummy object that does not do anything. This allows you to use
    * the same code in debug and release versions of your application.
-   *
    */
   public static ViewServer get(Context context) {
     ApplicationInfo info = context.getApplicationInfo();

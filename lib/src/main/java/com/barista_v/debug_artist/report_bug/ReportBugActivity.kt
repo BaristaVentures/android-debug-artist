@@ -9,14 +9,14 @@ import android.support.v7.widget.Toolbar
 import android.widget.EditText
 import android.widget.Toast
 import com.barista_v.debug_artist.R
-import com.barista_v.debug_artist.repositories.BugReportRepository
+import com.barista_v.debug_artist.repositories.BugRepository
 import java.lang.ref.WeakReference
 
 class ReportBugActivity : AppCompatActivity(), ReportBugView {
 
   companion object {
     fun getInstance(activity: FragmentActivity,
-                    repositoryBuilder: BugReportRepository.Builder,
+                    repositoryBuilder: BugRepository.Builder,
                     screenshotFilePath: String, logsFilePath: String) =
         ExtrasHandler.getInstance(activity, repositoryBuilder, screenshotFilePath, logsFilePath)
   }

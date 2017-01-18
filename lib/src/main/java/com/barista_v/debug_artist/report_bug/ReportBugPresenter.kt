@@ -2,13 +2,13 @@ package com.barista_v.debug_artist.report_bug
 
 import android.util.Log
 import com.barista_v.debug_artist.extensions.composeForIoTasks
-import com.barista_v.debug_artist.repositories.BugReportRepository
+import com.barista_v.debug_artist.repositories.BugRepository
 
 class ReportBugPresenter() {
   val TAG = "ReportBugView"
 
   private var view: ReportBugView? = null
-  private var bugReportRepository: BugReportRepository? = null
+  private var bugReportRepository: BugRepository? = null
   private var extrasHandler: ExtrasHandler? = null
 
   fun attach(view: ReportBugView, extrasHandler: ExtrasHandler) {
@@ -34,7 +34,7 @@ class ReportBugPresenter() {
         }, {
           view?.showErrorDialog(it.message ?: "Something happened")
         })
-        ?: Log.w(TAG, "You need to set BugReportRepository first before.")
+        ?: Log.w(TAG, "You need to set BugRepository first before.")
   }
 
 }

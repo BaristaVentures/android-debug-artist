@@ -2,7 +2,7 @@ package com.barista_v.debug_artist.report_bug
 
 import android.content.Intent
 import android.support.v4.app.FragmentActivity
-import com.barista_v.debug_artist.repositories.BugReportRepository
+import com.barista_v.debug_artist.repositories.BugRepository
 
 class ExtrasHandler(intent: Intent) {
 
@@ -11,7 +11,7 @@ class ExtrasHandler(intent: Intent) {
     val extraScreenshot = "report.screenshot"
     val extraLogs = "report.logs"
 
-    fun getInstance(activity: FragmentActivity, repositoryBuilder: BugReportRepository.Builder,
+    fun getInstance(activity: FragmentActivity, repositoryBuilder: BugRepository.Builder,
                     screenshotFilePath: String, logsFilePath: String) =
         Intent(activity, ReportBugActivity::class.java).apply {
           putExtra(extraRepository, repositoryBuilder)
@@ -20,7 +20,7 @@ class ExtrasHandler(intent: Intent) {
         }
   }
 
-  val extraRepositoryBuilder: BugReportRepository.Builder =
+  val extraRepositoryBuilder: BugRepository.Builder =
       intent.extras.getParcelable(extraRepository)
 
   val screenshotFilePath: String = intent.extras.getString(extraScreenshot)

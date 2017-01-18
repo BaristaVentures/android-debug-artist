@@ -2,15 +2,15 @@ package com.barista_v.debug_artist.report_bug.pivotal
 
 import android.os.Parcel
 import android.os.Parcelable
-import com.barista_v.debug_artist.repositories.BugReportRepository
+import com.barista_v.debug_artist.repositories.BugRepository
 
 class BugReportRepositoryBuilder(val apiKey: String,
                                  val projectId: String,
                                  val properties: MutableMap<String, String>)
-  : BugReportRepository.Builder {
+  : BugRepository.Builder {
 
-  override fun build(): BugReportRepository {
-    return PivotalReportRepository(apiKey, projectId, properties)
+  override fun build(): BugRepository {
+    return PivotalBugRepository(apiKey, projectId, properties)
   }
 
   companion object {

@@ -3,7 +3,7 @@ package com.barista_v.debug_artist.drawer.item
 import com.barista_v.debug_artist.drawer.item.input.InputItemListener
 import com.barista_v.debug_artist.drawer.item.phoenix.RestartListener
 import com.barista_v.debug_artist.drawer.item.spinner.SpinnerItemListener
-import com.barista_v.debug_artist.repositories.BugReportRepository
+import com.barista_v.debug_artist.repositories.BugRepository
 import com.jakewharton.scalpel.ScalpelFrameLayout
 
 open class MenuItem
@@ -36,4 +36,4 @@ open class InputMenuItem(val id: Int,
                          val inputItemListener: InputItemListener) : ButtonMenuItem()
 
 open class ReportBugSwitchMenuItem(checked: Boolean = false,
-                                   val repositoryBuilder: BugReportRepository.Builder?) : SwitchMenuItem(checked)
+                                   val repositoryBuilder: BugRepository.Builder?) : SwitchMenuItem(checked)

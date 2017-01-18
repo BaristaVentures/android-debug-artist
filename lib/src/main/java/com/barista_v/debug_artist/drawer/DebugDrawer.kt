@@ -21,7 +21,7 @@ import com.barista_v.debug_artist.drawer.item.issue_reporter.AndroidShakeDetecto
 import com.barista_v.debug_artist.drawer.item.phoenix.RestartListener
 import com.barista_v.debug_artist.drawer.item.spinner.SpinnerDrawerItem
 import com.barista_v.debug_artist.drawer.item.spinner.SpinnerItemListener
-import com.barista_v.debug_artist.repositories.BugReportRepository
+import com.barista_v.debug_artist.repositories.BugRepository
 import com.jakewharton.scalpel.ScalpelFrameLayout
 import com.mikepenz.materialdrawer.Drawer
 import com.mikepenz.materialdrawer.DrawerBuilder
@@ -95,7 +95,7 @@ class DebugDrawer @JvmOverloads constructor(application: Application,
   fun withPicassoLogsSwitch(checked: Boolean = false) = withMenuItem(PicassoLogsSwitchMenuItem(checked))
 
   @JvmOverloads
-  fun withReportBugReportSwitch(checked: Boolean = false, bugReportRepository: BugReportRepository.Builder) =
+  fun withReportBugReportSwitch(checked: Boolean = false, bugReportRepository: BugRepository.Builder) =
       withMenuItem(ReportBugSwitchMenuItem(checked, bugReportRepository))
 
   fun withLynksButton() = withMenuItem(LynksButtonMenuItem())

@@ -6,7 +6,7 @@ import com.barista_v.debug_artist.drawer.item.input.InputItemListener
 import com.barista_v.debug_artist.drawer.item.issue_reporter.OnShakeListener
 import com.barista_v.debug_artist.drawer.item.issue_reporter.ShakeDetector
 import com.barista_v.debug_artist.drawer.item.phoenix.RestartListener
-import com.barista_v.debug_artist.repositories.BugReportRepository
+import com.barista_v.debug_artist.repositories.BugRepository
 import com.mikepenz.materialdrawer.model.DividerDrawerItem
 
 class DebugDrawerPresenter : OnShakeListener {
@@ -14,7 +14,7 @@ class DebugDrawerPresenter : OnShakeListener {
 
   @VisibleForTesting internal var view: DebugDrawerView? = null
   @VisibleForTesting internal var actor: Actor? = null
-  @VisibleForTesting internal var bugRepositoryBuilder: BugReportRepository.Builder? = null
+  @VisibleForTesting internal var bugRepositoryBuilder: BugRepository.Builder? = null
   @VisibleForTesting internal var shakeDetector: ShakeDetector? = null
   @VisibleForTesting internal var restartListener: RestartListener? = null
   @VisibleForTesting internal var inputItemListener: InputItemListener? = null

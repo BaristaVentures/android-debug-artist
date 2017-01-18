@@ -2,7 +2,7 @@ package com.barista_v.debug_artist.report_bug
 
 import com.barista_v.debug_artist.MockFactory.answer
 import com.barista_v.debug_artist.mockSchedulers
-import com.barista_v.debug_artist.repositories.BugReportRepository
+import com.barista_v.debug_artist.repositories.BugRepository
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.api.dsl.it
@@ -15,7 +15,7 @@ class ReportBugPresenterTests : Spek({
 
   describe("a new ReportBug presenter") {
     val view = mock(ReportBugView::class.java)
-    val bugReportRepository = mock(BugReportRepository::class.java)
+    val bugReportRepository = mock(BugRepository::class.java)
     val extrasHandler = mock(ExtrasHandler::class.java)
     var presenter = ReportBugPresenter()
 

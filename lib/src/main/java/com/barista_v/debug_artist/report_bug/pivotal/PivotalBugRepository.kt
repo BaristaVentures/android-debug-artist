@@ -1,7 +1,7 @@
 package com.barista_v.debug_artist.report_bug.pivotal
 
 import com.barista_v.debug_artist.repositories.Answer
-import com.barista_v.debug_artist.repositories.BugReportRepository
+import com.barista_v.debug_artist.repositories.BugRepository
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.GsonBuilder
 import okhttp3.*
@@ -14,11 +14,10 @@ import rx.Observable.just
 import rx.Observable.zip
 import java.io.File
 
-
-class PivotalReportRepository(apiToken: String,
-                              val projectId: String,
-                              var properties: Map<String, String> = mapOf<String, String>())
-  : BugReportRepository {
+class PivotalBugRepository(apiToken: String,
+                           val projectId: String,
+                           var properties: Map<String, String> = mapOf<String, String>())
+  : BugRepository {
 
   private val url = "https://www.pivotaltracker.com/"
   private val service: PivotalService

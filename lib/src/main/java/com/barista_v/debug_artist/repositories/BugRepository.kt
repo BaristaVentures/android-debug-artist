@@ -3,7 +3,7 @@ package com.barista_v.debug_artist.repositories
 import android.os.Parcelable
 import rx.Observable
 
-interface BugReportRepository {
+interface BugRepository {
 
   fun createBug(name: String,
                 description: String,
@@ -11,7 +11,7 @@ interface BugReportRepository {
                 logsFilePath: String?): Observable<Answer<Any>>
 
   interface Builder : Parcelable {
-    fun build(): BugReportRepository
+    fun build(): BugRepository
   }
 
 }

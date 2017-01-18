@@ -2,7 +2,7 @@ package com.barista_v.debug_artist
 
 import com.barista_v.debug_artist.drawer.item.*
 import com.barista_v.debug_artist.repositories.Answer
-import com.barista_v.debug_artist.repositories.BugReportRepository
+import com.barista_v.debug_artist.repositories.BugRepository
 import org.mockito.Mockito.mock
 import rx.Observable
 
@@ -20,7 +20,7 @@ object MockFactory {
       = Observable.just(Answer())
 
   fun reportBugItem(checked: Boolean) = ReportBugSwitchMenuItem(checked, null)
-  fun bugRepositoryBuilder(): BugReportRepository.Builder? =
-      mock(BugReportRepository.Builder::class.java)
+  fun bugRepositoryBuilder(): BugRepository.Builder? =
+      mock(BugRepository.Builder::class.java)
 
 }
