@@ -20,8 +20,10 @@ class ReportBugPresenter() {
   fun onSendButtonClick(name: String, description: String) {
     view?.showProgressDialog()
 
-    bugReportRepository?.createBug(name, description, extrasHandler?.filePath)
-        ?.composeForIoTasks()
+    val createBugObservable = bugReportRepository?.createBug(name, description,
+        extrasHandler?.screenshotFilePath, extrasHandler?.logsFilePath)
+
+    createBugObservable?.composeForIoTasks()
         ?.doOnTerminate { view?.dismissProgressDialog() }
         ?.subscribe({
           if (it.error == null) {

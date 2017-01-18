@@ -17,8 +17,8 @@ class ReportBugActivity : AppCompatActivity(), ReportBugView {
   companion object {
     fun getInstance(activity: FragmentActivity,
                     repositoryBuilder: BugReportRepository.Builder,
-                    screenshotFilePath: String?) =
-        ExtrasHandler.getInstance(activity, repositoryBuilder, screenshotFilePath)
+                    screenshotFilePath: String, logsFilePath: String) =
+        ExtrasHandler.getInstance(activity, repositoryBuilder, screenshotFilePath, logsFilePath)
   }
 
   override fun onCreate(savedInstanceState: Bundle?) {

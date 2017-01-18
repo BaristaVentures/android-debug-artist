@@ -45,20 +45,25 @@ class PivotalReportRepository(apiToken: String,
     service = retrofit.create(PivotalService::class.java)
   }
 
-  override fun createBug(name: String, description: String, screenshotFilePath: String?): Observable<Answer<Any>> {
-    val uploadFileObservable = screenshotFilePath?.let {
-      uploadFile(it)
-    } ?: just(null)
+  override fun createBug(name: String, description: String, screenshotFilePath: String?, logsFilePath: String?)
+      : Observable<Answer<Any>> {
 
-    return zip(createStory(name, description), uploadFileObservable, { story, uploadedFile ->
-      if (story.body == null) {
-        just(story)
-      } else if (uploadedFile?.body == null) {
-        just(uploadedFile)
-      } else {
-        createComment(story.body.id, uploadedFile?.body.filename, arrayOf(uploadedFile?.body))
-      }
-    }).switchMap { observable -> observable }
+    val uploadFileObservable = screenshotFilePath?.let { uploadFile(it) } ?: just(null)
+    val uploadLogsObservable = logsFilePath?.let { uploadFile(it) } ?: just(null)
+
+    return zip(createStory(name, description), uploadFileObservable, uploadLogsObservable,
+        { story, uploadedScreenshot, uploadedLogs ->
+          if (story.body == null) {
+            just(story)
+          } else if (uploadedScreenshot?.body == null) {
+            just(uploadedLogs)
+          } else if (uploadedLogs?.body == null) {
+            just(uploadedScreenshot)
+          } else {
+            val attachments = arrayOf(uploadedScreenshot?.body, uploadedLogs?.body)
+            createComment(story.body.id, "Attach", attachments)
+          }
+        }).switchMap { observable -> observable }
   }
 
   private fun createStory(name: String, description: String): Observable<Answer<Story>> {

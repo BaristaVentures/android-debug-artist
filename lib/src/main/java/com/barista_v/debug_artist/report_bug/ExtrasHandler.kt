@@ -8,18 +8,22 @@ class ExtrasHandler(intent: Intent) {
 
   companion object {
     val extraRepository = "report.repository"
-    val extraScreenshotFilePath = "report.screenshot"
+    val extraScreenshot = "report.screenshot"
+    val extraLogs = "report.logs"
 
     fun getInstance(activity: FragmentActivity, repositoryBuilder: BugReportRepository.Builder,
-                    screenshotFilePath: String?) =
+                    screenshotFilePath: String, logsFilePath: String) =
         Intent(activity, ReportBugActivity::class.java).apply {
           putExtra(extraRepository, repositoryBuilder)
-          screenshotFilePath?.let { putExtra(extraScreenshotFilePath, it) }
+          putExtra(extraScreenshot, screenshotFilePath)
+          putExtra(extraLogs, logsFilePath)
         }
   }
 
   val extraRepositoryBuilder: BugReportRepository.Builder =
       intent.extras.getParcelable(extraRepository)
 
-  val filePath: String? = intent.extras.getString(extraScreenshotFilePath)
+  val screenshotFilePath: String = intent.extras.getString(extraScreenshot)
+
+  val logsFilePath: String = intent.extras.getString(extraLogs)
 }
