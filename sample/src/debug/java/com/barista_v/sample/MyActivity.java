@@ -32,8 +32,8 @@ public class MyActivity extends AppCompatActivity
     String[] hosts = new String[] { "Value 1", "Value 2" };
 
     BugRepository.Builder repositoryBuilder =
-        new BugReportRepositoryBuilder("8d4f9d99c2a4c818746fe1cb9015e2c9", "1954523",
-            getProperties());
+        new BugReportRepositoryBuilder(BuildConfig.PIVOTAL_API_KEY,
+            BuildConfig.PIVOTAL_PROJECT_ID, getProperties());
 
     mDebugDrawer = new DebugDrawer(MyApplication.sInstance, this)
         .withScalpelSwitch((ScalpelFrameLayout) findViewById(R.id.scalpelLayout))
