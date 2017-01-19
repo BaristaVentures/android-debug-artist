@@ -37,7 +37,7 @@ android {
 dependencies {
   compile deps.appCompat
   compile project(':lib')
-//  compile("com.barista-v:debug-artist:0.5.10@aar") {
-//    transitive = true
-//  }
+  //  compile("com.barista-v:debug-artist:0.5.10@aar") {
+  //    transitive = true
+  //  }
 }

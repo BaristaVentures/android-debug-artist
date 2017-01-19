@@ -7,9 +7,9 @@ import com.barista_v.debug_artist.repositories.BugRepository
 open class ExtrasHandler(intent: Intent) {
 
   companion object {
-    val extraRepository = "report.repository"
-    val extraScreenshot = "report.screenshot"
-    val extraLogs = "report.logs"
+    internal val extraRepository = "report.repository"
+    internal val extraScreenshot = "report.screenshot"
+    internal val extraLogs = "report.logs"
 
     fun getInstance(activity: FragmentActivity, repositoryBuilder: BugRepository.Builder,
                     screenshotFilePath: String, logsFilePath: String) =

@@ -7,10 +7,10 @@ import com.barista_v.debug_artist.drawer.item.issue_reporter.OnShakeListener
 import com.barista_v.debug_artist.drawer.item.issue_reporter.ShakeDetector
 import com.barista_v.debug_artist.drawer.item.phoenix.RestartListener
 import com.barista_v.debug_artist.repositories.BugRepository
+import com.barista_v.debug_artist.utils.Device
 import com.mikepenz.materialdrawer.model.DividerDrawerItem
 
-class DebugDrawerPresenter : OnShakeListener {
-  val TAG = "DebugDrawerPresenter"
+open class DebugDrawerPresenter : OnShakeListener {
 
   @VisibleForTesting internal var view: DebugDrawerView? = null
   @VisibleForTesting internal var actor: Actor? = null
@@ -19,16 +19,16 @@ class DebugDrawerPresenter : OnShakeListener {
   @VisibleForTesting internal var restartListener: RestartListener? = null
   @VisibleForTesting internal var inputItemListener: InputItemListener? = null
 
-  private var traveler: DebugDrawerTraveler? = null
-  private var androidDevice: AndroidDevice? = null
+  private var traveler: Traveler? = null
+  private var device: Device? = null
 
-  fun attach(view: DebugDrawerView, traveler: DebugDrawerTraveler,
-             actor: Actor, shakeDetector: ShakeDetector, androidDevice: AndroidDevice) {
+  fun attach(view: DebugDrawerView, traveler: Traveler,
+             actor: Actor, shakeDetector: ShakeDetector, device: Device) {
     this.view = view
     this.traveler = traveler
     this.actor = actor
     this.shakeDetector = shakeDetector
-    this.androidDevice = androidDevice
+    this.device = device
   }
 
   fun deAttach() {
@@ -114,9 +114,9 @@ class DebugDrawerPresenter : OnShakeListener {
         inputItemListener = item.inputItemListener
       }
       is ReportBugSwitchMenuItem -> {
+        bugRepositoryBuilder = item.repositoryBuilder
         view?.addBugReportSwitch(item.checked)
         shakeDetector?.start(this)
-        bugRepositoryBuilder = item.repositoryBuilder
       }
       is SpinnerMenuItem -> view?.addSpinnerItem(item)
       is LabelMenuItem -> item.properties.forEach { view?.addLabelItem(it.key, it.value) }
@@ -126,12 +126,12 @@ class DebugDrawerPresenter : OnShakeListener {
   override fun onShake(count: Int) {
     if (count > 1) return
 
-    bugRepositoryBuilder?.let {
-      val screenshotPath = androidDevice?.takeScreenshot("screenshot.jpg") ?: return
-      val logPath = androidDevice?.readLogFile() ?: return
+    val screenshotPath = device?.takeScreenshot("screenshot.jpg") ?: return //TODO: log warning
+    val logPath = device?.readLogFile() ?: return //TODO: log warning
 
+    bugRepositoryBuilder?.let {
       traveler?.startBugReportView(it, screenshotPath, logPath)
-    }
+    } //TODO: log warning
   }
 
 }

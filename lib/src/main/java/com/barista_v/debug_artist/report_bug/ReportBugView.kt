@@ -5,4 +5,5 @@ interface ReportBugView {
   fun dismissProgressDialog()
   fun showSuccessToast()
   fun showErrorDialog(text: String)
+  fun setScreenshotImage(screenshotFilePath: String)
 }

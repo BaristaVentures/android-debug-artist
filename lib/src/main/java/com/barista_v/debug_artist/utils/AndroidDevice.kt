@@ -1,5 +1,6 @@
-package com.barista_v.debug_artist.drawer
+package com.barista_v.debug_artist.utils
 
+import android.os.Process
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import com.jraska.falcon.Falcon
@@ -8,11 +9,11 @@ import java.io.*
 /**
  * Know how to pick things from an Android Device.
  */
-open class AndroidDevice(val activity: AppCompatActivity) {
+class AndroidDevice(val activity: AppCompatActivity) : Device {
 
   val TAG = "AndroidDevice"
 
-  fun takeScreenshot(fileName: String): String {
+  override fun takeScreenshot(fileName: String): String {
     val outFile = File(activity.cacheDir, fileName)
     Falcon.takeScreenshot(activity, outFile)
     return outFile.path
@@ -24,10 +25,10 @@ open class AndroidDevice(val activity: AppCompatActivity) {
    *
    * Source: http://stackoverflow.com/a/22174245/273119
    */
-  fun readLogFile(): String {
+  override fun readLogFile(): String {
     val fullName = "appLog.log"
     val file = File(activity.cacheDir, fullName)
-    val pid = android.os.Process.myPid().toString()
+    val pid = Process.myPid().toString()
 
     if (file.exists()) {
       file.delete()

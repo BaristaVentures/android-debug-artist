@@ -40,6 +40,14 @@
       android:inputType="textAutoComplete"
       tools:text="Description" />
 
+    <ImageView
+      android:id="@+id/screenshotImageView"
+      android:layout_width="120dp"
+      android:layout_height="120dp"
+      android:layout_gravity="center_horizontal"
+      android:layout_marginTop="@dimen/spacing_small"
+      tools:background="@color/accent" />
+
     <Button
       android:id="@+id/sendButton"
       android:layout_width="wrap_content"

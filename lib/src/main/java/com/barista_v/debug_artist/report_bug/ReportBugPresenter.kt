@@ -15,6 +15,8 @@ class ReportBugPresenter() {
     this.view = view
     this.extrasHandler = extrasHandler
     this.bugReportRepository = extrasHandler.extraRepositoryBuilder.build()
+
+    view.setScreenshotImage(extrasHandler.screenshotFilePath)
   }
 
   fun onSendButtonClick(name: String, description: String) {

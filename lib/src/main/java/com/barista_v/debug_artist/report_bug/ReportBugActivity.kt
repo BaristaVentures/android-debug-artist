@@ -1,12 +1,14 @@
 package com.barista_v.debug_artist.report_bug
 
 import android.app.ProgressDialog
+import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.FragmentActivity
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.Toast
 import com.barista_v.debug_artist.R
 import com.barista_v.debug_artist.repositories.BugRepository
@@ -70,4 +72,7 @@ class ReportBugActivity : AppCompatActivity(), ReportBugView {
         .show()
   }
 
+  override fun setScreenshotImage(screenshotFilePath: String) {
+    (findViewById(R.id.screenshotImageView) as ImageView).setImageURI(Uri.parse(screenshotFilePath))
+  }
 }

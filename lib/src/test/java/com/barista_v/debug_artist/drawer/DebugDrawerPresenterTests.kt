@@ -1,7 +1,6 @@
 package com.barista_v.debug_artist.drawer
 
 import com.barista_v.debug_artist.MockFactory
-import com.barista_v.debug_artist.MockFactory.bugRepositoryBuilder
 import com.barista_v.debug_artist.drawer.item.LeakCanarySwitchMenuItem
 import com.barista_v.debug_artist.drawer.item.LynksButtonMenuItem
 import com.barista_v.debug_artist.drawer.item.PicassoLogsSwitchMenuItem
@@ -9,32 +8,35 @@ import com.barista_v.debug_artist.drawer.item.StethoSwitchMenuItem
 import com.barista_v.debug_artist.drawer.item.input.InputItemListener
 import com.barista_v.debug_artist.drawer.item.issue_reporter.ShakeDetector
 import com.barista_v.debug_artist.mockSchedulers
+import com.barista_v.debug_artist.repositories.BugRepository
+import com.barista_v.debug_artist.utils.Device
+import com.nhaarman.mockito_kotlin.*
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.api.dsl.on
-import org.mockito.ArgumentMatchers.anyObject
 import org.mockito.ArgumentMatchers.anyString
 import org.mockito.Mockito
-import org.mockito.Mockito.*
 import kotlin.test.assertNull
 
 //@RunWith(JUnitPlatform::class)
 class DebugDrawerPresenterTests : Spek({
+  mockSchedulers()
 
   describe("a new DebugDrawer presenter") {
-    val view = mock(DebugDrawerView::class.java)
-    val actor = mock(Actor::class.java)
-    val shakeDetector = mock(ShakeDetector::class.java)
-    val traveler = mock(DebugDrawerTraveler::class.java)
-    val androidDevice = mock(AndroidDevice::class.java)
+    val view = mock<DebugDrawerView>()
+    val actor = mock<Actor>()
+    val shakeDetector = mock<ShakeDetector>()
+    val traveler = mock<Traveler>()
+    val device = mock<Device>()
     var presenter = DebugDrawerPresenter()
 
     beforeEachTest {
-      mockSchedulers()
+      Mockito.reset(view, traveler, actor, shakeDetector, device)
 
-      Mockito.reset(view, traveler, actor, shakeDetector, androidDevice)
-      presenter = DebugDrawerPresenter().apply { attach(view, traveler, actor, shakeDetector, androidDevice) }
+      presenter = DebugDrawerPresenter().apply {
+        attach(view, traveler, actor, shakeDetector, device)
+      }
     }
 
     on("pause") {
@@ -230,62 +232,59 @@ class DebugDrawerPresenterTests : Spek({
     }
 
     on("shake with count 2") {
-      val spiedPresenter = spy(presenter)
-      spiedPresenter.onShake(2)
+      presenter.onShake(2)
 
       it("should do nothing") {
-        verifyZeroInteractions(presenter, view, actor, traveler, shakeDetector)
+        verifyNoMoreInteractions(view, actor, traveler, shakeDetector, device)
       }
     }
 
-    on("shake with right count and files loaded right") {
-      `when`(androidDevice.takeScreenshot(anyString())).thenReturn("any.jpg")
-      `when`(androidDevice.readLogFile()).thenReturn("log.log")
+    on("shake with right count and all files loaded") {
+      val repositoryBuilder = mock<BugRepository.Builder>()
 
-      presenter.bugRepositoryBuilder = bugRepositoryBuilder()
+      whenever(device.takeScreenshot(anyString())).thenReturn("any.jpg")
+      whenever(device.readLogFile()).thenReturn("log.log")
+
+      presenter.bugRepositoryBuilder = repositoryBuilder
       presenter.onShake(1)
 
       it("should start report bug view") {
-        verify(traveler).startBugReportView(anyObject(), anyString(), anyString())
+        verify(traveler).startBugReportView(repositoryBuilder, "any.jpg", "log.log")
       }
     }
 
     on("shake with right count and null screenshot file") {
-      val spiedPresenter = spy(presenter)
-      `when`(androidDevice.takeScreenshot(anyString())).thenReturn(null)
-      `when`(androidDevice.readLogFile()).thenReturn("log.log")
+      whenever(device.takeScreenshot(anyString())).thenReturn(null)
+      whenever(device.readLogFile()).thenReturn("log.log")
 
-      spiedPresenter.bugRepositoryBuilder = bugRepositoryBuilder()
-      spiedPresenter.onShake(1)
+      presenter.bugRepositoryBuilder = mock<BugRepository.Builder>()
+      presenter.onShake(1)
 
       it("should do nothing") {
-        verifyNoMoreInteractions(spiedPresenter)
+        verifyZeroInteractions(view, actor, shakeDetector, traveler)
       }
     }
 
     on("shake with right count and null log file") {
-      val spiedPresenter = spy(presenter)
-      `when`(androidDevice.takeScreenshot(anyString())).thenReturn("any.jpg")
-      `when`(androidDevice.readLogFile()).thenReturn(null)
+      whenever(device.takeScreenshot(anyString())).thenReturn("any.jpg")
+      whenever(device.readLogFile()).thenReturn(null)
 
-      spiedPresenter.bugRepositoryBuilder = bugRepositoryBuilder()
-      spiedPresenter.onShake(1)
+      presenter.bugRepositoryBuilder = mock<BugRepository.Builder>()
+      presenter.onShake(1)
 
       it("should do nothing") {
-        verifyNoMoreInteractions(spiedPresenter)
+        verifyZeroInteractions(view, actor, shakeDetector, traveler)
       }
     }
 
-    on("text input") {
-      val inputListener = mock(InputItemListener::class.java)
+    on("text input entered") {
+      val inputListener = mock<InputItemListener>()
+
       presenter.inputItemListener = inputListener
+      presenter.onTextInputEntered(1, "asd")
 
-      on("text input entered") {
-        presenter.onTextInputEntered(1, "asd")
-
-        it("call listener with same values") {
-          verify(inputListener).onTextInputEnter(1, "asd")
-        }
+      it("call listener with same values") {
+        verify(inputListener).onTextInputEnter(1, "asd")
       }
     }
 

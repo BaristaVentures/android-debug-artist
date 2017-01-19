@@ -4,9 +4,9 @@ import android.os.Parcel
 import android.os.Parcelable
 import com.barista_v.debug_artist.repositories.BugRepository
 
-class BugReportRepositoryBuilder(val apiKey: String,
-                                 val projectId: String,
-                                 val properties: MutableMap<String, String>)
+class PivotalBugRepositoryBuilder(val apiKey: String,
+                                  val projectId: String,
+                                  val properties: MutableMap<String, String>)
   : BugRepository.Builder {
 
   override fun build(): BugRepository {
@@ -14,9 +14,9 @@ class BugReportRepositoryBuilder(val apiKey: String,
   }
 
   companion object {
-    @JvmField val CREATOR: Parcelable.Creator<BugReportRepositoryBuilder> = object : Parcelable.Creator<BugReportRepositoryBuilder> {
-      override fun createFromParcel(source: Parcel): BugReportRepositoryBuilder = BugReportRepositoryBuilder(source)
-      override fun newArray(size: Int): Array<BugReportRepositoryBuilder?> = arrayOfNulls(size)
+    @JvmField val CREATOR: Parcelable.Creator<PivotalBugRepositoryBuilder> = object : Parcelable.Creator<PivotalBugRepositoryBuilder> {
+      override fun createFromParcel(source: Parcel): PivotalBugRepositoryBuilder = PivotalBugRepositoryBuilder(source)
+      override fun newArray(size: Int): Array<PivotalBugRepositoryBuilder?> = arrayOfNulls(size)
     }
   }
 

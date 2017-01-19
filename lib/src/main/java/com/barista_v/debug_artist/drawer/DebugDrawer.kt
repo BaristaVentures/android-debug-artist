@@ -22,6 +22,7 @@ import com.barista_v.debug_artist.drawer.item.phoenix.RestartListener
 import com.barista_v.debug_artist.drawer.item.spinner.SpinnerDrawerItem
 import com.barista_v.debug_artist.drawer.item.spinner.SpinnerItemListener
 import com.barista_v.debug_artist.repositories.BugRepository
+import com.barista_v.debug_artist.utils.AndroidDevice
 import com.jakewharton.scalpel.ScalpelFrameLayout
 import com.mikepenz.materialdrawer.Drawer
 import com.mikepenz.materialdrawer.DrawerBuilder

@@ -20,7 +20,5 @@ object MockFactory {
       = Observable.just(Answer())
 
   fun reportBugItem(checked: Boolean) = ReportBugSwitchMenuItem(checked, null)
-  fun bugRepositoryBuilder(): BugRepository.Builder? =
-      mock(BugRepository.Builder::class.java)
 
 }
