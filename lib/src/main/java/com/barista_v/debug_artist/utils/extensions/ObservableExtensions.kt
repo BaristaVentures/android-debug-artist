@@ -1,4 +1,4 @@
-package com.barista_v.debug_artist.extensions
+package com.barista_v.debug_artist.utils.extensions
 
 import rx.Observable
 import rx.android.schedulers.AndroidSchedulers

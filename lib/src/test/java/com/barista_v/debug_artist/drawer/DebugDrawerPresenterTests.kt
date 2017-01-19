@@ -6,10 +6,10 @@ import com.barista_v.debug_artist.drawer.item.LynksButtonMenuItem
 import com.barista_v.debug_artist.drawer.item.PicassoLogsSwitchMenuItem
 import com.barista_v.debug_artist.drawer.item.StethoSwitchMenuItem
 import com.barista_v.debug_artist.drawer.item.input.InputItemListener
-import com.barista_v.debug_artist.drawer.item.issue_reporter.ShakeDetector
+import com.barista_v.debug_artist.utils.shake_detector.ShakeDetector
 import com.barista_v.debug_artist.mockSchedulers
 import com.barista_v.debug_artist.repositories.BugRepository
-import com.barista_v.debug_artist.utils.Device
+import com.barista_v.debug_artist.utils.device.Device
 import com.nhaarman.mockito_kotlin.*
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.describe

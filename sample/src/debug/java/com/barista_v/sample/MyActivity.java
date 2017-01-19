@@ -11,7 +11,7 @@ import com.barista_v.debug_artist.drawer.item.input.InputItemListener;
 import com.barista_v.debug_artist.drawer.item.phoenix.RestartListener;
 import com.barista_v.debug_artist.drawer.item.spinner.SpinnerDrawerItem;
 import com.barista_v.debug_artist.drawer.item.spinner.SpinnerItemListener;
-import com.barista_v.debug_artist.report_bug.pivotal.PivotalBugRepositoryBuilder;
+import com.barista_v.debug_artist.repositories.pivotal.PivotalBugRepositoryBuilder;
 import com.barista_v.debug_artist.repositories.BugRepository;
 import com.jakewharton.scalpel.ScalpelFrameLayout;
 import java.util.LinkedHashMap;

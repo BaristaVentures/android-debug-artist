@@ -1,4 +1,4 @@
-package com.barista_v.debug_artist.report_bug.pivotal
+package com.barista_v.debug_artist.repositories.pivotal
 
 import com.barista_v.debug_artist.repositories.Answer
 import com.barista_v.debug_artist.repositories.BugRepository
@@ -44,7 +44,7 @@ class PivotalBugRepository(apiToken: String,
     service = retrofit.create(PivotalService::class.java)
   }
 
-  override fun createBug(name: String, description: String, screenshotFilePath: String?, logsFilePath: String?)
+  override fun create(name: String, description: String, screenshotFilePath: String?, logsFilePath: String?)
       : Observable<Answer<Any>> {
 
     val uploadFileObservable = screenshotFilePath?.let { uploadFile(it) } ?: just(null)

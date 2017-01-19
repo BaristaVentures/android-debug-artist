@@ -1,7 +1,7 @@
 package com.barista_v.debug_artist.report_bug
 
 import android.util.Log
-import com.barista_v.debug_artist.extensions.composeForIoTasks
+import com.barista_v.debug_artist.utils.extensions.composeForIoTasks
 import com.barista_v.debug_artist.repositories.BugRepository
 
 class ReportBugPresenter() {
@@ -22,7 +22,7 @@ class ReportBugPresenter() {
   fun onSendButtonClick(name: String, description: String) {
     view?.showProgressDialog()
 
-    val createBugObservable = bugReportRepository?.createBug(name, description,
+    val createBugObservable = bugReportRepository?.create(name, description,
         extrasHandler?.screenshotFilePath, extrasHandler?.logsFilePath)
 
     createBugObservable?.composeForIoTasks()

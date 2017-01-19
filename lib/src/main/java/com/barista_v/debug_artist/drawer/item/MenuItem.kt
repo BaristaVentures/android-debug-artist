@@ -36,4 +36,5 @@ open class InputMenuItem(val id: Int,
                          val inputItemListener: InputItemListener) : ButtonMenuItem()
 
 open class ReportBugSwitchMenuItem(checked: Boolean = false,
-                                   val repositoryBuilder: BugRepository.Builder?) : SwitchMenuItem(checked)
+                                   val repositoryBuilder: BugRepository.Builder?)
+  : SwitchMenuItem(checked)

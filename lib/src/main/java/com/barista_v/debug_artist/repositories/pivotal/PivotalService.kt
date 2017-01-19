@@ -1,4 +1,4 @@
-package com.barista_v.debug_artist.report_bug.pivotal
+package com.barista_v.debug_artist.repositories.pivotal
 
 import okhttp3.MultipartBody
 import retrofit2.Response

@@ -1,4 +1,4 @@
-package com.barista_v.debug_artist.drawer.item.issue_reporter
+package com.barista_v.debug_artist.utils.shake_detector
 
 interface ShakeDetector {
   fun start(listener: OnShakeListener)

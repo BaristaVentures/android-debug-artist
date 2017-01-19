@@ -3,11 +3,11 @@ package com.barista_v.debug_artist.drawer
 import android.support.annotation.VisibleForTesting
 import com.barista_v.debug_artist.drawer.item.*
 import com.barista_v.debug_artist.drawer.item.input.InputItemListener
-import com.barista_v.debug_artist.drawer.item.issue_reporter.OnShakeListener
-import com.barista_v.debug_artist.drawer.item.issue_reporter.ShakeDetector
+import com.barista_v.debug_artist.utils.shake_detector.OnShakeListener
+import com.barista_v.debug_artist.utils.shake_detector.ShakeDetector
 import com.barista_v.debug_artist.drawer.item.phoenix.RestartListener
 import com.barista_v.debug_artist.repositories.BugRepository
-import com.barista_v.debug_artist.utils.Device
+import com.barista_v.debug_artist.utils.device.Device
 import com.mikepenz.materialdrawer.model.DividerDrawerItem
 
 open class DebugDrawerPresenter : OnShakeListener {

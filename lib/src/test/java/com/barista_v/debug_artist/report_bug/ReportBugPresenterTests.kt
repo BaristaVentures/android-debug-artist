@@ -59,7 +59,7 @@ class ReportBugPresenterTests : Spek({
     on("sendButton with success") {
       whenever(extrasHandler.screenshotFilePath).thenReturn("http://any")
       whenever(extrasHandler.logsFilePath).thenReturn("http://any")
-      whenever(bugReportRepository.createBug("title", "description", "http://any", "http://any"))
+      whenever(bugReportRepository.create("title", "description", "http://any", "http://any"))
           .thenReturn(answer())
 
       presenter.onSendButtonClick("title", "description")
@@ -75,7 +75,7 @@ class ReportBugPresenterTests : Spek({
 
     on("sendButton with error") {
       val error = Throwable("Something happened")
-      whenever(bugReportRepository.createBug("title", "description", "http://any", "http://any"))
+      whenever(bugReportRepository.create("title", "description", "http://any", "http://any"))
           .thenReturn(error(error))
 
       presenter.onSendButtonClick("title", "description")

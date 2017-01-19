@@ -17,12 +17,12 @@ import com.barista_v.debug_artist.DebugActor
 import com.barista_v.debug_artist.R
 import com.barista_v.debug_artist.drawer.item.*
 import com.barista_v.debug_artist.drawer.item.input.InputItemListener
-import com.barista_v.debug_artist.drawer.item.issue_reporter.AndroidShakeDetector
+import com.barista_v.debug_artist.utils.shake_detector.AndroidShakeDetector
 import com.barista_v.debug_artist.drawer.item.phoenix.RestartListener
 import com.barista_v.debug_artist.drawer.item.spinner.SpinnerDrawerItem
 import com.barista_v.debug_artist.drawer.item.spinner.SpinnerItemListener
 import com.barista_v.debug_artist.repositories.BugRepository
-import com.barista_v.debug_artist.utils.AndroidDevice
+import com.barista_v.debug_artist.utils.device.AndroidDevice
 import com.jakewharton.scalpel.ScalpelFrameLayout
 import com.mikepenz.materialdrawer.Drawer
 import com.mikepenz.materialdrawer.DrawerBuilder
