@@ -12,11 +12,12 @@ dependencies:
   pre:
     - wget "https://services.gradle.org/distributions/gradle-2.14.1-bin.zip"; unzip gradle-2.14.1-bin.zip
     - echo y | android update sdk --no-ui --all --filter android-24,build-tools-25.0.0,tool,extra-android-m2repository,extra-android-support,extra-google-google_play_services,extra-google-m2repository
-    - PROPERTIES_FILE=lib/bintray.properties sh scripts/cp-env-to-properties.sh
+    - PROPERTIES_FILE=lib/bintray.properties
+    - sh scripts/cp-env-to-properties.sh
 
 test:
   override:
-    - ./gradlew testDebugUnitTestCoverage -PdisablePreDex --stacktrace
+    - ./gradlew testDebugUnitTestCoverage -PdisablePreDex --stacktrace --no-daemon
 
     # copy the build outputs to artifacts
     - cp -r lib/build/reports $CIRCLE_TEST_REPORTS
