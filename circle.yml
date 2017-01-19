@@ -1,6 +1,6 @@
 machine:
   environment:
-    PATH: "~/$CIRCLE_PROJECT_REPONAME/gradle-2.14.1/bin:$PATH"
+    PATH: "~/$CIRCLE_PROJECT_REPONAME/gradle-2.13/bin:$PATH"
     TERM: "dumb"
     ADB_INSTALL_TIMEOUT: "10"
     GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx2048m -XX:+HeapDumpOnOutOfMemoryError"'
@@ -11,7 +11,7 @@ dependencies:
     - ~/.android
     - ~/android
   pre:
-    - wget "https://services.gradle.org/distributions/gradle-2.14.1-bin.zip"; unzip gradle-2.14.1-bin.zip
+    - wget "https://services.gradle.org/distributions/gradle-2.13-bin.zip"; unzip gradle-2.13-bin.zip
     - echo y | android update sdk --no-ui --all --filter android-24,build-tools-25.0.0,tool,extra-android-m2repository,extra-android-support,extra-google-google_play_services,extra-google-m2repository
 
     # BinTray
