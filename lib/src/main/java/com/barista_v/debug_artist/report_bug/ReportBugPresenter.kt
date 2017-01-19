@@ -1,10 +1,9 @@
 package com.barista_v.debug_artist.report_bug
 
-import android.util.Log
-import com.barista_v.debug_artist.utils.extensions.composeForIoTasks
 import com.barista_v.debug_artist.repositories.BugRepository
+import com.barista_v.debug_artist.utils.extensions.composeForIoTasks
 
-class ReportBugPresenter() {
+class ReportBugPresenter {
   val TAG = "ReportBugView"
 
   private var view: ReportBugView? = null
@@ -22,8 +21,10 @@ class ReportBugPresenter() {
   fun onSendButtonClick(name: String, description: String) {
     view?.showProgressDialog()
 
+    val screenshotFilePath = extrasHandler?.screenshotFilePath
+    val logsFilePath = extrasHandler?.logsFilePath
     val createBugObservable = bugReportRepository?.create(name, description,
-        extrasHandler?.screenshotFilePath, extrasHandler?.logsFilePath)
+        screenshotFilePath, logsFilePath)
 
     createBugObservable?.composeForIoTasks()
         ?.doOnTerminate { view?.dismissProgressDialog() }
@@ -36,7 +37,6 @@ class ReportBugPresenter() {
         }, {
           view?.showErrorDialog(it.message ?: "Something happened")
         })
-        ?: Log.w(TAG, "You need to set BugRepository first before.")
   }
 
 }

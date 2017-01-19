@@ -18,25 +18,32 @@ class ReportBugPresenterTests : Spek({
 
   describe("a new ReportBug presenter") {
     val view = mock<ReportBugView>()
-    val bugReportRepository = mock<BugRepository>()
+    val bugRepositoryBuilder = mock<BugRepository.Builder>()
+    val bugRepository = mock<BugRepository>()
     val extrasHandler = mock<ExtrasHandler>()
     var presenter = ReportBugPresenter()
 
     beforeEachTest {
       mockSchedulers()
 
-      Mockito.reset(view, bugReportRepository, extrasHandler)
-
-      whenever(extrasHandler.extraRepositoryBuilder.build()).thenReturn(bugReportRepository)
+      whenever(bugRepositoryBuilder.build()).thenReturn(bugRepository)
+      whenever(extrasHandler.extraRepositoryBuilder).thenReturn(bugRepositoryBuilder)
+      whenever(extrasHandler.screenshotFilePath).thenReturn("any.jpg")
 
       presenter = ReportBugPresenter().apply { attach(view, extrasHandler) }
+
+      Mockito.reset(view, bugRepositoryBuilder, bugRepository, extrasHandler)
     }
 
     on("attach") {
+      whenever(bugRepositoryBuilder.build()).thenReturn(bugRepository)
+      whenever(extrasHandler.extraRepositoryBuilder).thenReturn(bugRepositoryBuilder)
       whenever(extrasHandler.screenshotFilePath).thenReturn("any.jpg")
 
+      presenter.attach(view, extrasHandler)
+
       it("should build repository") {
-        verify(extrasHandler).extraRepositoryBuilder
+        verify(bugRepositoryBuilder).build()
       }
 
       it("should set screenshot image") {
@@ -44,22 +51,10 @@ class ReportBugPresenterTests : Spek({
       }
     }
 
-    on("sendButton") {
-      presenter.onSendButtonClick("title", "description")
-
-      it("should create bug and close") {
-        verify(view).apply {
-          showProgressDialog()
-          dismissProgressDialog()
-          showSuccessToast()
-        }
-      }
-    }
-
     on("sendButton with success") {
-      whenever(extrasHandler.screenshotFilePath).thenReturn("http://any")
-      whenever(extrasHandler.logsFilePath).thenReturn("http://any")
-      whenever(bugReportRepository.create("title", "description", "http://any", "http://any"))
+      whenever(extrasHandler.screenshotFilePath).thenReturn("any.jpg")
+      whenever(extrasHandler.logsFilePath).thenReturn("log.log")
+      whenever(bugRepository.create("title", "description", "any.jpg", "log.log"))
           .thenReturn(answer())
 
       presenter.onSendButtonClick("title", "description")
@@ -75,7 +70,10 @@ class ReportBugPresenterTests : Spek({
 
     on("sendButton with error") {
       val error = Throwable("Something happened")
-      whenever(bugReportRepository.create("title", "description", "http://any", "http://any"))
+
+      whenever(extrasHandler.screenshotFilePath).thenReturn("any.jpg")
+      whenever(extrasHandler.logsFilePath).thenReturn("log.log")
+      whenever(bugRepository.create("title", "description", "any.jpg", "log.log"))
           .thenReturn(error(error))
 
       presenter.onSendButtonClick("title", "description")

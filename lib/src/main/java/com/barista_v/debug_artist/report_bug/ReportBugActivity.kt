@@ -20,7 +20,7 @@ class ReportBugActivity : AppCompatActivity(), ReportBugView {
     fun getInstance(activity: FragmentActivity,
                     repositoryBuilder: BugRepository.Builder,
                     screenshotFilePath: String, logsFilePath: String) =
-        ExtrasHandler.getInstance(activity, repositoryBuilder, screenshotFilePath, logsFilePath)
+        ExtrasHandlerImpl.getInstance(activity, repositoryBuilder, screenshotFilePath, logsFilePath)
   }
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,7 +31,7 @@ class ReportBugActivity : AppCompatActivity(), ReportBugView {
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
     val presenter = ReportBugPresenter().apply {
-      attach(this@ReportBugActivity, ExtrasHandler(intent))
+      attach(this@ReportBugActivity, ExtrasHandlerImpl(intent))
     }
 
     findViewById(R.id.sendButton).setOnClickListener {
