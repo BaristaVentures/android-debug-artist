@@ -7,6 +7,8 @@ import android.support.v4.app.FragmentActivity
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
+import android.view.KeyEvent
+import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
@@ -39,6 +41,16 @@ class ReportBugActivity : AppCompatActivity(), ReportBugView {
     findViewById(R.id.sendButton).setOnClickListener {
       presenter.onSendButtonClick((findViewById(R.id.titleEditText) as EditText).text.toString(),
           (findViewById(R.id.descriptionEditText) as EditText).text.toString())
+    }
+
+    (findViewById(R.id.descriptionEditText) as EditText).setOnEditorActionListener { textView, id, keyEvent ->
+      if (id == EditorInfo.IME_NULL && keyEvent.action == KeyEvent.ACTION_DOWN) {
+        presenter.onSendButtonClick((findViewById(R.id.titleEditText) as EditText).text.toString(),
+            (findViewById(R.id.descriptionEditText) as EditText).text.toString())
+        true
+      } else {
+        false
+      }
     }
   }
 
