@@ -17,59 +17,67 @@
     android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
     app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
-  <LinearLayout
+  <ScrollView
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="@dimen/spacing_medium">
+    android:layout_height="wrap_content">
 
-    <android.support.design.widget.TextInputLayout
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content">
-
-      <EditText
-        android:id="@+id/titleEditText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/title"
-        android:inputType="textAutoComplete"
-        tools:text="Title" />
-
-    </android.support.design.widget.TextInputLayout>
-
-    <android.support.design.widget.TextInputLayout
+    <LinearLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_marginTop="@dimen/spacing_small">
+      android:orientation="vertical"
+      android:paddingLeft="@dimen/spacing_medium"
+      android:paddingRight="@dimen/spacing_medium"
+      android:paddingTop="@dimen/spacing_medium">
 
-      <EditText
-        android:id="@+id/descriptionEditText"
+      <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+          android:id="@+id/titleEditText"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:hint="@string/title"
+          android:inputType="textAutoComplete"
+          tools:text="Title" />
+
+      </android.support.design.widget.TextInputLayout>
+
+      <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/description"
-        android:imeOptions="actionSend"
-        android:inputType="textAutoComplete"
-        tools:text="Description" />
+        android:layout_marginTop="@dimen/spacing_small">
 
-    </android.support.design.widget.TextInputLayout>
+        <EditText
+          android:id="@+id/descriptionEditText"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:hint="@string/description"
+          android:imeOptions="actionSend"
+          android:inputType="textAutoComplete"
+          tools:text="Description" />
 
-    <ImageView
-      android:id="@+id/screenshotImageView"
-      android:layout_width="match_parent"
-      android:layout_height="240dp"
-      android:layout_gravity="center_horizontal"
-      android:layout_marginTop="@dimen/spacing_medium"
-      android:background="@color/gray" />
+      </android.support.design.widget.TextInputLayout>
 
-    <android.support.design.widget.FloatingActionButton
-      android:id="@+id/sendButton"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_gravity="center_horizontal"
-      android:layout_marginTop="@dimen/spacing_medium"
-      android:src="@drawable/ic_send_white_24dp"
-      app:useCompatPadding="true" />
+      <ImageView
+        android:id="@+id/screenshotImageView"
+        android:layout_width="match_parent"
+        android:layout_height="240dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/spacing_medium"
+        android:background="@color/gray" />
 
-  </LinearLayout>
+      <android.support.design.widget.FloatingActionButton
+        android:id="@+id/sendButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/spacing_medium"
+        android:src="@drawable/ic_send_white_24dp"
+        app:useCompatPadding="true" />
+
+    </LinearLayout>
+
+  </ScrollView>
 
 </LinearLayout>

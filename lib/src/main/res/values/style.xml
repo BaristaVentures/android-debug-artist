@@ -1,7 +1,9 @@
 <resources>
 
   <style name="ApiTheme" parent="Theme.AppCompat.NoActionBar">
-    <item name="colorPrimary">#AAA</item>
+    <item name="colorPrimary">#797979</item>
+    <item name="colorPrimaryDark">#595959</item>
+    <item name="colorAccent">#ede86a</item>
   </style>
 
 </resources>
