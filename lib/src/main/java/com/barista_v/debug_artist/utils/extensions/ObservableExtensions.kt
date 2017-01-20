@@ -11,5 +11,5 @@ import rx.schedulers.Schedulers
 fun <T> Observable<T>.composeForIoTasks(): Observable<T> = compose<T>(Observable.Transformer {
   it.subscribeOn(Schedulers.io())
       .observeOn(AndroidSchedulers.mainThread())
-      .retryWhen(RetryAfterTimeoutWithDelay(3, 500))
+      .retryWhen(RetryAfterTimeoutWithDelay(10, 1000))
 })
