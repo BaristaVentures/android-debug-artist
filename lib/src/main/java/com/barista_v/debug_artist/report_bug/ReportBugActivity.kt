@@ -31,7 +31,9 @@ class ReportBugActivity : AppCompatActivity(), ReportBugView {
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
     val presenter = ReportBugPresenter().apply {
-      attach(this@ReportBugActivity, ExtrasHandlerImpl(intent))
+      attach(this@ReportBugActivity,
+          ReportBugTravelerImpl(this@ReportBugActivity),
+          ExtrasHandlerImpl(intent))
     }
 
     findViewById(R.id.sendButton).setOnClickListener {

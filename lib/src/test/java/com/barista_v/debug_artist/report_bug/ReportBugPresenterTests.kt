@@ -5,6 +5,7 @@ import com.barista_v.debug_artist.mockSchedulers
 import com.barista_v.debug_artist.repositories.BugRepository
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.verify
+import com.nhaarman.mockito_kotlin.verifyZeroInteractions
 import com.nhaarman.mockito_kotlin.whenever
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.describe
@@ -24,6 +25,7 @@ class ReportBugPresenterTests : Spek({
     val bugRepository = mock<BugRepository>()
     val extrasHandler = mock<ExtrasHandler>()
     var presenter = ReportBugPresenter()
+    val traveler = mock<ReportBugTraveler>()
 
     beforeEachTest {
       mockSchedulers()
@@ -32,9 +34,9 @@ class ReportBugPresenterTests : Spek({
       whenever(extrasHandler.extraRepositoryBuilder).thenReturn(bugRepositoryBuilder)
       whenever(extrasHandler.screenshotFilePath).thenReturn("any.jpg")
 
-      presenter = ReportBugPresenter().apply { attach(view, extrasHandler) }
+      presenter = ReportBugPresenter().apply { attach(view, traveler, extrasHandler) }
 
-      Mockito.reset(view, bugRepositoryBuilder, bugRepository, extrasHandler)
+      Mockito.reset(view, bugRepositoryBuilder, bugRepository, extrasHandler, traveler)
     }
 
     on("attach") {
@@ -42,7 +44,7 @@ class ReportBugPresenterTests : Spek({
       whenever(extrasHandler.extraRepositoryBuilder).thenReturn(bugRepositoryBuilder)
       whenever(extrasHandler.screenshotFilePath).thenReturn("any.jpg")
 
-      presenter.attach(view, extrasHandler)
+      presenter.attach(view, traveler, extrasHandler)
 
       it("should build repository") {
         verify(bugRepositoryBuilder).build()
@@ -61,12 +63,16 @@ class ReportBugPresenterTests : Spek({
 
       presenter.onSendButtonClick("title", "description")
 
-      it("should create bug and close") {
+      it("should create bug") {
         verify(view).apply {
           showProgressDialog()
           dismissProgressDialog()
           showSuccessToast()
         }
+      }
+
+      it("should close") {
+        verify(traveler).close()
       }
     }
 
@@ -86,6 +92,10 @@ class ReportBugPresenterTests : Spek({
           dismissProgressDialog()
           showErrorDialog(error.message!!)
         }
+      }
+
+      it("should not close") {
+        verifyZeroInteractions(traveler)
       }
     }
   }
