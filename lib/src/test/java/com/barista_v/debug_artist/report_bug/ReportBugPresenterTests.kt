@@ -10,10 +10,12 @@ import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.api.dsl.on
+import org.junit.platform.runner.JUnitPlatform
+import org.junit.runner.RunWith
 import org.mockito.Mockito
 import rx.Observable.error
 
-//@RunWith(JUnitPlatform::class)
+@RunWith(JUnitPlatform::class)
 class ReportBugPresenterTests : Spek({
 
   describe("a new ReportBug presenter") {

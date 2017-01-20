@@ -6,20 +6,22 @@ import com.barista_v.debug_artist.drawer.item.LynksButtonMenuItem
 import com.barista_v.debug_artist.drawer.item.PicassoLogsSwitchMenuItem
 import com.barista_v.debug_artist.drawer.item.StethoSwitchMenuItem
 import com.barista_v.debug_artist.drawer.item.input.InputItemListener
-import com.barista_v.debug_artist.utils.shake_detector.ShakeDetector
 import com.barista_v.debug_artist.mockSchedulers
 import com.barista_v.debug_artist.repositories.BugRepository
 import com.barista_v.debug_artist.utils.device.Device
+import com.barista_v.debug_artist.utils.shake_detector.ShakeDetector
 import com.nhaarman.mockito_kotlin.*
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.api.dsl.on
+import org.junit.platform.runner.JUnitPlatform
+import org.junit.runner.RunWith
 import org.mockito.ArgumentMatchers.anyString
 import org.mockito.Mockito
 import kotlin.test.assertNull
 
-//@RunWith(JUnitPlatform::class)
+@RunWith(JUnitPlatform::class)
 class DebugDrawerPresenterTests : Spek({
   mockSchedulers()
 
