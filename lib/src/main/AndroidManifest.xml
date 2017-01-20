@@ -11,7 +11,7 @@
 
     <activity
       android:name=".report_bug.ReportBugActivity"
-      android:label="Report Bug" />
+      android:label="@string/report_bug" />
 
   </application>
 
