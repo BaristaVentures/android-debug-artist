@@ -20,6 +20,12 @@ class ReportBugPresenter {
   }
 
   fun onSendButtonClick(name: String, description: String) {
+    if (name.isEmpty() || description.isEmpty()) {
+      //TODO: Set error per field
+      view?.showErrorDialog("All the fields are mandatory, please fill them.")
+      return
+    }
+
     view?.showProgressDialog()
 
     val screenshotFilePath = extrasHandler?.screenshotFilePath

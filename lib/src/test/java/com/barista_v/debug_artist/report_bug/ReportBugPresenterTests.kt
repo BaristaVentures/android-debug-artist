@@ -3,10 +3,7 @@ package com.barista_v.debug_artist.report_bug
 import com.barista_v.debug_artist.MockFactory.answer
 import com.barista_v.debug_artist.mockSchedulers
 import com.barista_v.debug_artist.repositories.BugRepository
-import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.verify
-import com.nhaarman.mockito_kotlin.verifyZeroInteractions
-import com.nhaarman.mockito_kotlin.whenever
+import com.nhaarman.mockito_kotlin.*
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.api.dsl.it
@@ -73,6 +70,30 @@ class ReportBugPresenterTests : Spek({
 
       it("should close") {
         verify(traveler).close()
+      }
+    }
+
+    on("sendButton with empty title") {
+      presenter.onSendButtonClick("", "description")
+
+      it("should show error") {
+        verify(view).apply {
+          showErrorDialog(any())
+        }
+
+        verifyNoMoreInteractions(view)
+      }
+    }
+
+    on("sendButton with empty description") {
+      presenter.onSendButtonClick("title", "")
+
+      it("should show error") {
+        verify(view).apply {
+          showErrorDialog(any())
+        }
+
+        verifyNoMoreInteractions(view)
       }
     }
 
