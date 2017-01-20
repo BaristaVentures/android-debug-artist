@@ -23,38 +23,51 @@
     android:orientation="vertical"
     android:padding="@dimen/spacing_medium">
 
-    <EditText
-      android:id="@+id/titleEditText"
+    <android.support.design.widget.TextInputLayout
       android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:hint="@string/title"
-      android:inputType="textAutoComplete"
-      tools:text="Title" />
+      android:layout_height="wrap_content">
 
-    <EditText
-      android:id="@+id/descriptionEditText"
+      <EditText
+        android:id="@+id/titleEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/title"
+        android:inputType="textAutoComplete"
+        tools:text="Title" />
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_marginTop="@dimen/spacing_small"
-      android:hint="@string/description"
-      android:inputType="textAutoComplete"
-      tools:text="Description" />
+      android:layout_marginTop="@dimen/spacing_small">
+
+      <EditText
+        android:id="@+id/descriptionEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/description"
+        android:inputType="textAutoComplete"
+        tools:text="Description" />
+
+    </android.support.design.widget.TextInputLayout>
 
     <ImageView
       android:id="@+id/screenshotImageView"
-      android:layout_width="120dp"
-      android:layout_height="120dp"
+      android:layout_width="match_parent"
+      android:layout_height="240dp"
       android:layout_gravity="center_horizontal"
-      android:layout_marginTop="@dimen/spacing_small"
-      tools:background="@color/accent" />
+      android:layout_marginTop="@dimen/spacing_medium"
+      android:background="@color/gray" />
 
-    <Button
+    <android.support.design.widget.FloatingActionButton
       android:id="@+id/sendButton"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_gravity="center_horizontal"
       android:layout_marginTop="@dimen/spacing_medium"
-      android:text="@string/send" />
+      android:src="@drawable/ic_send_white_24dp"
+      app:useCompatPadding="true" />
 
   </LinearLayout>
 

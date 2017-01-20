@@ -1,0 +1,7 @@
+<resources>
+
+  <style name="ApiTheme" parent="Theme.AppCompat.NoActionBar">
+    <item name="colorPrimary">#AAA</item>
+  </style>
+
+</resources>
