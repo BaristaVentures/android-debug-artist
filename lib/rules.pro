@@ -61,11 +61,17 @@
 -keepattributes Signature
 -keepattributes Exceptions
 
--keepclasseswithmembers class * {
-    @retrofit2.http.* <methods>;
-}
+-keepclasseswithmembers class * { @retrofit2.http.* <methods>; }
 
 -keepclasseswithmembers class com.barista_v.debug_artist.repositories.pivotal.Story { *; }
 -keepclasseswithmembers class com.barista_v.debug_artist.repositories.pivotal.StoryRequestBody { *; }
 -keepclasseswithmembers class com.barista_v.debug_artist.repositories.pivotal.Comment { *; }
 -keepclasseswithmembers class com.barista_v.debug_artist.repositories.pivotal.Attachment { *; }
+
+# Jacoco
+## Keep everything for the jacoco classes
+
+# Keep everything for the emma classes
+-keep class com.vladium.** { *; }
+# Keep everything for the jacoco classes
+-keep class org.jacoco.** { *; }
