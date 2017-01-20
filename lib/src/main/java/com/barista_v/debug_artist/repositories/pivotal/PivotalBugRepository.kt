@@ -47,8 +47,8 @@ class PivotalBugRepository(apiToken: String,
   override fun create(name: String, description: String, screenshotFilePath: String?, logsFilePath: String?)
       : Observable<Answer<Any>> {
 
-    val uploadFileObservable = screenshotFilePath?.let { uploadFile(it) } ?: just(null)
-    val uploadLogsObservable = logsFilePath?.let { uploadFile(it) } ?: just(null)
+    val uploadFileObservable = screenshotFilePath?.let { uploadFile("image/jpg", it) } ?: just(null)
+    val uploadLogsObservable = logsFilePath?.let { uploadFile("text/plain", it) } ?: just(null)
 
     return zip(createStory(name, description), uploadFileObservable, uploadLogsObservable,
         { story, uploadedScreenshot, uploadedLogs ->
@@ -75,9 +75,9 @@ class PivotalBugRepository(apiToken: String,
     return service.postStory(projectId, StoryRequestBody(name, fullDescription)).map { Answer.from(it) }
   }
 
-  private fun uploadFile(filePath: String): Observable<Answer<Attachment>> {
+  private fun uploadFile(contentType: String, filePath: String): Observable<Answer<Attachment>> {
     val file = File(filePath)
-    val requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file)
+    val requestFile = RequestBody.create(MediaType.parse(contentType), file)
     val body = MultipartBody.Part.createFormData("file", file.name, requestFile)
 
     return service.upload(projectId, body).map { Answer.from(it) }

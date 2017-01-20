@@ -16,4 +16,5 @@ class StoryRequestBody(val name: String,
 class Comment(val text: String,
               val fileAttachments: Array<Attachment>)
 
-class Attachment(val id: String, val filename: String)
+class Attachment(val id: String, val filename: String, var contentType: String?)
+
