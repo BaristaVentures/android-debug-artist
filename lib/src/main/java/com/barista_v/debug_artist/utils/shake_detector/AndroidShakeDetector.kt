@@ -21,7 +21,7 @@ class AndroidShakeDetector(val context: Context) : ShakeDetector, SensorEventLis
 
     sensorManager = (context.getSystemService(Context.SENSOR_SERVICE) as SensorManager).apply {
       val accelerometerSensor = getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
-      registerListener(this@AndroidShakeDetector, accelerometerSensor, SensorManager.SENSOR_DELAY_UI);
+      registerListener(this@AndroidShakeDetector, accelerometerSensor, SensorManager.SENSOR_DELAY_FASTEST)
     }
   }
 
@@ -73,7 +73,7 @@ class AndroidShakeDetector(val context: Context) : ShakeDetector, SensorEventLis
      * from the Google Play Store and run it to see how
      *  many G's it takes to register a shake
      */
-    private val SHAKE_THRESHOLD_GRAVITY = 2.7f
+    private val SHAKE_THRESHOLD_GRAVITY = 1.7f
     private val SHAKE_SLOP_TIME_MS = 500
     private val SHAKE_COUNT_RESET_TIME_MS = 3000
   }
