@@ -33,7 +33,8 @@ public class MyActivity extends AppCompatActivity
 
     BugRepository.Builder repositoryBuilder =
         new PivotalBugRepositoryBuilder(BuildConfig.PIVOTAL_API_KEY,
-            BuildConfig.PIVOTAL_PROJECT_ID, getProperties());
+            BuildConfig.PIVOTAL_PROJECT_ID, getProperties(),
+            new String[] {"android-sample"} );
 
     mDebugDrawer = new DebugDrawer(MyApplication.sInstance, this)
         .withScalpelSwitch((ScalpelFrameLayout) findViewById(R.id.scalpelLayout))

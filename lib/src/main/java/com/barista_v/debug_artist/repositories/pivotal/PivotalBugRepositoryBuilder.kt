@@ -6,11 +6,11 @@ import com.barista_v.debug_artist.repositories.BugRepository
 
 class PivotalBugRepositoryBuilder(val apiKey: String,
                                   val projectId: String,
-                                  val properties: MutableMap<String, String>)
-  : BugRepository.Builder {
-
+                                  val properties: MutableMap<String, String>,
+                                  val labels: Array<String>?)
+  : BugRepository.Builder, Parcelable {
   override fun build(): BugRepository {
-    return PivotalBugRepository(apiKey, projectId, properties)
+    return PivotalBugRepository(apiKey, projectId, properties, labels)
   }
 
   companion object {
@@ -21,7 +21,8 @@ class PivotalBugRepositoryBuilder(val apiKey: String,
   }
 
   constructor(source: Parcel) : this(source.readString(), source.readString(),
-      mutableMapOf<String, String>().apply { source.readMap(this, MutableMap::class.java.classLoader) })
+      mutableMapOf<String, String>().apply { source.readMap(this, MutableMap::class.java.classLoader) },
+      source.createStringArray())
 
   override fun describeContents() = 0
 
@@ -29,5 +30,6 @@ class PivotalBugRepositoryBuilder(val apiKey: String,
     dest?.writeString(apiKey)
     dest?.writeString(projectId)
     dest?.writeMap(properties)
+    dest?.writeStringArray(labels)
   }
 }

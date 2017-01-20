@@ -16,7 +16,8 @@ import java.io.File
 
 class PivotalBugRepository(apiToken: String,
                            val projectId: String,
-                           var properties: Map<String, String> = mapOf<String, String>())
+                           var properties: Map<String, String> = mapOf<String, String>(),
+                           val labels: Array<String>?)
   : BugRepository {
 
   private val url = "https://www.pivotaltracker.com/"
@@ -44,13 +45,12 @@ class PivotalBugRepository(apiToken: String,
     service = retrofit.create(PivotalService::class.java)
   }
 
-  override fun create(name: String, description: String, screenshotFilePath: String?, logsFilePath: String?)
-      : Observable<Answer<Any>> {
-
+  override fun create(name: String, description: String,
+                      screenshotFilePath: String?, logsFilePath: String?): Observable<Answer<Any>> {
     val uploadFileObservable = screenshotFilePath?.let { uploadFile("image/jpg", it) } ?: just(null)
     val uploadLogsObservable = logsFilePath?.let { uploadFile("text/plain", it) } ?: just(null)
 
-    return zip(createStory(name, description), uploadFileObservable, uploadLogsObservable,
+    return zip(createStory(name, description, labels), uploadFileObservable, uploadLogsObservable,
         { story, uploadedScreenshot, uploadedLogs ->
           if (story.body == null) {
             just(story)
@@ -65,14 +65,14 @@ class PivotalBugRepository(apiToken: String,
         }).switchMap { observable -> observable }
   }
 
-  private fun createStory(name: String, description: String): Observable<Answer<Story>> {
+  private fun createStory(name: String, description: String, labels: Array<String>? = null): Observable<Answer<Story>> {
     val fullDescription = if (properties.isEmpty()) {
       description
     } else {
       "$description \n\n${toListOfItems((properties))}"
     }
 
-    return service.postStory(projectId, StoryRequestBody(name, fullDescription)).map { Answer.from(it) }
+    return service.postStory(projectId, StoryRequestBody(name, fullDescription, labels)).map { Answer.from(it) }
   }
 
   private fun uploadFile(contentType: String, filePath: String): Observable<Answer<Attachment>> {

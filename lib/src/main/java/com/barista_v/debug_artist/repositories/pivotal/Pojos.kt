@@ -7,7 +7,8 @@ class Story(val id: String,
             val description: String)
 
 class StoryRequestBody(val name: String,
-                       val description: String) {
+                       val description: String,
+                       val labels: Array<String>?) {
 
   @SerializedName("story_type") val type = "bug"
 
