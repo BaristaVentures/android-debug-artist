@@ -7,7 +7,7 @@
 Make developers life easier with some tools, you can add it to your debug builds and have some debug
 libraries like [Leakcanary](https://github.com/square/leakcanary) and others without extra work.
 
-- Debug Drawer: add a right menu that enable some features like LeakCanary, stetho and others. *use just for debug builds*
+- Debug Drawer: right menu with LeakCanary, stetho and others. *use just for debug builds*
 - [ViewServer](https://github.com/romainguy/ViewServer): helps to debug layouts with more devices.
 
 ![](img/debug_drawer.jpg)
@@ -19,23 +19,15 @@ Add this on each activity `setContentView` so your child activities always add i
 ```
 mDebugDrawer = new DebugDrawer(appInstance, activityInstance)
         .withScalpelSwitch((ScalpelFrameLayout) findViewById(R.id.scalpelLayout))
-        .withLeakCanarySwitch(true)
-        .withPicassoLogsSwitch(false)
-        .withStethoSwitch(true)
-        .withDivider()
-        .withLynksButton()
-        .withPhoenixRestartButton(this)
-        .withDivider()
-        .withInputItem(2, "Host", this)
-        .withSpinnerItem(1, "Spinner with item selected by index", hosts, 0, this)
+        .with<feature>
         .withDivider()
         .withInfoProperties(getProperties());
 ```
 
 ### Features:
 
-For each feature you need to setup it correctly, sometimes no extra work is needed.
-Features:
+- _Shake it to Report Bug_: on shake takes an screenshot and let you create a bug in your favorite
+  story/cards service (provide `Pivotal Tracker` repository for it but you **can build your own**.
 - [Links](https://github.com/pedrovgs/Lynx): show logcat live phone.
 - [Leakcanary](https://github.com/square/leakcanary): track Memory leaks.
 

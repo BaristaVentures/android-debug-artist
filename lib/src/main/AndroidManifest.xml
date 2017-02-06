@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-  package="com.barista_v.debug_artist">
+  package="debug_artist.menu">
 
   <uses-permission android:name="android.permission.READ_LOGS" />
   <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -8,12 +8,6 @@
   <application>
 
     <activity android:name="com.github.pedrovgs.lynx.LynxActivity" />
-
-    <activity
-      android:name=".report_bug.ReportBugActivity"
-      android:label="@string/report_bug"
-      android:launchMode="singleInstance"
-      android:theme="@style/ApiTheme" />
 
   </application>
 

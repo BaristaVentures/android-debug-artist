@@ -4,5 +4,9 @@
 #
 
 ./gradlew build
+
 ./gradlew lib:uploadArchives
-./gradlew lib:bintrayUpload
+./gradlew pivotaltracker-reporter:uploadArchives
+
+./gradlew lib:bintrayUpload || echo "something happened uploading lib to bintray"
+./gradlew pivotaltracker-reporter:bintrayUpload || echo "something happened uploading reporter to bintray"

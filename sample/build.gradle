@@ -5,7 +5,7 @@ android {
   buildToolsVersion setup.buildTools
 
   defaultConfig {
-    applicationId "com.barista_v.sample"
+    applicationId "sample"
 
     minSdkVersion setup.minSdk
     targetSdkVersion setup.targetSdk
@@ -37,6 +37,7 @@ android {
 dependencies {
   compile deps.appCompat
   compile project(':lib')
+  compile project(':pivotaltracker-reporter')
   //  compile("com.barista-v:debug-artist:0.5.10@aar") {
   //    transitive = true
   //  }

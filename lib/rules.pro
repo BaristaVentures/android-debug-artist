@@ -53,21 +53,6 @@
 -keep class com.squareup.haha.perflib.Snapshot
 -keep class com.squareup.okhttp.MediaType
 
-# Retrofit 2.X
-## https://square.github.io/retrofit/ ##
-
--dontwarn retrofit2.**
--keep class retrofit2.** { *; }
--keepattributes Signature
--keepattributes Exceptions
-
--keepclasseswithmembers class * { @retrofit2.http.* <methods>; }
-
--keepclasseswithmembers class com.barista_v.debug_artist.repositories.pivotal.Story { *; }
--keepclasseswithmembers class com.barista_v.debug_artist.repositories.pivotal.StoryRequestBody { *; }
--keepclasseswithmembers class com.barista_v.debug_artist.repositories.pivotal.Comment { *; }
--keepclasseswithmembers class com.barista_v.debug_artist.repositories.pivotal.Attachment { *; }
-
 # Jacoco
 ## Keep everything for the jacoco classes
 
