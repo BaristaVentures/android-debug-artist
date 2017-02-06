@@ -5,70 +5,21 @@
 [![codecov](https://codecov.io/gh/BaristaVentures/debug-artist/branch/develop/graph/badge.svg)](https://codecov.io/gh/BaristaVentures/debug-artist)
 [![codebeat badge](https://codebeat.co/badges/17e3bfd1-d2d2-4240-94f0-480da37d32d6)](https://codebeat.co/projects/github-com-baristaventures-debug-artist)
 
-
 Make developers life easier with some tools, you can add it to your debug builds and have some debug
 libraries like [Leakcanary](https://github.com/square/leakcanary) and others without extra work.
 
-- Debug Drawer: right menu with LeakCanary, stetho and others. *use just for debug builds*
+Library contains:
+- [Debug Drawer Menu](docs/debug-drawer.md): right menu with features for development, (*yeah, it's for you! developer!*).
 - [ViewServer](https://github.com/romainguy/ViewServer): helps to debug layouts with more devices.
-
-![](img/debug_drawer.jpg)
-
-## How to use it
-
-Add this on each activity `setContentView` so your child activities always add it to each activity:
-
-```
-mDebugDrawer = new DebugDrawer(appInstance, activityInstance)
-        .withScalpelSwitch((ScalpelFrameLayout) findViewById(R.id.scalpelLayout))
-        .with<feature>
-        .withDivider()
-        .withInfoProperties(getProperties());
-```
-
-### Features:
-
-- _Shake it to Report Bug_: on shake takes an screenshot and let you create a bug in your favorite
-  story/cards service (provide `Pivotal Tracker` repository for it but you **can build your own**.
-- [Links](https://github.com/pedrovgs/Lynx): show logcat live phone.
-- [Leakcanary](https://github.com/square/leakcanary): track Memory leaks.
-
-You need to avoid other thing initialization on `Application` `onCreate` since LeakCanary creates another process and
-may cause crashes:
-
-```
-class MyCustomApp {
-
-    @Override
-    void onCreate(){
-      if (LeakCanary.isInAnalyzerProcess(this)) return // <-------------- This
-
-      // Setup Firebase
-      // Setup Other Services
-    }
-
-}
-```
-
-- [Picasso logs](https://github.com/square/picasso): enable debug logs.
-- [Scalpel](https://github.com/JakeWharton/scalpel): see 3d layouts.
-- [Stetho](https://github.com/facebook/stetho): if you want custom interceptors you can add them and it will use them _automatically_.
-- [Process Phoenix](https://github.com/JakeWharton/ProcessPhoenix): restart app/activity.
-- Custom spinners: used sometimes to select from a list of hosts.
-- Custom text input fields: used to set the app api host dynamically.
-- Custom map of properties: map of `title` -> `content` that allow you to show  useful info about the app like version, current host, flavor, etc...
 
 ## Add to gradle project
 
 ```groovy
-repositories {
-  jcenter()
-}
-
-dependencies {
-  compile("com.barista-v:debug-artist:<latest-version>@aar") { transitive = true }
-}
+repositories { jcenter() }
+dependencies { compile("com.baristav.debugartist:debugartist:<library-version>@aar") { transitive = true } }
 ```
+
+__Note:__ check [custom-bug-report-service](docs/custom-bug-report-service.md) to
 
 ## Publish
 

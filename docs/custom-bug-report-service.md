@@ -18,4 +18,3 @@ the menu to send the dependencies to the report bug activity, build it and use i
 
 The only service provided is [Pivotal Tracker](https://www.pivotaltracker.com/) but you can build
 your own too.
-
