@@ -5,9 +5,9 @@
 // Requires Jacoco plugin in build classpath.
 apply plugin: 'jacoco'
 
-jacoco {
-  toolVersion = "0.7.4.201502262128"
-}
+//jacoco {
+//  toolVersion = "0.7.4.201502262128"
+//}
 
 // Enables code coverage for JVM tests.
 // Android Gradle Plugin out of the box supports only code coverage for instrumentation tests.
@@ -72,19 +72,3 @@ project.afterEvaluate {
     }
   }
 }
-
-//test {
-//  jacoco {
-//    append = false
-////    destinationFile = file("$buildDir/jacoco/jacocoTest.exec")
-////    classDumpFile = file("$buildDir/jacoco/classpathdumps")
-//  }
-//}
-//
-//jacocoTestReport {
-//  reports {
-//    xml.enabled true
-//    csv.enabled true
-//    html.destination "${buildDir}/jacocoHtml"
-//  }
-//}

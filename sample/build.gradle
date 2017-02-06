@@ -5,7 +5,7 @@ android {
   buildToolsVersion setup.buildTools
 
   defaultConfig {
-    applicationId "com.barista_v.sample"
+    applicationId "sample"
 
     minSdkVersion setup.minSdk
     targetSdkVersion setup.targetSdk
@@ -19,6 +19,9 @@ android {
       minifyEnabled true
       shrinkResources true
       proguardFiles getDefaultProguardFile('proguard-android.txt'), 'rules.pro'
+
+      buildConfigField "String", "PIVOTAL_API_KEY", "\"$ARTIST_PIVOTAL_API_KEY\""
+      buildConfigField "String", "PIVOTAL_PROJECT_ID", "\"$ARTIST_PIVOTAL_PROJECT_ID\""
     }
     release {
       minifyEnabled true
@@ -34,7 +37,8 @@ android {
 dependencies {
   compile deps.appCompat
   compile project(':lib')
-//  compile("com.barista-v:debug-artist:0.5.10@aar") {
-//    transitive = true
-//  }
+  compile project(':pivotaltracker-reporter')
+  //  compile("com.barista-v:debug-artist:0.5.10@aar") {
+  //    transitive = true
+  //  }
 }
