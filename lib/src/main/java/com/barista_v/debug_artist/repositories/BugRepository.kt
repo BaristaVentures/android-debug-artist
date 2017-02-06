@@ -4,6 +4,7 @@ import android.os.Parcelable
 import rx.Observable
 
 interface BugRepository {
+
   /**
    * Creates a bug
    */

@@ -65,7 +65,7 @@
         android:layout_height="240dp"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="@dimen/spacing_medium"
-        android:background="@color/gray" />
+        android:background="#FF888888" />
 
       <android.support.design.widget.FloatingActionButton
         android:id="@+id/sendButton"

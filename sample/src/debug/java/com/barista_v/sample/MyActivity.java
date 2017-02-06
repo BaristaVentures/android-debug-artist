@@ -11,8 +11,8 @@ import com.barista_v.debug_artist.drawer.item.input.InputItemListener;
 import com.barista_v.debug_artist.drawer.item.phoenix.RestartListener;
 import com.barista_v.debug_artist.drawer.item.spinner.SpinnerDrawerItem;
 import com.barista_v.debug_artist.drawer.item.spinner.SpinnerItemListener;
-import com.barista_v.debug_artist.repositories.pivotal.PivotalBugRepositoryBuilder;
 import com.barista_v.debug_artist.repositories.BugRepository;
+import com.barista_v.debug_artist.repositories.pivotal.PivotalBugRepositoryBuilder;
 import com.jakewharton.scalpel.ScalpelFrameLayout;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -34,14 +34,14 @@ public class MyActivity extends AppCompatActivity
     BugRepository.Builder repositoryBuilder =
         new PivotalBugRepositoryBuilder(BuildConfig.PIVOTAL_API_KEY,
             BuildConfig.PIVOTAL_PROJECT_ID, getProperties(),
-            new String[] {"android-sample"} );
+            new String[] { "android-sample" });
 
     mDebugDrawer = new DebugDrawer(MyApplication.sInstance, this)
         .withScalpelSwitch((ScalpelFrameLayout) findViewById(R.id.scalpelLayout))
         .withLeakCanarySwitch(true)
         .withPicassoLogsSwitch(true)
         .withStethoSwitch(true)
-        .withReportBugReportSwitch(true, repositoryBuilder)
+        .withShakeToReportBugSwitch(false, repositoryBuilder)
         .withDivider()
         .withLynksButton()
         .withPhoenixRestartButton(this)

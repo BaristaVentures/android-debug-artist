@@ -13,6 +13,7 @@ class AndroidDevice(val activity: AppCompatActivity) : Device {
 
   val TAG = "AndroidDevice"
 
+  @Throws(Falcon.UnableToTakeScreenshotException::class)
   override fun takeScreenshot(fileName: String): String {
     val outFile = File(activity.cacheDir, fileName)
     Falcon.takeScreenshot(activity, outFile)

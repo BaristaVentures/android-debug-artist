@@ -279,6 +279,18 @@ class DebugDrawerPresenterTests : Spek({
       }
     }
 
+    on("shake with right count but screenshot throws exception") {
+      val error = Exception("failed")
+      whenever(device.takeScreenshot(anyString())).thenThrow(error)
+      whenever(device.readLogFile()).thenReturn("log.log")
+
+      presenter.onShake(1)
+
+      it("should show error") {
+        verify(view).showErrorDialog(anyString())
+      }
+    }
+
     on("text input entered") {
       val inputListener = mock<InputItemListener>()
 

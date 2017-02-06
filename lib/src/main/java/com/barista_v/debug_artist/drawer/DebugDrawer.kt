@@ -17,12 +17,12 @@ import com.barista_v.debug_artist.DebugActor
 import com.barista_v.debug_artist.R
 import com.barista_v.debug_artist.drawer.item.*
 import com.barista_v.debug_artist.drawer.item.input.InputItemListener
-import com.barista_v.debug_artist.utils.shake_detector.AndroidShakeDetector
 import com.barista_v.debug_artist.drawer.item.phoenix.RestartListener
 import com.barista_v.debug_artist.drawer.item.spinner.SpinnerDrawerItem
 import com.barista_v.debug_artist.drawer.item.spinner.SpinnerItemListener
 import com.barista_v.debug_artist.repositories.BugRepository
 import com.barista_v.debug_artist.utils.device.AndroidDevice
+import com.barista_v.debug_artist.utils.shake_detector.AndroidShakeDetector
 import com.jakewharton.scalpel.ScalpelFrameLayout
 import com.mikepenz.materialdrawer.Drawer
 import com.mikepenz.materialdrawer.DrawerBuilder
@@ -96,7 +96,7 @@ class DebugDrawer @JvmOverloads constructor(application: Application,
   fun withPicassoLogsSwitch(checked: Boolean = false) = withMenuItem(PicassoLogsSwitchMenuItem(checked))
 
   @JvmOverloads
-  fun withReportBugReportSwitch(checked: Boolean = false, bugReportRepository: BugRepository.Builder) =
+  fun withShakeToReportBugSwitch(checked: Boolean = false, bugReportRepository: BugRepository.Builder) =
       withMenuItem(ReportBugSwitchMenuItem(checked, bugReportRepository))
 
   fun withLynksButton() = withMenuItem(LynksButtonMenuItem())

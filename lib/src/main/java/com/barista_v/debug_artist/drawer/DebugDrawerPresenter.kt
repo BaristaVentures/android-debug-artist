@@ -53,11 +53,7 @@ class DebugDrawerPresenter : OnShakeListener {
   }
 
   fun onBugReporterItemSelected(checked: Boolean) {
-    if (checked) {
-      shakeDetector?.start(this@DebugDrawerPresenter)
-    } else {
-      shakeDetector?.pause()
-    }
+    startOrPauseShakeListener(checked)
   }
 
   fun onScalpelItemSelected(enabled: Boolean) {
@@ -116,7 +112,7 @@ class DebugDrawerPresenter : OnShakeListener {
       is ReportBugSwitchMenuItem -> {
         bugRepositoryBuilder = item.repositoryBuilder
         view?.addBugReportSwitch(item.checked)
-        shakeDetector?.start(this)
+        startOrPauseShakeListener(item.checked)
       }
       is SpinnerMenuItem -> view?.addSpinnerItem(item)
       is LabelMenuItem -> item.properties.forEach { view?.addLabelItem(it.key, it.value) }
@@ -126,12 +122,26 @@ class DebugDrawerPresenter : OnShakeListener {
   override fun onShake(count: Int) {
     if (count > 1) return
 
-    val screenshotPath = device?.takeScreenshot("screenshot.jpg") ?: return //TODO: log warning
-    val logPath = device?.readLogFile() ?: return //TODO: log warning
+    try {
+      val screenshotPath = device?.takeScreenshot("screenshot.jpg") ?: return //TODO: log warning
+      val logPath = device?.readLogFile() ?: return //TODO: log warning
 
-    bugRepositoryBuilder?.let {
-      traveler?.startBugReportView(it, screenshotPath, logPath)
-    } //TODO: log warning
+      bugRepositoryBuilder?.let {
+        traveler?.startBugReportView(it, screenshotPath, logPath)
+      } //TODO: log warning
+    } catch (e: Exception) {
+      val message = "message= ${e.message} \ncause=${e.cause?.message}"
+      view?.showErrorDialog(message)
+    }
   }
+
+  private fun startOrPauseShakeListener(checked: Boolean){
+    if (checked) {
+      shakeDetector?.start(this@DebugDrawerPresenter)
+    } else {
+      shakeDetector?.pause()
+    }
+  }
+
 
 }
