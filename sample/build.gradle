@@ -37,8 +37,8 @@ android {
 dependencies {
   compile deps.appCompat
   compile project(':lib')
-  compile project(':reporter-pivotal')
-  //  compile("com.barista-v:debug-artist:0.5.10@aar") {
-  //    transitive = true
-  //  }
+  /*compile project(':reporter-pivotal')*/
+    compile("com.baristav.debugartist:debugartist:0.6@aar") {
+      transitive = true
+    }
 }
