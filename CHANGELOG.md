@@ -1,5 +1,10 @@
 # CHANGELOG
 
+# v 0.6
+
+- Update to Kotlin 1.1.1.
+- Add bug reporter with pivotal tracker, waiting others!
+
 # v 0.5.11
 
 - Update to Kotlin 1.0.6.

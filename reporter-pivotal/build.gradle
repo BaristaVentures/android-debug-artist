@@ -35,5 +35,5 @@ dependencies {
   compile "com.squareup.okhttp3:okhttp:3.5.0"
 }
 
-// Must be at the bottom
+// SHOULD BE AT THE BOTTOM OF THE FILE, DONT MOVE
 apply from: 'bintray.gradle'

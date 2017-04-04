@@ -5,8 +5,10 @@
 
 ./gradlew build
 
-./gradlew lib:uploadArchives
-./gradlew pivotaltracker-reporter:uploadArchives
+./gradlew lib:build || echo "Failed"
+./gradlew lib:uploadArchives || echo "Failed"
+./gradlew lib:bintrayUpload || echo "Failed"
 
-./gradlew lib:bintrayUpload || echo "something happened uploading lib to bintray"
-./gradlew pivotaltracker-reporter:bintrayUpload || echo "something happened uploading reporter to bintray"
+./gradlew reporter-pivotal:build || echo "Failed"
+./gradlew reporter-pivotal:uploadArchives || echo "Failed"
+./gradlew reporter-pivotal:bintrayUpload || echo "Failed"
