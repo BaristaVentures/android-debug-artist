@@ -8,6 +8,41 @@ to send the repository to the new activity and then build it there.
 
 The idea is to allow custom bug repositories so build your own!
 
+Supported third party bug/story/card trackers:
+
+- [Pivotal Tracker](https://www.pivotaltracker.com/)
+- Trello (soon)
+- Github (soon)
+- Any Idea?
+
+# How to use it
+
+1. Add the library
+
+```groovy
+debugCompile("com.baristav.debugartist:reporter_pivotal:0.6.1@aar") { transitive = true }
+```
+
+2. Create the instance of the `Builder` you need, in this case will be the `PivotalBugRepositoryBuilder`:
+
+```
+
+    BugRepository.Builder repositoryBuilder =
+        new PivotalBugRepositoryBuilder("project-key",
+            "project-id", 
+            propertiesToInclude,
+            new String[] { "android-sample" });
+
+```
+
+3. Add the button with the builder to  
+
+```
+mDebugDrawer = new DebugDrawer(MyApplication.sInstance, this)
+        //...
+        .withShakeToReportBugSwitch(false, repositoryBuilder)
+```
+
 # How to create your custom Bug Report Repository
 
 You will need to create 2 classes that inherit from:
@@ -15,7 +50,3 @@ You will need to create 2 classes that inherit from:
 the menu to send the dependencies to the report bug activity, build it and use it there.
 
 - `BugRepository`: the repository itself that know how to use the custom service api to create.
-
-The only service provided is [Pivotal Tracker](https://www.pivotaltracker.com/) but you can build
-your own too.
-

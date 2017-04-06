@@ -1,1 +1,1 @@
-include ':pivotaltracker-reporter', ':lib', ':sample'
+include ':reporter-pivotal', ':lib', ':sample'

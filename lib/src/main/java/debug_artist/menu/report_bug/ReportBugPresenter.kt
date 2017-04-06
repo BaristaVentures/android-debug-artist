@@ -1,6 +1,5 @@
 package debug_artist.menu.report_bug
 
-import debug_artist.menu.report_bug.BugRepository
 import debug_artist.menu.utils.extensions.composeForIoTasks
 
 class ReportBugPresenter {
@@ -30,10 +29,9 @@ class ReportBugPresenter {
 
     val screenshotFilePath = extrasHandler?.screenshotFilePath
     val logsFilePath = extrasHandler?.logsFilePath
-    val createBugObservable = bugReportRepository?.create(name, description,
-        screenshotFilePath, logsFilePath)
 
-    createBugObservable?.composeForIoTasks()
+    bugReportRepository?.create(name, description, screenshotFilePath, logsFilePath)
+        ?.composeForIoTasks()
         ?.doOnTerminate { view?.dismissProgressDialog() }
         ?.subscribe({
           if (it.error == null) {

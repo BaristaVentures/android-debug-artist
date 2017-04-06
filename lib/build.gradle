@@ -1,11 +1,3 @@
-buildscript {
-  repositories { jcenter() }
-  dependencies {
-    classpath plugs.kotlin
-    classpath plugs.gradleVersions
-  }
-}
-
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'com.github.ben-manes.versions'
@@ -37,7 +29,6 @@ android {
 
 
 dependencies {
-  compile deps.appCompat
   compile deps.kotlinStdLib
 
   compile('com.mikepenz:materialdrawer:5.3.6@aar') { transitive = true }
@@ -73,5 +64,5 @@ dependencies {
   testCompile 'org.junit.platform:junit-platform-runner:1.0.0-M3'
 }
 
-// Must be at the bottom
+// SHOULD BE AT THE BOTTOM OF THE FILE, DONT MOVE
 apply from: 'bintray.gradle'
