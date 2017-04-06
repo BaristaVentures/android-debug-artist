@@ -7,4 +7,10 @@
   <string name="lynks">Lynks - Live Device Log</string>
   <string name="restart_app">Restart App</string>
   <string name="enter_value_for">Enter value for \'%s\'</string>
+  <string name="report_bug">Shake it to Report Bug</string>
+  <string name="title">title</string>
+  <string name="description">description</string>
+  <string name="send">send</string>
+  <string name="loading">Loading…</string>
+  <string name="success">Success</string>
 </resources>

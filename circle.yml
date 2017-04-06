@@ -1,22 +1,28 @@
 machine:
   environment:
-    PATH: "~/$CIRCLE_PROJECT_REPONAME/gradle-2.14.1/bin:$PATH"
+    PATH: "~/$CIRCLE_PROJECT_REPONAME/gradle-3.3/bin:$PATH"
     TERM: "dumb"
     ADB_INSTALL_TIMEOUT: "10"
     GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx2048m -XX:+HeapDumpOnOutOfMemoryError"'
+    _JAVA_OPTIONS: "-Xms512m -Xmx1024m"
 
 dependencies:
   cache_directories:
     - ~/.android
     - ~/android
   pre:
-    - wget "https://services.gradle.org/distributions/gradle-2.14.1-bin.zip"; unzip gradle-2.14.1-bin.zip
-    - echo y | android update sdk --no-ui --all --filter android-24,build-tools-25.0.0,tool,extra-android-m2repository,extra-android-support,extra-google-google_play_services,extra-google-m2repository
+    - wget "https://services.gradle.org/distributions/gradle-3.3-bin.zip"; unzip gradle-3.3-bin.zip
+    - echo y | android update sdk --no-ui --all --filter android-25,build-tools-25.0.2,tool,extra-android-m2repository,extra-android-support,extra-google-google_play_services,extra-google-m2repository
+
+    # BinTray
     - PROPERTIES_FILE=lib/bintray.properties sh scripts/cp-env-to-properties.sh
+    - PROPERTIES_FILE=pivotaltracker-reporter/bintray.properties sh scripts/cp-env-to-properties.sh
+    - sh scripts/cp-env-to-properties.sh
 
 test:
   override:
-    - ./gradlew testDebugUnitTestCoverage -PdisablePreDex --stacktrace
+    - ./gradlew assemble -PdisablePreDex --stacktrace --no-daemon
+    - ./gradlew testDebugUnitTestCoverage -PdisablePreDex --stacktrace --no-daemon
 
     # copy the build outputs to artifacts
     - cp -r lib/build/reports $CIRCLE_TEST_REPORTS

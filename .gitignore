@@ -6,6 +6,9 @@
 /build
 /captures
 
+
+/gradle.properties
+
 # Created by https://www.gitignore.io
 
 ### Android ###

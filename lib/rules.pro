@@ -52,3 +52,11 @@
 -keep class com.squareup.haha.perflib.ClassObj
 -keep class com.squareup.haha.perflib.Snapshot
 -keep class com.squareup.okhttp.MediaType
+
+# Jacoco
+## Keep everything for the jacoco classes
+
+# Keep everything for the emma classes
+-keep class com.vladium.** { *; }
+# Keep everything for the jacoco classes
+-keep class org.jacoco.** { *; }

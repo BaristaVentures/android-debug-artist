@@ -9,7 +9,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.barista_v.sample.MainActivity">
+    tools:context="sample.MainActivity">
 
     <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
       android:id="@+id/toolbar"
@@ -20,5 +20,11 @@
       android:theme="@style/Toolbar.ThemeOverlay" />
 
   </FrameLayout>
+
+  <ImageView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:src="@drawable/ic_tag_faces_black_48dp" />
 
 </com.jakewharton.scalpel.ScalpelFrameLayout>

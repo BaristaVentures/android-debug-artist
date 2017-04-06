@@ -1,0 +1,40 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+
+android {
+  compileSdkVersion setup.compileSdk
+  buildToolsVersion setup.buildTools
+
+  defaultConfig {
+    minSdkVersion setup.minSdk
+    targetSdkVersion setup.targetSdk
+    versionCode VERSION_CODE as Integer
+    versionName VERSION_NAME
+    consumerProguardFiles 'rules.pro'
+    archivesBaseName = POM_ARTIFACT_ID // used by bintray plugin as artifact id
+  }
+
+  lintOptions {
+    abortOnError false
+  }
+}
+
+
+dependencies {
+  compile deps.appCompat
+  compile deps.supportDesign
+  compile deps.kotlinStdLib
+  compile project(":lib")
+
+  compile "io.reactivex:rxjava:1.2.1"
+  compile "io.reactivex:rxandroid:1.2.1"
+  compile 'com.artemzin.rxjava:proguard-rules:1.2.1.0'
+  compile "com.squareup.retrofit2:retrofit:2.1.0"
+  compile "com.squareup.retrofit2:converter-gson:2.1.0"
+  compile "com.squareup.retrofit2:adapter-rxjava:2.1.0"
+  compile "com.squareup.okhttp3:logging-interceptor:3.5.0"
+  compile "com.squareup.okhttp3:okhttp:3.5.0"
+}
+
+// SHOULD BE AT THE BOTTOM OF THE FILE, DONT MOVE
+apply from: 'bintray.gradle'

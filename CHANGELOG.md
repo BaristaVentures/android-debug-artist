@@ -1,14 +1,17 @@
 # CHANGELOG
 
+# v 0.6.1 (~~0.6~~ BROKEN) 
+
+- Update to Kotlin 1.1.1.
+- Add bug reporter with pivotal tracker, waiting others!
+
 # v 0.5.11
 
 - Update to Kotlin 1.0.6.
 - Allow to set initial state for switch's (true/false).
 - Show drawer on first launch now can be set from constructor.
 
-# v 0.5.10 - FIX 0.5.9 broken version
-
-# v 0.5.9 - First public release (*DONT USE*)
+# v 0.5.10 - (~~0.5.9~~ BROKEN) - First public release
 - Kotlin `1.0.5-2`
 - Features:
   - [Links](https://github.com/pedrovgs/Lynx): show logcat live phone.

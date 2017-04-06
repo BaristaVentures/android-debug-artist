@@ -32,21 +32,23 @@ def isReleaseBuild() {
 }
 
 def getReleaseRepositoryUrl() {
-  return hasProperty('RELEASE_REPOSITORY_URL') ? RELEASE_REPOSITORY_URL :
+  hasProperty('RELEASE_REPOSITORY_URL') ? getProperty("RELEASE_REPOSITORY_URL") :
       "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
 }
 
 def getSnapshotRepositoryUrl() {
-  return hasProperty('SNAPSHOT_REPOSITORY_URL') ? SNAPSHOT_REPOSITORY_URL :
+  return hasProperty('SNAPSHOT_REPOSITORY_URL') ? getProperty("SNAPSHOT_REPOSITORY_URL") :
       "https://oss.sonatype.org/content/repositories/snapshots/"
+      //      "https://oss.jfrog.org/artifactory/oss-snapshot-local"
+//      "https://oss.jfrog.org"
 }
 
 def getRepositoryUsername() {
-  return hasProperty('BINTRAY_USER') ? BINTRAY_USER : ""
+  return hasProperty('BINTRAY_USER') ? getProperty("BINTRAY_USER") : ""
 }
 
 def getRepositoryPassword() {
-  return hasProperty('BINTRAY_PASSWORD') ? BINTRAY_PASSWORD : ""
+  return hasProperty('BINTRAY_PASSWORD') ? getProperty("BINTRAY_PASSWORD") : ""
 }
 
 afterEvaluate { project ->
@@ -93,7 +95,6 @@ afterEvaluate { project ->
             }
           }
         }
-
       }
     }
   }
@@ -102,7 +103,6 @@ afterEvaluate { project ->
     required { isReleaseBuild() && gradle.taskGraph.hasTask("bintrayUpload") }
     sign configurations.archives
   }
-
 
   task install(type: Upload, dependsOn: assemble) {
     repositories.mavenInstaller {
@@ -114,7 +114,7 @@ afterEvaluate { project ->
 
       pom.project {
         name POM_NAME
-        packaging POM_PACKAGING
+        packaging "aar"
         description POM_DESCRIPTION
         url POM_URL
 
@@ -171,18 +171,15 @@ afterEvaluate { project ->
   }
 }
 
-
-Properties properties = new Properties()
-properties.load(project.file('bintray.properties').newDataInputStream())
-
 bintray {
-  user = properties.getProperty("BINTRAY_USER")
-  key = properties.getProperty("BINTRAY_API_KEY")
+  user = getProperty("BINTRAY_USER")
+  key = getProperty("BINTRAY_API_KEY")
+
+  configurations = ['archives']
 
   override = true
   publish = true
-//  dryRun = true
-  configurations = ['archives']
+  dryRun = false
 
   pkg {
     repo = "maven"
@@ -194,9 +191,9 @@ bintray {
     vcsUrl = POM_SCM_CONNECTION
     licenses = [POM_LICENCE_NAME]
 
-    githubRepo = POM_SCM_CONNECTION
+    githubRepo = POM_SCM_URL
     githubReleaseNotesFile = 'README.md'
-    userOrg =  properties.getProperty("BINTRAY_USER_ORG")
+    userOrg = getProperty("BINTRAY_USER_ORG")
 
     version {
       desc = POM_DESCRIPTION
@@ -204,7 +201,7 @@ bintray {
 
       gpg {
         sign = true //Determines whether to GPG sign the files. The default is false
-        passphrase = properties.getProperty("BINTRAY_GPG_PASSPHRASE")
+        passphrase = "\"${getProperty("BINTRAY_GPG_PASSPHRASE")}\""
       }
     }
   }
