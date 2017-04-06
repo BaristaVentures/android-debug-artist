@@ -25,20 +25,37 @@ debugCompile("com.baristav.debugartist:reporter_pivotal:0.6.1@aar") { transitive
 
 2. Create the instance of the `Builder` you need, in this case will be the `PivotalBugRepositoryBuilder`:
 
+
+- From Kotlin:
+```
+val repositoryBuilder = PivotalBugRepositoryBuilder("project-key",
+        "project-id", 
+        propertiesToInclude,
+        defaultTags);
 ```
 
-    BugRepository.Builder repositoryBuilder =
-        new PivotalBugRepositoryBuilder("project-key",
+- From Java:
+```java
+PivotalBugRepositoryBuilder repositoryBuilder = 
+    new PivotalBugRepositoryBuilder("project-key",
             "project-id", 
             propertiesToInclude,
-            new String[] { "android-sample" });
+            defaultTags);
 
 ```
 
 3. Add the button with the builder to  
 
+- From Kotlin:
+```kotlin
+val debugDrawer = DebugDrawer(MyApplication.sInstance, this)
+        //...
+        .withShakeToReportBugSwitch(false, repositoryBuilder)        
 ```
-mDebugDrawer = new DebugDrawer(MyApplication.sInstance, this)
+
+- From Java:
+```java
+DebugDrawer debugDrawer = new DebugDrawer(MyApplication.sInstance, this)
         //...
         .withShakeToReportBugSwitch(false, repositoryBuilder)
 ```
