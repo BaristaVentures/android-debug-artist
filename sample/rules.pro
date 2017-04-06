@@ -44,3 +44,5 @@
 -keep class android.support.v4.app.DialogFragment
 -keep class android.support.v4.app.Fragment
 -keep class android.support.v4.app.FragmentActivity
+-keep class android.support.design.widget.FloatingActionButton
+-keep class android.support.v7.widget.AppCompatImageHelper

@@ -19,7 +19,7 @@ repositories { jcenter() }
 dependencies { compile("com.baristav.debugartist:debugartist:<library-version>@aar") { transitive = true } }
 ```
 
-__Note:__ check [custom-bug-report-service](docs/custom-bug-report-service.md) to
+__Note:__ check [cusartom-bug-report-service](docs/custom-bug-report-service.md) to
 
 ## Publish
 

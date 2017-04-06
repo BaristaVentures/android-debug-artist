@@ -22,6 +22,7 @@ android {
 
 dependencies {
   compile deps.appCompat
+  compile deps.supportDesign
   compile deps.kotlinStdLib
   compile project(":lib")
 

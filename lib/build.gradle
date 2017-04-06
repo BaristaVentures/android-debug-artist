@@ -29,7 +29,6 @@ android {
 
 
 dependencies {
-  compile deps.appCompat
   compile deps.kotlinStdLib
 
   compile('com.mikepenz:materialdrawer:5.3.6@aar') { transitive = true }
