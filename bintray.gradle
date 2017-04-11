@@ -24,6 +24,23 @@ apply plugin: 'maven'
 apply plugin: 'signing'
 apply plugin: 'com.jfrog.bintray'
 
+def areBinTrayPropertiesDefined() {
+  ["BINTRAY_USER",
+   "BINTRAY_USER_ORG",
+   "BINTRAY_PASSWORD",
+   "BINTRAY_API_KEY",
+   "BINTRAY_GPG_PASSPHRASE"].each {
+
+    if (!hasProperty(it)) {
+      return false
+    }
+  }
+}
+
+if (areBinTrayPropertiesDefined()) {
+  return
+}
+
 version = VERSION_NAME
 group = GROUP
 
@@ -38,9 +55,9 @@ def getReleaseRepositoryUrl() {
 
 def getSnapshotRepositoryUrl() {
   return hasProperty('SNAPSHOT_REPOSITORY_URL') ? getProperty("SNAPSHOT_REPOSITORY_URL") :
-//            "https://oss.sonatype.org/content/repositories/snapshots/"
-      //  "https://oss.jfrog.org"
-      "https://oss.jfrog.org/artifactory/oss-snapshot-local/"
+      "https://oss.sonatype.org/content/repositories/snapshots/"
+      //      "https://oss.jfrog.org/artifactory/oss-snapshot-local"
+//      "https://oss.jfrog.org"
 }
 
 def getRepositoryUsername() {
@@ -175,10 +192,11 @@ bintray {
   user = getProperty("BINTRAY_USER")
   key = getProperty("BINTRAY_API_KEY")
 
+  configurations = ['archives']
+
   override = true
   publish = true
   dryRun = false
-  configurations = ['archives']
 
   pkg {
     repo = "maven"

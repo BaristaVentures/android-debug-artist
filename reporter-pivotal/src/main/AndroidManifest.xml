@@ -8,7 +8,7 @@
   <application>
 
     <activity
-      android:name=".repositories.ReportBugActivity"
+      android:name="debug_artist.menu.report_bug.ReportBugActivity"
       android:label="@string/report_bug"
       android:launchMode="singleInstance"
       android:theme="@style/ApiTheme" />

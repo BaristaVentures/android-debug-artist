@@ -7,11 +7,20 @@
 Add this on each activity `setContentView` so your child activities always add it to each activity:
 
 ```
-debugDrawer = new DebugDrawer(appInstance, activityInstance)
-        .withScalpelSwitch((ScalpelFrameLayout) findViewById(R.id.scalpelLayout))
-        .with_<feature>_()
+mDebugDrawer = DebugDrawer(MyApplication.sInstance, this)
+        .withScalpelSwitch(findViewById(R.id.scalpelLayout) as ScalpelFrameLayout)
+        .withLeakCanarySwitch(true)
+        .withPicassoLogsSwitch(true)
+        .withStethoSwitch(true)
+        .withShakeToReportBugSwitch(false, repositoryBuilder)
         .withDivider()
-        .withInfoProperties(getProperties());
+        .withLynksButton()
+        .withPhoenixRestartButton(this)
+        .withDivider()
+        .withInputItem(2, "Host", this)
+        .withSpinnerItem(1, "Spinner with item selected by index", hosts, 0, this)
+        .withDivider()
+        .withInfoProperties(properties)
 ```
 
 ### Features:

@@ -27,7 +27,6 @@ android {
   }
 }
 
-
 dependencies {
   compile deps.kotlinStdLib
 
@@ -65,4 +64,4 @@ dependencies {
 }
 
 // SHOULD BE AT THE BOTTOM OF THE FILE, DONT MOVE
-apply from: 'bintray.gradle'
+apply from: '../bintray.gradle'

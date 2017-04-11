@@ -17,7 +17,7 @@ Supported third party bug/story/card trackers:
 
 # How to use it
 
-1. Add the library
+1. Add the library you need (in this case `pivotal tracker reporter`)
 
 ```groovy
 debugCompile("com.baristav.debugartist:reporter_pivotal:0.6.1@aar") { transitive = true }
