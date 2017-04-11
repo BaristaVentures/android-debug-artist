@@ -1,6 +1,6 @@
 # Shake to Report Bug
 
-![](img/report-bug.jpg)
+![](../../img/report-bug.jpg)
 
 When this feature is enabled will be checking if you shake your device, on shake takes an screenshot
 and starts a new activity with the provided . This builder enable the menu
