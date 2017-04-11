@@ -1,4 +1,4 @@
-![](img/logo.png)
+![](img/logo.jpg)
 
 [![Download](https://api.bintray.com/packages/barista-ventures/maven/debugartist/images/download.svg)](https://bintray.com/barista-ventures/maven/debug-artist/_latestVersion)
 [![codecov](https://codecov.io/gh/BaristaVentures/debug-artist/branch/master/graph/badge.svg)](https://codecov.io/gh/BaristaVentures/debug-artist)
