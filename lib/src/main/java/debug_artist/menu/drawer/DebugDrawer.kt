@@ -13,17 +13,6 @@ import android.widget.EditText
 import android.widget.Toast
 import android.widget.Toast.LENGTH_LONG
 import android.widget.Toast.LENGTH_SHORT
-import debug_artist.menu.DebugActor
-import debug_artist.menu.R
-import debug_artist.menu.drawer.item.*
-import debug_artist.menu.drawer.item.*
-import debug_artist.menu.drawer.item.input.InputItemListener
-import debug_artist.menu.drawer.item.phoenix.RestartListener
-import debug_artist.menu.drawer.item.spinner.SpinnerDrawerItem
-import debug_artist.menu.drawer.item.spinner.SpinnerItemListener
-import debug_artist.menu.report_bug.BugRepository
-import debug_artist.menu.utils.device.AndroidDevice
-import debug_artist.menu.utils.shake_detector.AndroidShakeDetector
 import com.jakewharton.scalpel.ScalpelFrameLayout
 import com.mikepenz.materialdrawer.Drawer
 import com.mikepenz.materialdrawer.DrawerBuilder
@@ -33,6 +22,16 @@ import com.mikepenz.materialdrawer.model.PrimaryDrawerItem
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem
 import com.mikepenz.materialdrawer.model.SwitchDrawerItem
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem
+import debug_artist.menu.DebugActor
+import debug_artist.menu.R
+import debug_artist.menu.drawer.item.*
+import debug_artist.menu.drawer.item.input.InputItemListener
+import debug_artist.menu.drawer.item.phoenix.RestartListener
+import debug_artist.menu.drawer.item.spinner.SpinnerDrawerItem
+import debug_artist.menu.drawer.item.spinner.SpinnerItemListener
+import debug_artist.menu.report_bug.BugRepository
+import debug_artist.menu.utils.device.AndroidDevice
+import debug_artist.menu.utils.shake_detector.AndroidShakeDetector
 import java.lang.ref.WeakReference
 
 /**

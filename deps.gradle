@@ -4,15 +4,15 @@ ext {
            minSdk    : 15,
            targetSdk : 25]
 
-  versions = [supportLibrary: "25.0.0",
+  versions = [supportLibrary: "25.3.1",
               kotlin        : "1.1.1",
               spek          : "1.1.0-beta2"]
 
   plugs = [kotlin        : "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlin",
            gradleVersions: 'com.github.ben-manes:gradle-versions-plugin:0.14.0']
 
-  deps = [appCompat   : "com.android.support:appcompat-v7:$versions.supportLibrary",
+  deps = [appCompat    : "com.android.support:appcompat-v7:$versions.supportLibrary",
           supportDesign: "com.android.support:design:$versions.supportLibrary",
 
-          kotlinStdLib: "org.jetbrains.kotlin:kotlin-stdlib:$versions.kotlin"]
+          kotlinStdLib : "org.jetbrains.kotlin:kotlin-stdlib:$versions.kotlin"]
 }
