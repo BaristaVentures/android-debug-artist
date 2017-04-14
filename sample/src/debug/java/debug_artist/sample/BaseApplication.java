@@ -3,12 +3,12 @@ package debug_artist.sample;
 import android.app.Application;
 import com.squareup.leakcanary.LeakCanary;
 
-public class MyApplication extends Application {
+public class BaseApplication extends Application {
 
   /**
-   * Should only be used in debug builds (do not save application statically)
+   * Should only be used in debug builds (do not save application statically on release)
    */
-  public static MyApplication sInstance;
+  public static BaseApplication sInstance;
 
   @Override
   public void onCreate() {

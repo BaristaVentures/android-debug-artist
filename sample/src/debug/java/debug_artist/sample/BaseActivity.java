@@ -1,7 +1,6 @@
 package debug_artist.sample;
 
 import android.os.Build;
-import android.support.annotation.LayoutRes;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
@@ -20,14 +19,14 @@ import java.util.Map;
 import static android.os.Build.MANUFACTURER;
 import static android.os.Build.MODEL;
 
-public class MyActivity extends AppCompatActivity
+public class BaseActivity extends AppCompatActivity
     implements SpinnerItemListener, RestartListener, InputItemListener {
 
   private DebugDrawer mDebugDrawer;
 
   @Override
-  public void setContentView(@LayoutRes int layoutResID) {
-    super.setContentView(layoutResID);
+  protected void onResume() {
+    super.onResume();
 
     String[] hosts = new String[] { "Value 1", "Value 2" };
 
@@ -36,7 +35,8 @@ public class MyActivity extends AppCompatActivity
             BuildConfig.PIVOTAL_PROJECT_ID, getProperties(),
             new String[] { "android-sample" });
 
-    mDebugDrawer = new DebugDrawer(MyApplication.sInstance, this)
+    // Create debug drawer with selected features
+    mDebugDrawer = new DebugDrawer(BaseApplication.sInstance, this)
         .withScalpelSwitch((ScalpelFrameLayout) findViewById(R.id.scalpelLayout))
         .withLeakCanarySwitch(true)
         .withPicassoLogsSwitch(true)
@@ -51,15 +51,15 @@ public class MyActivity extends AppCompatActivity
         .withDivider()
         .withInfoProperties(getProperties());
 
+    // Enable view debuger on some devices
     ViewServer.get(this).addWindow(this);
   }
 
   @Override
-  protected void onDestroy() {
-    super.onDestroy();
+  protected void onPause() {
+    super.onPause();
 
     mDebugDrawer.release();
-
     ViewServer.get(this).removeWindow(this);
   }
 
