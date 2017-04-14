@@ -2,7 +2,8 @@ package debug_artist.sample;
 
 import android.app.Application;
 
-public class MyApplication extends Application {
+public class BaseApplication extends Application {
+
   @Override
   public void onCreate() {
     super.onCreate();
@@ -11,4 +12,5 @@ public class MyApplication extends Application {
     // "Setup firebase"
     //
   }
+
 }
