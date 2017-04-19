@@ -1,6 +1,6 @@
 # Debug Drawer
 
-![](img/debug_drawer.jpg)
+![](img/debug-drawer.jpg)
 
 ## How to use it
 
