@@ -44,8 +44,8 @@ class DebugDrawer @JvmOverloads constructor(application: Application,
                                             showDrawerOnFirstLaunch: Boolean = false)
   : OnCheckedChangeListener, Drawer.OnDrawerItemClickListener, SpinnerItemListener, DebugDrawerView {
 
-  private var activityWeakReference = WeakReference(activity)
-  private var presenter = DebugDrawerPresenter()
+  private val activityWeakReference = WeakReference(activity)
+  private val presenter = DebugDrawerPresenter()
   private val debugActor = DebugActor(application, activity)
   private val menuDrawer = DrawerBuilder(activity)
       .withTranslucentStatusBar(true)
@@ -55,10 +55,11 @@ class DebugDrawer @JvmOverloads constructor(application: Application,
       .apply {
         onDrawerItemClickListener = this@DebugDrawer
 
-        addItems(PrimaryDrawerItem().withName("Debug Artist - Q&A Module")
-            .withDescription("Drag from right to left to open")
-            .withSelectable(false)
-            .withEnabled(false),
+        addItems(
+            PrimaryDrawerItem().withName("Debug Artist - Q&A Module")
+                .withDescription("Drag from right to left to open")
+                .withSelectable(false)
+                .withEnabled(false),
             DividerDrawerItem())
       }
 
