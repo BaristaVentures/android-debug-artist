@@ -1,9 +1,9 @@
 package debug_artist.menu.drawer
 
+import android.app.Activity
 import android.app.Application
 import android.support.annotation.StringRes
 import android.support.v7.app.AlertDialog
-import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.RecyclerView
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -31,8 +31,8 @@ import debug_artist.menu.drawer.item.spinner.SpinnerDrawerItem
 import debug_artist.menu.drawer.item.spinner.SpinnerItemListener
 import debug_artist.menu.report_bug.BugRepository
 import debug_artist.menu.utils.device.AndroidDevice
+import debug_artist.menu.utils.device.AndroidDevice.Companion.getProjectProperties
 import debug_artist.menu.utils.shake_detector.AndroidShakeDetector
-import java.lang.ref.WeakReference
 
 /**
  * Debug drawer showing some debugging tools and info.
@@ -40,11 +40,10 @@ import java.lang.ref.WeakReference
  * To add dynamic actions check "debugDrawer.with*" methods.
  */
 class DebugDrawer @JvmOverloads constructor(application: Application,
-                                            activity: AppCompatActivity,
+                                            val activity: Activity,
                                             showDrawerOnFirstLaunch: Boolean = false)
   : OnCheckedChangeListener, Drawer.OnDrawerItemClickListener, SpinnerItemListener, DebugDrawerView {
 
-  private val activityWeakReference = WeakReference(activity)
   private val presenter = DebugDrawerPresenter()
   private val debugActor = DebugActor(application, activity)
   private val menuDrawer = DrawerBuilder(activity)
@@ -114,7 +113,7 @@ class DebugDrawer @JvmOverloads constructor(application: Application,
                       listener: SpinnerItemListener) =
       withMenuItem(SpinnerMenuItem(id, name, options, selectedItem, listener))
 
-  fun withInfoProperties(properties: Map<String, String>) = withMenuItem(LabelMenuItem(properties))
+  fun withInfoProperties() = withMenuItem(LabelMenuItem(getProjectProperties(activity)))
 
   //</editor-fold>
 
@@ -170,7 +169,7 @@ class DebugDrawer @JvmOverloads constructor(application: Application,
   }
 
   override fun addInputItem(item: InputMenuItem) {
-    val text = activityWeakReference.get()?.getString(R.string.enter_value_for, item.name) ?: ""
+    val text = activity.getString(R.string.enter_value_for, item.name) ?: ""
 
     menuDrawer.addItem(PrimaryDrawerItem()
         .withName(text)
@@ -187,24 +186,20 @@ class DebugDrawer @JvmOverloads constructor(application: Application,
   }
 
   override fun showErrorDialog(message: String) {
-    activityWeakReference.get()?.let {
-      Toast.makeText(it, message, LENGTH_LONG).show()
-    }
+    Toast.makeText(activity, message, LENGTH_LONG).show()
   }
 
   override fun showSuccessToast() {
-    activityWeakReference.get()?.let {
-      Toast.makeText(it, "Success", LENGTH_SHORT).show()
-    }
+    Toast.makeText(activity, "Success", LENGTH_SHORT).show()
   }
 
   //</editor-fold>
 
-  private fun showInputDialog(drawerItem: PrimaryDrawerItem) = activityWeakReference.get()?.let {
-    val factory = LayoutInflater.from(it)
+  private fun showInputDialog(drawerItem: PrimaryDrawerItem) {
+    val factory = LayoutInflater.from(activity)
     val entryView = factory.inflate(R.layout.input_view, null) as EditText
 
-    AlertDialog.Builder(it)
+    AlertDialog.Builder(activity)
         .setTitle(drawerItem.name.toString())
         .setView(entryView)
         .setPositiveButton(android.R.string.yes) { dialog, which ->

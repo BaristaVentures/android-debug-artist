@@ -17,20 +17,20 @@ Java:
     String[] hosts = new String[] { "Value 1", "Value 2" };
 
     // Create debug drawer with selected features
-    mDebugDrawer = new DebugDrawer(BaseApplication.sInstance, this)
+    mDebugDrawer = new DebugDrawer(applicationContext, activityContext)
         .withScalpelSwitch((ScalpelFrameLayout) findViewById(R.id.scalpelLayout))
         .withLeakCanarySwitch(true)
         .withPicassoLogsSwitch(true)
         .withStethoSwitch(true)
         // .withShakeToReportBugSwitch(false, repositoryBuilder)
-        .withDivider()
+        .withDivider() // a line like this ------------------ in the drawer 
         .withLynksButton()
         .withPhoenixRestartButton(this)
         .withDivider()
         .withInputItem(2, "Host", this)
         .withSpinnerItem(1, "Spinner with item selected by index", hosts, 0, this)
         .withDivider()
-        .withInfoProperties(getProperties());
+        .withInfoProperties(dictionaryWithProperties);
 
     // Enable view debuger on some devices
     ViewServer.get(this).addWindow(this);

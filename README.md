@@ -14,6 +14,23 @@ Library contains:
 
 - [ViewServer](https://github.com/romainguy/ViewServer): helps to debug layouts with more devices.
 
+## Some Comments
+
+- If you want to differentiate release/staging/debug builds on the drawer you need to add:
+
+```
+buildTypes {
+    debug {
+      versionNameSuffix "-staging"  // THIS LINE
+      
+      //...
+    }
+    //...
+}
+```
+
+Looks like we cant get
+
 ## Add to gradle project
 
 ```groovy

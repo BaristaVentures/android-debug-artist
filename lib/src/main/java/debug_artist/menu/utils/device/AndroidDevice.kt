@@ -1,7 +1,8 @@
 package debug_artist.menu.utils.device
 
+import android.app.Activity
+import android.os.Build
 import android.os.Process
-import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import com.jraska.falcon.Falcon
 import java.io.*
@@ -9,12 +10,35 @@ import java.io.*
 /**
  * Know how to pick things from an Android Device.
  */
-class AndroidDevice(val activity: AppCompatActivity) : Device {
+class AndroidDevice(val activity: Activity) {
 
   val TAG = "AndroidDevice"
 
+  companion object {
+
+    /**
+     * Return a map with keys and values referencing environment variables like
+     * app version, android version, model, etc...
+     */
+    @JvmStatic
+    @JvmOverloads
+    fun getProjectProperties(activity: Activity, extraProperties: HashMap<String, String>? = null)
+        : MutableMap<String, String> {
+      return activity.packageManager.getPackageInfo(activity.packageName, 0).let {
+        mutableMapOf<String, String>(
+            "AppVersion" to it.versionName,
+            "Build" to it.versionCode.toString(),
+            "AndroidVersion" to Build.VERSION.RELEASE,
+            "Manufacturer" to Build.MANUFACTURER,
+            "Model" to Build.MODEL).apply {
+          extraProperties?.let { putAll(extraProperties) }
+        }
+      }
+    }
+  }
+
   @Throws(Falcon.UnableToTakeScreenshotException::class)
-  override fun takeScreenshot(fileName: String): String {
+  fun takeScreenshot(fileName: String): String {
     val outFile = File(activity.cacheDir, fileName)
     Falcon.takeScreenshot(activity, outFile)
     return outFile.path
@@ -26,7 +50,7 @@ class AndroidDevice(val activity: AppCompatActivity) : Device {
    *
    * Source: http://stackoverflow.com/a/22174245/273119
    */
-  override fun readLogFile(): String {
+  fun readLogFile(): String {
     val fullName = "appLog.log"
     val file = File(activity.cacheDir, fullName)
     val pid = Process.myPid().toString()

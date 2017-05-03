@@ -1,16 +1,18 @@
-package debug_artist.menu.drawer
+package debug_artist.menu
 
 import com.nhaarman.mockito_kotlin.*
-import debug_artist.menu.MockFactory
+import debug_artist.menu.drawer.Actor
+import debug_artist.menu.drawer.DebugDrawerPresenter
+import debug_artist.menu.drawer.DebugDrawerView
+import debug_artist.menu.drawer.Traveler
 import debug_artist.menu.drawer.item.LeakCanarySwitchMenuItem
 import debug_artist.menu.drawer.item.LynksButtonMenuItem
 import debug_artist.menu.drawer.item.PicassoLogsSwitchMenuItem
 import debug_artist.menu.drawer.item.StethoSwitchMenuItem
 import debug_artist.menu.drawer.item.input.InputItemListener
 import debug_artist.menu.report_bug.BugRepository
-import debug_artist.menu.utils.device.Device
+import debug_artist.menu.utils.device.AndroidDevice
 import debug_artist.menu.utils.shake_detector.ShakeDetector
-import debug_artist.mockSchedulers
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.api.dsl.it
@@ -30,7 +32,7 @@ class DebugDrawerPresenterTests : Spek({
     val actor = mock<Actor>()
     val shakeDetector = mock<ShakeDetector>()
     val traveler = mock<Traveler>()
-    val device = mock<Device>()
+    val device = mock<AndroidDevice>()
     var presenter = DebugDrawerPresenter()
 
     beforeEachTest {
@@ -303,4 +305,6 @@ class DebugDrawerPresenterTests : Spek({
     }
 
   }
-})
+}
+
+                                      )

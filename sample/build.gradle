@@ -18,7 +18,10 @@ android {
     debug {
       minifyEnabled true
       shrinkResources true
+
       proguardFiles getDefaultProguardFile('proguard-android.txt'), 'rules.pro'
+
+      versionNameSuffix "-staging"
 
       buildConfigField "String", "PIVOTAL_API_KEY", "\"$ARTIST_PIVOTAL_API_KEY\""
       buildConfigField "String", "PIVOTAL_PROJECT_ID", "\"$ARTIST_PIVOTAL_PROJECT_ID\""

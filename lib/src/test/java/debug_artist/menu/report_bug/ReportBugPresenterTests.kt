@@ -2,7 +2,7 @@ package debug_artist.menu.report_bug
 
 import debug_artist.menu.MockFactory.answer
 import debug_artist.menu.report_bug.*
-import debug_artist.mockSchedulers
+import debug_artist.menu.mockSchedulers
 import com.nhaarman.mockito_kotlin.*
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.describe
