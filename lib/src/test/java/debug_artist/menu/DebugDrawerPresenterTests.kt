@@ -1,306 +1,263 @@
-package debug_artist.menu.drawer
+package debug_artist.menu
 
+import com.jraska.falcon.Falcon
 import com.nhaarman.mockito_kotlin.*
-import debug_artist.menu.MockFactory
+import debug_artist.menu.drawer.Actor
+import debug_artist.menu.drawer.DebugDrawerPresenter
+import debug_artist.menu.drawer.DebugDrawerView
+import debug_artist.menu.drawer.Traveler
 import debug_artist.menu.drawer.item.LeakCanarySwitchMenuItem
 import debug_artist.menu.drawer.item.LynksButtonMenuItem
 import debug_artist.menu.drawer.item.PicassoLogsSwitchMenuItem
 import debug_artist.menu.drawer.item.StethoSwitchMenuItem
 import debug_artist.menu.drawer.item.input.InputItemListener
 import debug_artist.menu.report_bug.BugRepository
-import debug_artist.menu.utils.device.Device
+import debug_artist.menu.utils.device.AndroidDevice
 import debug_artist.menu.utils.shake_detector.ShakeDetector
-import debug_artist.mockSchedulers
-import org.jetbrains.spek.api.Spek
-import org.jetbrains.spek.api.dsl.describe
-import org.jetbrains.spek.api.dsl.it
-import org.jetbrains.spek.api.dsl.on
-import org.junit.platform.runner.JUnitPlatform
-import org.junit.runner.RunWith
+import org.junit.Before
+import org.junit.Test
 import org.mockito.ArgumentMatchers.anyString
 import org.mockito.Mockito
 import kotlin.test.assertNull
 
-@RunWith(JUnitPlatform::class)
-class DebugDrawerPresenterTests : Spek({
-  mockSchedulers()
-
-  describe("a new DebugDrawer presenter") {
-    val view = mock<DebugDrawerView>()
-    val actor = mock<Actor>()
-    val shakeDetector = mock<ShakeDetector>()
-    val traveler = mock<Traveler>()
-    val device = mock<Device>()
-    var presenter = DebugDrawerPresenter()
-
-    beforeEachTest {
-      Mockito.reset(view, traveler, actor, shakeDetector, device)
-
-      presenter = DebugDrawerPresenter().apply {
-        attach(view, traveler, actor, shakeDetector, device)
-      }
-    }
-
-    on("pause") {
-      presenter.deAttach()
-
-      it("should release resources") {
-        assertNull(presenter.view)
-        assertNull(presenter.actor)
-        assertNull(presenter.inputItemListener)
-        assertNull(presenter.restartListener)
-        verify(shakeDetector).pause()
-      }
-    }
-
-    on("add switch stetho checked") {
-      presenter.onItemAdded(StethoSwitchMenuItem(checked = true))
-
-      it("should enable") {
-        verify(actor).enableStetho()
-        verify(view).addStethoSwitch(true)
-      }
-    }
-
-    on("add switch stetho unchecked") {
-      presenter.onItemAdded(StethoSwitchMenuItem())
-
-      it("should not enable") {
-        verifyZeroInteractions(actor)
-        verify(view).addStethoSwitch(false)
-      }
-    }
-
-    on("add switch Leak Canary checked") {
-      presenter.onItemAdded(LeakCanarySwitchMenuItem(checked = true))
-
-      it("should enable it") {
-        verify(actor).enableLeakCanary()
-        verify(view).addLeakCanarySwitch(true)
-      }
-    }
-
-    on("add switch Leak Canary unchecked") {
-      presenter.onItemAdded(LeakCanarySwitchMenuItem())
-
-      it("should not enable") {
-        verifyZeroInteractions(actor)
-        verify(view).addLeakCanarySwitch(false)
-      }
-    }
-
-    on("add switch Picasso Logs checked") {
-      presenter.onItemAdded(PicassoLogsSwitchMenuItem(checked = true))
-
-      it("should enable it") {
-        verify(actor).enablePicassoLogs()
-        verify(view).addPicassoLogsSwitch(true)
-      }
-    }
-
-    on("add switch Picasso Logs unchecked") {
-      presenter.onItemAdded(PicassoLogsSwitchMenuItem())
-
-      it("should enable it") {
-        verifyZeroInteractions(actor)
-        verify(view).addPicassoLogsSwitch(false)
-      }
-    }
-
-    on("add switch Scalpel Layout checked") {
-      presenter.onItemAdded(MockFactory.scalpelSwitchMenuItem(checked = true))
-
-      it("should enable it") {
-        verify(actor).enableScalpelLayout()
-        verify(view).addScalpelSwitch(true)
-      }
-    }
-
-    on("add switch Scalpel Layout unchecked") {
-      presenter.onItemAdded(MockFactory.scalpelSwitchMenuItem())
-
-      it("should enable it") {
-        verify(actor, times(0)).enableScalpelLayout()
-        verify(view).addScalpelSwitch(false)
-      }
-    }
-
-    on("add button Lynks") {
-      presenter.onItemAdded(LynksButtonMenuItem())
-
-      it("should add") {
-        verify(view).addLynksButton()
-      }
-    }
-
-    on("add button Phoenix") {
-      presenter.onItemAdded(MockFactory.phoenixButtonMenuItem())
-
-      it("should add") {
-        verify(view).addPhoenixButton()
-      }
-    }
-
-    on("add button Spinner") {
-      val item = MockFactory.spinnerMenuItem()
-      presenter.onItemAdded(item)
-
-      it("should add") {
-        verify(view).addSpinnerItem(item)
-      }
-    }
-
-    on("add button Input") {
-      val item = MockFactory.inputMenuItem()
-      presenter.onItemAdded(item)
-
-      it("should add") {
-        verify(view).addInputItem(item)
-      }
-    }
-
-    on("add button report bug") {
-      val item = MockFactory.reportBugItem(true)
-      presenter.onItemAdded(item)
-
-      it("should add and start shake detector") {
-        verify(view).addBugReportSwitch(true)
-        verify(shakeDetector).start(presenter)
-      }
-    }
-
-    on("lynks item selected") {
-      presenter.onLynksItemSelected()
-
-      it("should enable lynks") {
-        verify(actor).enableLynx()
-      }
-    }
-
-    on("phoenix item selected") {
-      presenter.onPhoenixItemSelected()
-
-      it("should trigger app rebirth") {
-        verify(actor).triggerAppRebirth()
-      }
-    }
-
-    on("picasso item selected") {
-      presenter.onPicassoItemSelected()
-
-      it("should enable picasso logs") {
-        verify(actor).enablePicassoLogs()
-      }
-    }
-
-    on("scalpel item checked") {
-      presenter.onScalpelItemSelected(true)
-
-      it("should enable scalpel") {
-        verify(actor).enableScalpelLayout()
-      }
-    }
-
-    on("scalpel item unchecked") {
-      presenter.onScalpelItemSelected(false)
-
-      it("should disable scalpel") {
-        verify(actor).disableScalpelLayout()
-      }
-    }
-
-    on("stetho item checked") {
-      presenter.onStethoItemSelected()
-
-      it("should enable stetho") {
-        verify(actor).enableStetho()
-      }
-    }
-
-    on("bug-reporter item checked") {
-      presenter.onBugReporterItemSelected(true)
-
-      it("should start listening for shakes") {
-        verify(shakeDetector).start(presenter)
-      }
-    }
-
-    on("bug-reporter item unchecked") {
-      presenter.onBugReporterItemSelected(false)
-
-      it("should pause listening for shakes") {
-        verify(shakeDetector).pause()
-      }
-    }
-
-    on("shake with count 2") {
-      presenter.onShake(2)
-
-      it("should do nothing") {
-        verifyNoMoreInteractions(view, actor, traveler, shakeDetector, device)
-      }
-    }
-
-    on("shake with right count and all files loaded") {
-      val repositoryBuilder = mock<BugRepository.Builder>()
-
-      whenever(device.takeScreenshot(anyString())).thenReturn("any.jpg")
-      whenever(device.readLogFile()).thenReturn("log.log")
-
-      presenter.bugRepositoryBuilder = repositoryBuilder
-      presenter.onShake(1)
-
-      it("should start report bug view") {
-        verify(traveler).startBugReportView(repositoryBuilder, "any.jpg", "log.log")
-      }
-    }
-
-    on("shake with right count and null screenshot file") {
-      whenever(device.takeScreenshot(anyString())).thenReturn(null)
-      whenever(device.readLogFile()).thenReturn("log.log")
-
-      presenter.bugRepositoryBuilder = mock<BugRepository.Builder>()
-      presenter.onShake(1)
-
-      it("should do nothing") {
-        verifyZeroInteractions(view, actor, shakeDetector, traveler)
-      }
-    }
-
-    on("shake with right count and null log file") {
-      whenever(device.takeScreenshot(anyString())).thenReturn("any.jpg")
-      whenever(device.readLogFile()).thenReturn(null)
-
-      presenter.bugRepositoryBuilder = mock<BugRepository.Builder>()
-      presenter.onShake(1)
-
-      it("should do nothing") {
-        verifyZeroInteractions(view, actor, shakeDetector, traveler)
-      }
-    }
-
-    on("shake with right count but screenshot throws exception") {
-      val error = Exception("failed")
-      whenever(device.takeScreenshot(anyString())).thenThrow(error)
-      whenever(device.readLogFile()).thenReturn("log.log")
-
-      presenter.onShake(1)
-
-      it("should show error") {
-        verify(view).showErrorDialog(anyString())
-      }
-    }
-
-    on("text input entered") {
-      val inputListener = mock<InputItemListener>()
-
-      presenter.inputItemListener = inputListener
-      presenter.onTextInputEntered(1, "asd")
-
-      it("call listener with same values") {
-        verify(inputListener).onTextInputEnter(1, "asd")
-      }
-    }
-
+class DebugDrawerPresenterTests {
+  val view: DebugDrawerView = mock()
+  val actor: Actor = mock()
+  val shakeDetector: ShakeDetector = mock()
+  val traveler: Traveler = mock()
+  val device: AndroidDevice = mock()
+
+  lateinit var presenter: DebugDrawerPresenter
+
+  @Before
+  fun setUp() {
+    mockSchedulers()
+
+    Mockito.reset(view, traveler, actor, shakeDetector, device)
+
+    presenter = DebugDrawerPresenter()
+    presenter.attach(view, traveler, actor, shakeDetector, device)
   }
-})
+
+  @Test
+  fun test_onDettach_releaseResources() {
+    presenter.deAttach()
+
+    assertNull(presenter.view)
+    assertNull(presenter.actor)
+    assertNull(presenter.inputItemListener)
+    assertNull(presenter.restartListener)
+    verify(shakeDetector).pause()
+  }
+
+  @Test
+  fun test_onStethoAdded_ifChecked_enable() {
+    presenter.onItemAdded(StethoSwitchMenuItem(checked = true))
+
+    verify(actor).enableStetho()
+    verify(view).addStethoSwitch(true)
+  }
+
+  @Test
+  fun test_onStethoAdded_ifUnchecked_dontEnable() {
+    presenter.onItemAdded(StethoSwitchMenuItem())
+
+    verifyZeroInteractions(actor)
+    verify(view).addStethoSwitch(false)
+  }
+
+  @Test
+  fun test_onLeakAdded_ifChecked_enable() {
+    presenter.onItemAdded(LeakCanarySwitchMenuItem(checked = true))
+
+    verify(actor).enableLeakCanary()
+    verify(view).addLeakCanarySwitch(true)
+  }
+
+  @Test
+  fun test_onLeakAdded_ifNotChecked_dontEnable() {
+    presenter.onItemAdded(LeakCanarySwitchMenuItem())
+
+    verifyZeroInteractions(actor)
+    verify(view).addLeakCanarySwitch(false)
+  }
+
+  @Test
+  fun test_onPicassoAdded_ifChecked_enable() {
+    presenter.onItemAdded(PicassoLogsSwitchMenuItem(checked = true))
+
+    verify(actor).enablePicassoLogs()
+    verify(view).addPicassoLogsSwitch(true)
+  }
+
+  @Test
+  fun test_onPicassoAdded_ifNotChecked_dontEnable() {
+    presenter.onItemAdded(PicassoLogsSwitchMenuItem())
+
+    verifyZeroInteractions(actor)
+    verify(view).addPicassoLogsSwitch(false)
+  }
+
+  @Test
+  fun test_onScalpelAdded_ifChecked_enable() {
+    presenter.onItemAdded(MockFactory.scalpelSwitchMenuItem(checked = true))
+
+    verify(actor).enableScalpelLayout()
+    verify(view).addScalpelSwitch(true)
+  }
+
+  @Test
+  fun test_onScalpelAdded_ifNotChecked_dontEnable() {
+    presenter.onItemAdded(MockFactory.scalpelSwitchMenuItem())
+
+    verify(actor, times(0)).enableScalpelLayout()
+    verify(view).addScalpelSwitch(false)
+  }
+
+  @Test
+  fun test_onLynksAdded_add() {
+    presenter.onItemAdded(LynksButtonMenuItem())
+    verify(view).addLynksButton()
+  }
+
+  @Test
+  fun test_onPhoenixAdded_add() {
+    presenter.onItemAdded(MockFactory.phoenixButtonMenuItem())
+    verify(view).addPhoenixButton()
+  }
+
+  @Test
+  fun test_onSpinnerAdded_add() {
+    val item = MockFactory.spinnerMenuItem()
+    presenter.onItemAdded(item)
+    verify(view).addSpinnerItem(item)
+  }
+
+  @Test
+  fun test_onInputAdded_add() {
+    val item = MockFactory.inputMenuItem()
+    presenter.onItemAdded(item)
+    verify(view).addInputItem(item)
+  }
+
+  @Test
+  fun test_reportBugAdded_enable_andStartShakeDetector() {
+    val item = MockFactory.reportBugItem(true)
+
+    presenter.onItemAdded(item)
+
+    verify(view).addBugReportSwitch(true)
+    verify(shakeDetector).start(presenter)
+  }
+
+  @Test
+  fun test_onLynksSelected_enable() {
+    presenter.onLynksItemSelected()
+    verify(actor).enableLynx()
+  }
+
+  @Test
+  fun test_onPhoenixSelected_trigger() {
+    presenter.onPhoenixItemSelected()
+    verify(actor).triggerAppRebirth()
+  }
+
+  @Test
+  fun test_onPicassoSelected_enable() {
+    presenter.onPicassoItemSelected()
+    verify(actor).enablePicassoLogs()
+  }
+
+  @Test
+  fun test_onScalpelSelected_ifChecked_enable() {
+    presenter.onScalpelItemSelected(true)
+    verify(actor).enableScalpelLayout()
+  }
+
+  @Test
+  fun test_onScalpelSelected_ifNotChecked_disable() {
+    presenter.onScalpelItemSelected(false)
+    verify(actor).disableScalpelLayout()
+  }
+
+  @Test
+  fun test_onStethoSelected_enable() {
+    presenter.onStethoItemSelected()
+    verify(actor).enableStetho()
+  }
+
+  @Test
+  fun test_onReportBugSelected_ifChecked_startShakeListener() {
+    presenter.onBugReporterItemSelected(true)
+    verify(shakeDetector).start(presenter)
+  }
+
+  @Test
+  fun test_bugReporterSelected_ifNotChecked_pauseShakeListener() {
+    presenter.onBugReporterItemSelected(false)
+    verify(shakeDetector).pause()
+  }
+
+  @Test
+  fun test_onShake_with2_doNothing() {
+    presenter.onShake(2)
+    verifyNoMoreInteractions(view, actor, traveler, shakeDetector, device)
+  }
+
+  @Test
+  fun test_onShake_with1_startReportBug() {
+    val repositoryBuilder = mock<BugRepository.Builder>()
+
+    whenever(device.takeScreenshot(anyString())).thenReturn("any.jpg")
+    whenever(device.readLogFile()).thenReturn("log.log")
+
+    presenter.bugRepositoryBuilder = repositoryBuilder
+    presenter.onShake(1)
+
+    verify(traveler).startBugReportView(repositoryBuilder, "any.jpg", "log.log")
+  }
+
+  @Test
+  fun test_onShake_with1_withNullScreenshot_doNothing() {
+    whenever(device.takeScreenshot(anyString())).thenReturn(null)
+    whenever(device.readLogFile()).thenReturn("log.log")
+
+    presenter.bugRepositoryBuilder = mock<BugRepository.Builder>()
+    presenter.onShake(1)
+
+    verifyZeroInteractions(view, actor, shakeDetector, traveler)
+  }
+
+  @Test
+  fun test_onShake_with1_withNullLogFile_doNothing() {
+    whenever(device.takeScreenshot(anyString())).thenReturn("any.jpg")
+    whenever(device.readLogFile()).thenReturn(null)
+
+    presenter.bugRepositoryBuilder = mock<BugRepository.Builder>()
+    presenter.onShake(1)
+
+    verifyZeroInteractions(view, actor, shakeDetector, traveler)
+  }
+
+  @Test
+  fun test_onShake_with1_withExceptionTakingScreenshot_showError() {
+    val error = mock<Falcon.UnableToTakeScreenshotException>()
+    whenever(device.takeScreenshot(anyString())).thenThrow(error)
+    whenever(device.readLogFile()).thenReturn("log.log")
+
+    presenter.onShake(1)
+
+    verify(view).showErrorDialog(anyString())
+  }
+
+  @Test
+  fun test_onInput_callListenerWithSameValues() {
+    val inputListener = mock<InputItemListener>()
+
+    presenter.inputItemListener = inputListener
+    presenter.onTextInputEntered(1, "asd")
+
+    verify(inputListener).onTextInputEnter(1, "asd")
+  }
+
+}

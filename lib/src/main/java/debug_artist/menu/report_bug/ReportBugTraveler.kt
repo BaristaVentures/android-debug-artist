@@ -1,12 +1,13 @@
 package debug_artist.menu.report_bug
 
-import android.support.v4.app.FragmentActivity
+import android.app.Activity
+
 
 interface ReportBugTraveler {
   fun close()
 }
 
-class ReportBugTravelerImpl(val activity: FragmentActivity) : ReportBugTraveler {
+class ReportBugTravelerImpl(val activity: Activity) : ReportBugTraveler {
 
   override fun close() = activity.finish()
 

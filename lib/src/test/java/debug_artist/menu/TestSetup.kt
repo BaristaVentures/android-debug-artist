@@ -1,4 +1,4 @@
-package debug_artist
+package debug_artist.menu
 
 import rx.android.plugins.RxAndroidPlugins
 import rx.android.plugins.RxAndroidSchedulersHook
