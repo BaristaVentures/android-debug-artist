@@ -1,8 +1,11 @@
 machine:
   environment:
-    PATH: "~/$CIRCLE_PROJECT_REPONAME/gradle-3.3/bin:$PATH"
+    GRADLE_VERSION: "gradle-3.5"
+    PATH: "~/$CIRCLE_PROJECT_REPONAME/$GRADLE_VERSION/bin:$PATH"
+
     TERM: "dumb"
     ADB_INSTALL_TIMEOUT: "10"
+
     GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx2048m -XX:+HeapDumpOnOutOfMemoryError"'
     _JAVA_OPTIONS: "-Xms512m -Xmx1024m"
 
@@ -10,11 +13,13 @@ dependencies:
   cache_directories:
     - ~/.android
     - ~/android
+    - ~/.gradle
   pre:
-    - wget "https://services.gradle.org/distributions/gradle-3.3-bin.zip"; unzip gradle-3.3-bin.zip
-    - echo y | android update sdk --no-ui --all --filter android-25,build-tools-25.0.2,tool,extra-android-m2repository,extra-android-support,extra-google-google_play_services,extra-google-m2repository
+    # Install dependencies
+    - wget "https://services.gradle.org/distributions/$GRADLE_VERSION-bin.zip"; unzip $GRADLE_VERSION-bin.zip
+    - sh scripts/install-dependencies.sh
 
-    # BinTray
+    # Create config files based on all env variables
     - PROPERTIES_FILE=lib/bintray.properties sh scripts/cp-env-to-properties.sh
     - PROPERTIES_FILE=pivotaltracker-reporter/bintray.properties sh scripts/cp-env-to-properties.sh
     - sh scripts/cp-env-to-properties.sh
@@ -28,6 +33,5 @@ test:
     - cp -r lib/build/reports $CIRCLE_TEST_REPORTS
     - cp -r lib/build/jacoco $CIRCLE_TEST_REPORTS
     - cp -r lib/build/test-results $CIRCLE_TEST_REPORTS
-
   post:
     - bash <(curl -s https://codecov.io/bash) -f "$CIRCLE_TEST_REPORTS/reports/jacoco/testDebugUnitTestCoverage/testDebugUnitTestCoverage.xml"
