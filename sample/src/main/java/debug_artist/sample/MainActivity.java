@@ -3,7 +3,7 @@ package debug_artist.sample;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 
-public class MainActivity extends MyActivity {
+public class MainActivity extends BaseActivity {
 
   public static MainActivity activityLeaked;
 
@@ -16,4 +16,5 @@ public class MainActivity extends MyActivity {
     // Intentionally to leak memory and see it with leak canary
     activityLeaked = this;
   }
+
 }

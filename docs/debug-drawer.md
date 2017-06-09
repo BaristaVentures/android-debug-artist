@@ -1,17 +1,54 @@
 # Debug Drawer
 
-![](img/debug_drawer.jpg)
+![](img/debug-drawer.jpg)
 
 ## How to use it
 
-Add this on each activity `setContentView` so your child activities always add it to each activity:
+**Please** check the [sample/](sample/) project.
 
-```
-debugDrawer = new DebugDrawer(appInstance, activityInstance)
+1. Add this on each activity `onResume` so your child activities always add it to each activity:
+
+Java:
+```java
+@Override
+  protected void onResume() {
+    super.onResume();
+
+    String[] hosts = new String[] { "Value 1", "Value 2" };
+
+    // Create debug drawer with selected features
+    mDebugDrawer = new DebugDrawer(applicationContext, activityContext)
         .withScalpelSwitch((ScalpelFrameLayout) findViewById(R.id.scalpelLayout))
-        .with_<feature>_()
+        .withLeakCanarySwitch(true)
+        .withPicassoLogsSwitch(true)
+        .withStethoSwitch(true)
+        // .withShakeToReportBugSwitch(false, repositoryBuilder)
+        .withDivider() // a line like this ------------------ in the drawer 
+        .withLynksButton()
+        .withPhoenixRestartButton(this)
         .withDivider()
-        .withInfoProperties(getProperties());
+        .withInputItem(2, "Host", this)
+        .withSpinnerItem(1, "Spinner with item selected by index", hosts, 0, this)
+        .withDivider()
+        .withInfoProperties(dictionaryWithProperties);
+
+    // Enable view debuger on some devices
+    ViewServer.get(this).addWindow(this);
+  }
+```
+
+2. Release resources on onPause:
+
+Java:
+
+```java
+  @Override
+  protected void onPause() {
+    super.onPause();
+
+    mDebugDrawer.release();
+    ViewServer.get(this).removeWindow(this);
+  }
 ```
 
 ### Features:

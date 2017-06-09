@@ -4,12 +4,10 @@ import android.support.annotation.VisibleForTesting
 import debug_artist.menu.drawer.item.*
 import debug_artist.menu.drawer.item.input.InputItemListener
 import debug_artist.menu.drawer.item.phoenix.RestartListener
-import debug_artist.menu.drawer.item.*
 import debug_artist.menu.report_bug.BugRepository
-import debug_artist.menu.utils.device.Device
+import debug_artist.menu.utils.device.AndroidDevice
 import debug_artist.menu.utils.shake_detector.OnShakeListener
 import debug_artist.menu.utils.shake_detector.ShakeDetector
-import com.mikepenz.materialdrawer.model.DividerDrawerItem
 
 class DebugDrawerPresenter : OnShakeListener {
 
@@ -21,10 +19,10 @@ class DebugDrawerPresenter : OnShakeListener {
   @VisibleForTesting internal var inputItemListener: InputItemListener? = null
 
   private var traveler: Traveler? = null
-  private var device: Device? = null
+  private var device: AndroidDevice? = null
 
   fun attach(view: DebugDrawerView, traveler: Traveler,
-             actor: Actor, shakeDetector: ShakeDetector, device: Device) {
+             actor: Actor, shakeDetector: ShakeDetector, device: AndroidDevice) {
     this.view = view
     this.traveler = traveler
     this.actor = actor
@@ -80,7 +78,7 @@ class DebugDrawerPresenter : OnShakeListener {
 
   fun onItemAdded(item: MenuItem) {
     when (item) {
-      is DividerDrawerItem -> view?.addDividerItem()
+      is DividerMenuItem -> view?.addDividerItem()
       is StethoSwitchMenuItem -> {
         view?.addStethoSwitch(item.checked)
         if (item.checked) actor?.enableStetho()

@@ -1,124 +1,94 @@
 package debug_artist.menu.report_bug
 
-import debug_artist.menu.MockFactory.answer
-import debug_artist.menu.report_bug.*
-import debug_artist.mockSchedulers
 import com.nhaarman.mockito_kotlin.*
-import org.jetbrains.spek.api.Spek
-import org.jetbrains.spek.api.dsl.describe
-import org.jetbrains.spek.api.dsl.it
-import org.jetbrains.spek.api.dsl.on
-import org.junit.platform.runner.JUnitPlatform
-import org.junit.runner.RunWith
+import debug_artist.menu.MockFactory.answer
+import debug_artist.menu.mockSchedulers
+import org.junit.Before
+import org.junit.Test
 import org.mockito.Mockito
-import rx.Observable.error
+import rx.Observable
 
-@RunWith(JUnitPlatform::class)
-class ReportBugPresenterTests : Spek({
+class ReportBugPresenterTests {
+  val view: ReportBugView = mock()
+  val bugRepositoryBuilder: BugRepository.Builder = mock()
+  val bugRepository: BugRepository = mock()
+  val extrasHandler: ExtrasHandler = mock()
+  val traveler: ReportBugTraveler = mock()
 
-  describe("a new ReportBug presenter") {
-    val view = mock<ReportBugView>()
-    val bugRepositoryBuilder = mock<BugRepository.Builder>()
-    val bugRepository = mock<BugRepository>()
-    val extrasHandler = mock<ExtrasHandler>()
-    var presenter = ReportBugPresenter()
-    val traveler = mock<ReportBugTraveler>()
+  var presenter = ReportBugPresenter()
 
-    beforeEachTest {
-      mockSchedulers()
+  @Before
+  fun setUp() {
+    mockSchedulers()
 
-      whenever(bugRepositoryBuilder.build()).thenReturn(bugRepository)
-      whenever(extrasHandler.extraRepositoryBuilder).thenReturn(bugRepositoryBuilder)
-      whenever(extrasHandler.screenshotFilePath).thenReturn("any.jpg")
+    whenever(bugRepositoryBuilder.build()).thenReturn(bugRepository)
+    whenever(extrasHandler.extraRepositoryBuilder).thenReturn(bugRepositoryBuilder)
+    whenever(extrasHandler.screenshotFilePath).thenReturn("any.jpg")
 
-      presenter = ReportBugPresenter().apply { attach(view, traveler, extrasHandler) }
+    presenter = ReportBugPresenter().apply { attach(view, traveler, extrasHandler) }
 
-      Mockito.reset(view, bugRepositoryBuilder, bugRepository, extrasHandler, traveler)
-    }
-
-    on("attach") {
-      whenever(bugRepositoryBuilder.build()).thenReturn(bugRepository)
-      whenever(extrasHandler.extraRepositoryBuilder).thenReturn(bugRepositoryBuilder)
-      whenever(extrasHandler.screenshotFilePath).thenReturn("any.jpg")
-
-      presenter.attach(view, traveler, extrasHandler)
-
-      it("should build repository") {
-        verify(bugRepositoryBuilder).build()
-      }
-
-      it("should set screenshot image") {
-        verify(view).setScreenshotImage("any.jpg")
-      }
-    }
-
-    on("sendButton with success") {
-      whenever(extrasHandler.screenshotFilePath).thenReturn("any.jpg")
-      whenever(extrasHandler.logsFilePath).thenReturn("log.log")
-      whenever(bugRepository.create("title", "description", "any.jpg", "log.log"))
-          .thenReturn(answer())
-
-      presenter.onSendButtonClick("title", "description")
-
-      it("should create bug") {
-        verify(view).apply {
-          showProgressDialog()
-          dismissProgressDialog()
-          showSuccessToast()
-        }
-      }
-
-      it("should close") {
-        verify(traveler).close()
-      }
-    }
-
-    on("sendButton with empty title") {
-      presenter.onSendButtonClick("", "description")
-
-      it("should show error") {
-        verify(view).apply {
-          showErrorDialog(any())
-        }
-
-        verifyNoMoreInteractions(view)
-      }
-    }
-
-    on("sendButton with empty description") {
-      presenter.onSendButtonClick("title", "")
-
-      it("should show error") {
-        verify(view).apply {
-          showErrorDialog(any())
-        }
-
-        verifyNoMoreInteractions(view)
-      }
-    }
-
-    on("sendButton with error") {
-      val error = Throwable("Something happened")
-
-      whenever(extrasHandler.screenshotFilePath).thenReturn("any.jpg")
-      whenever(extrasHandler.logsFilePath).thenReturn("log.log")
-      whenever(bugRepository.create("title", "description", "any.jpg", "log.log"))
-          .thenReturn(error(error))
-
-      presenter.onSendButtonClick("title", "description")
-
-      it("should show dialog with error") {
-        verify(view).apply {
-          showProgressDialog()
-          dismissProgressDialog()
-          showErrorDialog(error.message!!)
-        }
-      }
-
-      it("should not close") {
-        verifyZeroInteractions(traveler)
-      }
-    }
+    Mockito.reset(view, bugRepositoryBuilder, bugRepository, extrasHandler, traveler)
   }
 
-})
+  @Test
+  fun test_onAttach_buildRepository_andSetScreenshotImage() {
+    whenever(bugRepositoryBuilder.build()).thenReturn(bugRepository)
+    whenever(extrasHandler.extraRepositoryBuilder).thenReturn(bugRepositoryBuilder)
+    whenever(extrasHandler.screenshotFilePath).thenReturn("any.jpg")
+
+    presenter.attach(view, traveler, extrasHandler)
+
+    verify(bugRepositoryBuilder).build()
+    verify(view).setScreenshotImage("any.jpg")
+  }
+
+  @Test
+  fun test_onSendButtonClick_createBug() {
+    whenever(extrasHandler.screenshotFilePath).thenReturn("any.jpg")
+    whenever(extrasHandler.logsFilePath).thenReturn("log.log")
+    whenever(bugRepository.create("title", "description", "any.jpg", "log.log"))
+        .thenReturn(answer())
+
+    presenter.onSendButtonClick("title", "description")
+
+    verify(view).showProgressDialog()
+    verify(view).dismissProgressDialog()
+    verify(view).showSuccessToast()
+    verify(traveler).close()
+  }
+
+  @Test
+  fun test_onSendButtonClick_withEmptyTitle_showError() {
+    presenter.onSendButtonClick("", "description")
+
+    verify(view).showErrorDialog(any())
+    verifyNoMoreInteractions(view)
+  }
+
+  @Test
+  fun test_onSendButtonClick_withEmptyDescription_showError() {
+    presenter.onSendButtonClick("title", "")
+
+    verify(view).showErrorDialog(any())
+    verifyNoMoreInteractions(view)
+  }
+
+  @Test
+  fun test_onSendButtonClick_withErrorOnRequest_showError() {
+    val error = Throwable("Something happened")
+
+    whenever(extrasHandler.screenshotFilePath).thenReturn("any.jpg")
+    whenever(extrasHandler.logsFilePath).thenReturn("log.log")
+    whenever(bugRepository.create("title", "description", "any.jpg", "log.log"))
+        .thenReturn(Observable.error(error))
+
+    presenter.onSendButtonClick("title", "description")
+
+
+    verify(view).showProgressDialog()
+    verify(view).dismissProgressDialog()
+    verify(view).showErrorDialog(error.message!!)
+    verifyZeroInteractions(traveler)
+  }
+
+}

@@ -1,5 +1,12 @@
 # CHANGELOG
 
+# v 0.6.2
+
+- Remove extra resources on PivotalTracker reporter module.
+- Update dependencies.
+- Simplify the use of properties view.
+- Hide library resources to user.
+
 # v 0.6.1 (~~0.6~~ BROKEN) 
 
 - Update to Kotlin 1.1.1.

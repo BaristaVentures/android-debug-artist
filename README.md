@@ -1,4 +1,4 @@
-![](img/logo.png)
+![](img/logo.jpg)
 
 [![Download](https://api.bintray.com/packages/barista-ventures/maven/debugartist/images/download.svg)](https://bintray.com/barista-ventures/maven/debug-artist/_latestVersion)
 [![codecov](https://codecov.io/gh/BaristaVentures/debug-artist/branch/master/graph/badge.svg)](https://codecov.io/gh/BaristaVentures/debug-artist)
@@ -10,7 +10,26 @@ libraries like [Leakcanary](https://github.com/square/leakcanary) and others wit
 
 Library contains:
 - [Debug Drawer Menu](docs/debug-drawer.md): right menu with features for development, (*yeah, it's for you! developer!*).
+    * __Note:__ check [shake to report bug feature](docs/custom-bug-report-service.md)
+
 - [ViewServer](https://github.com/romainguy/ViewServer): helps to debug layouts with more devices.
+
+## Some Comments
+
+- If you want to differentiate release/staging/debug builds on the drawer you need to add:
+
+```
+buildTypes {
+    debug {
+      versionNameSuffix "-staging"  // THIS LINE
+      
+      //...
+    }
+    //...
+}
+```
+
+Looks like we cant get
 
 ## Add to gradle project
 
@@ -18,19 +37,6 @@ Library contains:
 repositories { jcenter() }
 dependencies { compile("com.baristav.debugartist:debugartist:<library-version>@aar") { transitive = true } }
 ```
-
-__Note:__ check [cusartom-bug-report-service](docs/custom-bug-report-service.md) to
-
-## Publish
-
-- You need to create `lib/bintray.properties` with the variables declared on `lib/bintray.properties.example`.
-
-```
-cp lib/gradle.properties.example lib/gradle.properties
-```
-
-- To Sync with Maven Central you need to get auth tokens from: https://oss.sonatype.org/
-- Run `scripts/deploy.sh` to upload to BinTray (jcenter).
 
 ## Thanks to
 - All feature developers!

@@ -1,7 +1,5 @@
 package debug_artist.sample;
 
-import android.os.Build;
-import android.support.annotation.LayoutRes;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
@@ -13,30 +11,32 @@ import debug_artist.menu.drawer.item.phoenix.RestartListener;
 import debug_artist.menu.drawer.item.spinner.SpinnerDrawerItem;
 import debug_artist.menu.drawer.item.spinner.SpinnerItemListener;
 import debug_artist.menu.report_bug.BugRepository;
+import debug_artist.menu.utils.device.AndroidDevice;
 import debug_artist.reporter_pivotaltracker.PivotalBugRepositoryBuilder;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
-import static android.os.Build.MANUFACTURER;
-import static android.os.Build.MODEL;
-
-public class MyActivity extends AppCompatActivity
+public class BaseActivity extends AppCompatActivity
     implements SpinnerItemListener, RestartListener, InputItemListener {
 
   private DebugDrawer mDebugDrawer;
 
   @Override
-  public void setContentView(@LayoutRes int layoutResID) {
-    super.setContentView(layoutResID);
+  protected void onResume() {
+    super.onResume();
 
+    // Define a list of strings that withSpinnerItem will need
     String[] hosts = new String[] { "Value 1", "Value 2" };
 
+    // Define your bug repository builder to happy report bugs to your third party services
+    Map<String, String> properties = AndroidDevice.getProjectProperties(this);
     BugRepository.Builder repositoryBuilder =
         new PivotalBugRepositoryBuilder(BuildConfig.PIVOTAL_API_KEY,
-            BuildConfig.PIVOTAL_PROJECT_ID, getProperties(),
-            new String[] { "android-sample" });
+            BuildConfig.PIVOTAL_PROJECT_ID, properties, new String[] { "android-sample" });
 
-    mDebugDrawer = new DebugDrawer(MyApplication.sInstance, this)
+    BaseApplication applicationInstance = BaseApplication.sInstance;
+
+    // Create debug drawer with selected features
+    mDebugDrawer = new DebugDrawer(applicationInstance, this)
         .withScalpelSwitch((ScalpelFrameLayout) findViewById(R.id.scalpelLayout))
         .withLeakCanarySwitch(true)
         .withPicassoLogsSwitch(true)
@@ -49,34 +49,21 @@ public class MyActivity extends AppCompatActivity
         .withInputItem(2, "Host", this)
         .withSpinnerItem(1, "Spinner with item selected by index", hosts, 0, this)
         .withDivider()
-        .withInfoProperties(getProperties());
+        .withInfoProperties();
 
+    // Enable view debugger on some devices
     ViewServer.get(this).addWindow(this);
   }
 
   @Override
-  protected void onDestroy() {
-    super.onDestroy();
+  protected void onPause() {
+    super.onPause();
 
     mDebugDrawer.release();
-
     ViewServer.get(this).removeWindow(this);
   }
 
-  /**
-   * Return a map with keys and values referencing environment variables
-   */
-  public Map<String, String> getProperties() {
-    return new LinkedHashMap<String, String>() {{
-      put("BuildType", BuildConfig.BUILD_TYPE);
-      put("AppVersion", BuildConfig.VERSION_NAME);
-      put("BuildNumber", String.valueOf(BuildConfig.VERSION_CODE));
-      put("AndroidVersion", Build.VERSION.RELEASE);
-      put("Manufacturer", MANUFACTURER);
-      put("Model", MODEL);
-    }};
-  }
-
+  //<editor-fold desc="DebugDrawer events for SpinnerItemListener, RestartListener, InputItemListener">
   @Override
   public void onSpinnerItemClick(SpinnerDrawerItem item, int itemId, CharSequence title) {
     Toast.makeText(this, "Selected: " + title, Toast.LENGTH_LONG).show();
@@ -91,4 +78,5 @@ public class MyActivity extends AppCompatActivity
   public void onTextInputEnter(int itemId, String inputText) {
     Toast.makeText(this, inputText, Toast.LENGTH_LONG).show();
   }
+  //</editor-fold>
 }

@@ -52,7 +52,7 @@ open class ApiError(val cause: Throwable) {
         return null
       } else {
         val code = response.code()
-        val errorBody = response.errorBody().string()
+        val errorBody = response.errorBody()?.string()
         val realCause = cause ?: Throwable("($code) $errorBody")
 
         return ApiError(realCause)

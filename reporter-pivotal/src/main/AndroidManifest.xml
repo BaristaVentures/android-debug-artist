@@ -1,18 +1,5 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-  package="debugartist.reporter_pivotaltracker">
+<manifest package="debugartist.reporter_pivotaltracker">
 
-  <uses-permission android:name="android.permission.READ_LOGS" />
-  <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-  <uses-permission android:name="android.permission.INTERNET" />
-
-  <application>
-
-    <activity
-      android:name=".repositories.ReportBugActivity"
-      android:label="@string/report_bug"
-      android:launchMode="singleInstance"
-      android:theme="@style/ApiTheme" />
-
-  </application>
+  <application />
 
 </manifest>

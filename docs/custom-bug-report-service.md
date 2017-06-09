@@ -1,14 +1,31 @@
 # Shake to Report Bug
 
-![](img/report-bug.jpg)
+This feature try to help your tester users report bugs into your team with all the needed data
+you need (device info, screenshots, logs, tags, etc).
 
-When this feature is enabled will be checking if you shake your device, on shake takes an screenshot
-and starts a new activity with the provided . This builder enable the menu
-to send the repository to the new activity and then build it there.
+Flow:
+1. *Tester/You* want to report a bug to your team.
+1. *Tester/You* shake the device with the `debug-artist`.
+1. *Tester/You* touch send.
+1. Bug `Card/Story` is created in your third party ticket system.
+
+All your `Card/Story` will be created with:
+
+- Device Logs.
+- Current screen screenshot. 
+- Custom title/description.
+- Default tags if able.
+- Default properties (api host url, or any variable data you want to see)
+
+Sample of report view:
+
+![](img/shake-to-report.jpg)
+
+If enabled device shake will take an screenshot and start a new activity with the provided `BugReporter.Builder`. 
+This builder enable the menu to send the repository to the new activity and then build it there.
 
 The idea is to allow custom bug repositories so build your own!
-
-Supported third party bug/story/card trackers:
+Supported third party `Card/Story` trackers:
 
 - [Pivotal Tracker](https://www.pivotaltracker.com/)
 - Trello (soon)
@@ -17,7 +34,7 @@ Supported third party bug/story/card trackers:
 
 # How to use it
 
-1. Add the library
+1. Add the library you need (in this case `pivotal tracker reporter`)
 
 ```groovy
 debugCompile("com.baristav.debugartist:reporter_pivotal:0.6.1@aar") { transitive = true }
@@ -25,20 +42,37 @@ debugCompile("com.baristav.debugartist:reporter_pivotal:0.6.1@aar") { transitive
 
 2. Create the instance of the `Builder` you need, in this case will be the `PivotalBugRepositoryBuilder`:
 
+
+- From Kotlin:
+```
+val repositoryBuilder = PivotalBugRepositoryBuilder("project-key",
+        "project-id", 
+        propertiesToInclude,
+        defaultTags);
 ```
 
-    BugRepository.Builder repositoryBuilder =
-        new PivotalBugRepositoryBuilder("project-key",
+- From Java:
+```java
+PivotalBugRepositoryBuilder repositoryBuilder = 
+    new PivotalBugRepositoryBuilder("project-key",
             "project-id", 
             propertiesToInclude,
-            new String[] { "android-sample" });
+            defaultTags);
 
 ```
 
 3. Add the button with the builder to  
 
+- From Kotlin:
+```kotlin
+val debugDrawer = DebugDrawer(MyApplication.sInstance, this)
+        //...
+        .withShakeToReportBugSwitch(false, repositoryBuilder)        
 ```
-mDebugDrawer = new DebugDrawer(MyApplication.sInstance, this)
+
+- From Java:
+```java
+DebugDrawer debugDrawer = new DebugDrawer(MyApplication.sInstance, this)
         //...
         .withShakeToReportBugSwitch(false, repositoryBuilder)
 ```

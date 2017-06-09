@@ -1,9 +1,8 @@
 package debug_artist.menu.report_bug
 
+import android.app.Activity
 import android.content.Intent
-import android.support.v4.app.FragmentActivity
 import debug_artist.menu.report_bug.ReportBugActivity
-import debug_artist.menu.report_bug.BugRepository
 
 interface ExtrasHandler {
   val extraRepositoryBuilder: BugRepository.Builder
@@ -18,7 +17,7 @@ class ExtrasHandlerImpl(intent: Intent) : ExtrasHandler {
     internal val extraScreenshot = "report.screenshot"
     internal val extraLogs = "report.logs"
 
-    fun getInstance(activity: FragmentActivity, repositoryBuilder: BugRepository.Builder,
+    fun getInstance(activity: Activity, repositoryBuilder: BugRepository.Builder,
                     screenshotFilePath: String, logsFilePath: String) =
         Intent(activity, ReportBugActivity::class.java).apply {
           putExtra(ExtrasHandlerImpl.Companion.extraRepository, repositoryBuilder)
