@@ -3,12 +3,10 @@
 # Publish to bintray
 #
 
-./gradlew build
+./gradlew build --stacktrace
 
-./gradlew lib:build || echo "Failed"
-./gradlew lib:uploadArchives || echo "Failed"
-./gradlew lib:bintrayUpload || echo "Failed"
+./gradlew lib:uploadArchives --stacktrace
+./gradlew lib:bintrayUpload --stacktrace
 
-./gradlew reporter-pivotal:build || echo "Failed"
-./gradlew reporter-pivotal:uploadArchives || echo "Failed"
-./gradlew reporter-pivotal:bintrayUpload || echo "Failed"
+./gradlew reporter-pivotal:uploadArchives --stacktrace
+./gradlew reporter-pivotal:bintrayUpload --stacktrace
