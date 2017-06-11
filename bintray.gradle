@@ -24,20 +24,22 @@ apply plugin: 'maven'
 apply plugin: 'signing'
 apply plugin: 'com.jfrog.bintray'
 
-def areBinTrayPropertiesDefined() {
+def correctSetup() {
   ["BINTRAY_USER",
    "BINTRAY_USER_ORG",
    "BINTRAY_PASSWORD",
    "BINTRAY_API_KEY",
    "BINTRAY_GPG_PASSPHRASE"].each {
 
-    if (!hasProperty(it)) {
+    if (!project.hasProperty(it)) {
+      println("-> bintray: $it property not found and is needed to deploy")
       return false
     }
   }
 }
 
-if (areBinTrayPropertiesDefined()) {
+if (!correctSetup()) {
+  println("-> bintray: No bintray properties found")
   return
 }
 
@@ -56,8 +58,8 @@ def getReleaseRepositoryUrl() {
 def getSnapshotRepositoryUrl() {
   return hasProperty('SNAPSHOT_REPOSITORY_URL') ? getProperty("SNAPSHOT_REPOSITORY_URL") :
       "https://oss.sonatype.org/content/repositories/snapshots/"
-      //      "https://oss.jfrog.org/artifactory/oss-snapshot-local"
-//      "https://oss.jfrog.org"
+  //      "https://oss.jfrog.org/artifactory/oss-snapshot-local"
+  //      "https://oss.jfrog.org"
 }
 
 def getRepositoryUsername() {
