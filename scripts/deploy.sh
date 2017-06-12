@@ -3,10 +3,12 @@
 # Publish to bintray
 #
 
-./gradlew build --stacktrace
+./gradlew build --stacktrace -PsignPackage
 
-./gradlew lib:uploadArchives --stacktrace
-./gradlew lib:bintrayUpload --stacktrace
+./gradlew lib:build --stacktrace -PsignPackage
+./gradlew lib:install --stacktrace -PsignPackage
+./gradlew lib:bintrayUpload --stacktrace -PsignPackage
 
-./gradlew reporter-pivotal:uploadArchives --stacktrace
-./gradlew reporter-pivotal:bintrayUpload --stacktrace
+./gradlew reporter-pivotal:build --stacktrace -PsignPackage
+./gradlew reporter-pivotal:install --stacktrace -PsignPackage
+./gradlew reporter-pivotal:bintrayUpload --stacktrace -PsignPackage

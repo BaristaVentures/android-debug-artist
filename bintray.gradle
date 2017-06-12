@@ -2,6 +2,7 @@
 // This script must be applied after android app/lib plugin.
 //
 // Artifact id must be set in android.defaultConfig.archivesBaseName
+// use -PsignPackage to allow package signing
 //
 
 /*
@@ -24,6 +25,9 @@ apply plugin: 'maven'
 apply plugin: 'signing'
 apply plugin: 'com.jfrog.bintray'
 
+version = VERSION_NAME
+group = GROUP
+
 def correctSetup() {
   ["BINTRAY_USER",
    "BINTRAY_USER_ORG",
@@ -42,9 +46,6 @@ if (!correctSetup()) {
   println("-> bintray: No bintray properties found")
   return
 }
-
-version = VERSION_NAME
-group = GROUP
 
 def isReleaseBuild() {
   return VERSION_NAME.contains("SNAPSHOT") == false
@@ -119,7 +120,7 @@ afterEvaluate { project ->
   }
 
   signing {
-    required { isReleaseBuild() && gradle.taskGraph.hasTask("bintrayUpload") }
+    required { isReleaseBuild() && project.hasProperty("signPackage") }
     sign configurations.archives
   }
 
@@ -203,6 +204,7 @@ bintray {
   pkg {
     repo = "maven"
     name = POM_ARTIFACT_ID
+    userOrg = getProperty("BINTRAY_USER_ORG")
     desc = POM_DESCRIPTION
     websiteUrl = POM_URL
     issueTrackerUrl = POM_URL + '/issues'
@@ -212,16 +214,10 @@ bintray {
 
     githubRepo = POM_SCM_URL
     githubReleaseNotesFile = 'README.md'
-    userOrg = getProperty("BINTRAY_USER_ORG")
 
     version {
       desc = POM_DESCRIPTION
       name = VERSION_NAME
-
-      gpg {
-        sign = true //Determines whether to GPG sign the files. The default is false
-        passphrase = "\"${getProperty("BINTRAY_GPG_PASSPHRASE")}\""
-      }
     }
   }
 }

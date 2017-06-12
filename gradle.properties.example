@@ -1,2 +1,15 @@
+# Bintray
+BINTRAY_USER=
+BINTRAY_USER_ORG=
+BINTRAY_PASSWORD=
+BINTRAY_API_KEY=
+BINTRAY_GPG_PASSPHRASE=
+
+# GPG signing data
+signing.keyId=
+signing.password=
+signing.secretKeyRingFile= # ~/.gnupg/secring.gpg
+
+# Optional
 ARTIST_PIVOTAL_API_KEY=
 ARTIST_PIVOTAL_PROJECT_ID=
