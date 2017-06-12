@@ -2,6 +2,7 @@
 // This script must be applied after android app/lib plugin.
 //
 // Artifact id must be set in android.defaultConfig.archivesBaseName
+// use -PsignPackage to allow package signing
 //
 
 /*
@@ -119,7 +120,7 @@ afterEvaluate { project ->
   }
 
   signing {
-    required { isReleaseBuild() }
+    required { isReleaseBuild() && project.hasProperty("signPackage") }
     sign configurations.archives
   }
 

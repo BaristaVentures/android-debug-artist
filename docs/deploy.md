@@ -1,5 +1,6 @@
 ## Publish
 
+1. Create GPG key and upload it to bintray.
 1. Copy `bintray.properties.example` to `bintray.properties`
 
 ```
