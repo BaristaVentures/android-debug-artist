@@ -25,9 +25,9 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:orientation="vertical"
-      android:paddingLeft="@dimen/spacing_medium"
-      android:paddingRight="@dimen/spacing_medium"
-      android:paddingTop="@dimen/spacing_medium">
+      android:paddingLeft="16dp"
+      android:paddingRight="16dp"
+      android:paddingTop="16dp">
 
       <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
@@ -46,9 +46,9 @@
       <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/spacing_small">
+        android:layout_marginTop="8dp">
 
-        <EditText
+          <EditText
           android:id="@+id/descriptionEditText"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
@@ -64,7 +64,7 @@
         android:layout_width="match_parent"
         android:layout_height="240dp"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="@dimen/spacing_medium"
+        android:layout_marginTop="16dp"
         android:background="#FF888888" />
 
       <android.support.design.widget.FloatingActionButton
@@ -72,7 +72,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="@dimen/spacing_medium"
+        android:layout_marginTop="16dp"
         android:src="@drawable/ic_send_white_24dp"
         app:useCompatPadding="true" />
 
