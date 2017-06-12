@@ -5,8 +5,10 @@
 
 ./gradlew build --stacktrace
 
-./gradlew lib:uploadArchives --stacktrace
+./gradlew lib:build --stacktrace
+./gradlew lib:install --stacktrace
 ./gradlew lib:bintrayUpload --stacktrace
 
-./gradlew reporter-pivotal:uploadArchives --stacktrace
+./gradlew reporter-pivotal:build --stacktrace
+./gradlew reporter-pivotal:install --stacktrace
 ./gradlew reporter-pivotal:bintrayUpload --stacktrace
