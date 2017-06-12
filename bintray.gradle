@@ -2,6 +2,7 @@
 // This script must be applied after android app/lib plugin.
 //
 // Artifact id must be set in android.defaultConfig.archivesBaseName
+// use -PsignPackage to allow package signing
 //
 
 /*
@@ -24,25 +25,27 @@ apply plugin: 'maven'
 apply plugin: 'signing'
 apply plugin: 'com.jfrog.bintray'
 
-def areBinTrayPropertiesDefined() {
+version = VERSION_NAME
+group = GROUP
+
+def correctSetup() {
   ["BINTRAY_USER",
    "BINTRAY_USER_ORG",
    "BINTRAY_PASSWORD",
    "BINTRAY_API_KEY",
    "BINTRAY_GPG_PASSPHRASE"].each {
 
-    if (!hasProperty(it)) {
+    if (!project.hasProperty(it)) {
+      println("-> bintray: $it property not found and is needed to deploy")
       return false
     }
   }
 }
 
-if (areBinTrayPropertiesDefined()) {
+if (!correctSetup()) {
+  println("-> bintray: No bintray properties found")
   return
 }
-
-version = VERSION_NAME
-group = GROUP
 
 def isReleaseBuild() {
   return VERSION_NAME.contains("SNAPSHOT") == false
@@ -56,8 +59,8 @@ def getReleaseRepositoryUrl() {
 def getSnapshotRepositoryUrl() {
   return hasProperty('SNAPSHOT_REPOSITORY_URL') ? getProperty("SNAPSHOT_REPOSITORY_URL") :
       "https://oss.sonatype.org/content/repositories/snapshots/"
-      //      "https://oss.jfrog.org/artifactory/oss-snapshot-local"
-//      "https://oss.jfrog.org"
+  //      "https://oss.jfrog.org/artifactory/oss-snapshot-local"
+  //      "https://oss.jfrog.org"
 }
 
 def getRepositoryUsername() {
@@ -117,7 +120,7 @@ afterEvaluate { project ->
   }
 
   signing {
-    required { isReleaseBuild() && gradle.taskGraph.hasTask("bintrayUpload") }
+    required { isReleaseBuild() && project.hasProperty("signPackage") }
     sign configurations.archives
   }
 
@@ -201,6 +204,7 @@ bintray {
   pkg {
     repo = "maven"
     name = POM_ARTIFACT_ID
+    userOrg = getProperty("BINTRAY_USER_ORG")
     desc = POM_DESCRIPTION
     websiteUrl = POM_URL
     issueTrackerUrl = POM_URL + '/issues'
@@ -210,16 +214,10 @@ bintray {
 
     githubRepo = POM_SCM_URL
     githubReleaseNotesFile = 'README.md'
-    userOrg = getProperty("BINTRAY_USER_ORG")
 
     version {
       desc = POM_DESCRIPTION
       name = VERSION_NAME
-
-      gpg {
-        sign = true //Determines whether to GPG sign the files. The default is false
-        passphrase = "\"${getProperty("BINTRAY_GPG_PASSPHRASE")}\""
-      }
     }
   }
 }
