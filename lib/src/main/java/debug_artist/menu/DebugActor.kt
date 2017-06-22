@@ -3,13 +3,13 @@ package debug_artist.menu
 import android.app.Activity
 import android.app.Application
 import android.util.Log
-import debug_artist.menu.drawer.Actor
 import com.facebook.stetho.Stetho
 import com.github.pedrovgs.lynx.LynxActivity
 import com.jakewharton.processphoenix.ProcessPhoenix
 import com.jakewharton.scalpel.ScalpelFrameLayout
 import com.squareup.leakcanary.LeakCanary
 import com.squareup.picasso.Picasso
+import debug_artist.menu.drawer.Actor
 import java.lang.ref.WeakReference
 
 class DebugActor(application: Application, activity: Activity) : Actor {
@@ -46,7 +46,7 @@ class DebugActor(application: Application, activity: Activity) : Actor {
   override fun disableScalpelLayout() = enableScalpelLayout(false)
 
   override fun enableStetho() {
-    activityWeakReference.get()?.let {
+    applicationWeakReference.get()?.let {
       Stetho.initializeWithDefaults(it)
       Log.i(TAG, "Stetho enabled")
     }

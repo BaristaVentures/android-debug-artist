@@ -1,16 +1,21 @@
 # Debug Drawer
 
-![](img/debug-drawer.jpg)
-
 ## How to use it
 
-**Please** check the [sample/](sample/) project.
+**Please** check the `sample/` project.
 
-1. Add this on each activity `onResume` so your child activities always add it to each activity:
+1. Add this on `BaseActivity.onResume` so your child activities always add it to each activity:
+
+- _Note: You **should** create a `BaseActivity` class and make everything inherith from it, the idea is that
+you just put this code in your `debug` buildType and not in `release`._
+
+- _Note: you build your own menu with the features you want_
 
 Java:
 ```java
-@Override
+  private DebugDrawer mDebugDrawer;
+
+  @Override
   protected void onResume() {
     super.onResume();
 

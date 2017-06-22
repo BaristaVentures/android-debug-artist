@@ -18,7 +18,7 @@ import java.util.Map;
 public class BaseActivity extends AppCompatActivity
     implements SpinnerItemListener, RestartListener, InputItemListener {
 
-  private DebugDrawer mDebugDrawer;
+  private DebugDrawer debugDrawer;
 
   @Override
   protected void onResume() {
@@ -36,7 +36,7 @@ public class BaseActivity extends AppCompatActivity
     BaseApplication applicationInstance = BaseApplication.sInstance;
 
     // Create debug drawer with selected features
-    mDebugDrawer = new DebugDrawer(applicationInstance, this)
+    debugDrawer = new DebugDrawer(applicationInstance, this)
         .withScalpelSwitch((ScalpelFrameLayout) findViewById(R.id.scalpelLayout))
         .withLeakCanarySwitch(true)
         .withPicassoLogsSwitch(true)
@@ -59,7 +59,7 @@ public class BaseActivity extends AppCompatActivity
   protected void onPause() {
     super.onPause();
 
-    mDebugDrawer.release();
+    debugDrawer.release();
     ViewServer.get(this).removeWindow(this);
   }
 
