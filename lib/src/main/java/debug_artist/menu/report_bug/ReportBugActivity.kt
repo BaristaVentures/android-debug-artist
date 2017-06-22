@@ -13,7 +13,6 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
 import debug_artist.menu.R
-import debug_artist.menu.report_bug.BugRepository
 import java.lang.ref.WeakReference
 
 class ReportBugActivity : AppCompatActivity(), ReportBugView {
@@ -43,7 +42,7 @@ class ReportBugActivity : AppCompatActivity(), ReportBugView {
           (findViewById(R.id.descriptionEditText) as EditText).text.toString())
     }
 
-    (findViewById(R.id.descriptionEditText) as EditText).setOnEditorActionListener { textView, id, keyEvent ->
+    (findViewById(R.id.descriptionEditText) as EditText).setOnEditorActionListener { _, id, keyEvent ->
       if (id == EditorInfo.IME_NULL && keyEvent.action == KeyEvent.ACTION_DOWN) {
         presenter.onSendButtonClick((findViewById(R.id.titleEditText) as EditText).text.toString(),
             (findViewById(R.id.descriptionEditText) as EditText).text.toString())

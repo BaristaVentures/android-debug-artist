@@ -202,7 +202,7 @@ class DebugDrawer @JvmOverloads constructor(application: Application,
     AlertDialog.Builder(activity)
         .setTitle(drawerItem.name.toString())
         .setView(entryView)
-        .setPositiveButton(android.R.string.yes) { dialog, which ->
+        .setPositiveButton(android.R.string.yes) { _, _ ->
           val inputText = entryView.text.toString()
           presenter.onTextInputEntered(drawerItem.tag as Int, inputText)
 

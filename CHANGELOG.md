@@ -1,5 +1,10 @@
 # CHANGELOG
 
+# v 0.6.3
+- Fix MemoryLeak caused by stetho [pr/48](https://github.com/BaristaVentures/debug-artist/pull/48)
+- Update kotlin 1.1.1-5.
+- Remove wrong stetho-okhttp dependency.
+ 
 # v 0.6.2
 
 - Remove extra resources on PivotalTracker reporter module.
