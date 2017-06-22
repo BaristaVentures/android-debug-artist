@@ -8,15 +8,15 @@
 Make developers life easier with some tools, you can add it to your debug builds and have some debug
 libraries like [Leakcanary](https://github.com/square/leakcanary) and others without extra work.
 
-Library contains:
-- [Debug Drawer Menu](docs/debug-drawer.md): right menu with features for development, (*yeah, it's for you! developer!*).
-    * __Note:__ check [sample](sample/) for a working project using this library to see how it works.
-    * __Note:__ check [shake to report bug feature](docs/custom-bug-report-service.md)
-    
+The [Debug Drawer Menu](docs/debug-drawer.md): right menu with features for development.
+        
+![](img/sample.gif)
 
-- [ViewServer](https://github.com/romainguy/ViewServer): helps to debug layouts with more devices.
+- __Note:__ check [sample](sample/) for a working project using this library to see how it works.
+- __Note:__ check [shake to report bug feature](docs/custom-bug-report-service.md)
 
-Looks like we cant get
+
+Contains [ViewServer](https://github.com/romainguy/ViewServer) to help you to debug layouts with more devices.
 
 ## Add to gradle project
 
