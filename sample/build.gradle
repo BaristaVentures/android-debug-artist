@@ -38,13 +38,22 @@ android {
 
 }
 
-
+def versions = [retrofit    : "2.2.0",
+                okhttp      : "3.8.0"]
 
 dependencies {
   compile deps.appCompat
   compile project(':lib')
   compile project(':reporter-pivotal')
 
-//  debugCompile("com.baristav.debugartist:debugartist:0.6.1@aar") { transitive = true }
+  // For StethoActivity
+  compile 'com.facebook.stetho:stetho-okhttp3:1.5.0'
+  compile "com.squareup.retrofit2:retrofit:${versions.retrofit}"
+  compile "com.squareup.retrofit2:converter-gson:${versions.retrofit}"
+  compile "com.squareup.retrofit2:converter-gson:${versions.retrofit}"
+  compile "com.squareup.okhttp3:okhttp:${versions.okhttp}"
+  compile "com.squareup.okhttp3:logging-interceptor:${versions.okhttp}"
+
+  //  debugCompile("com.baristav.debugartist:debugartist:0.6.1@aar") { transitive = true }
 //  debugCompile("com.baristav.debugartist:reporter_pivotal:0.6.1@aar") { transitive = true }
 }

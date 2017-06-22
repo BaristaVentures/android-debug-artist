@@ -10,24 +10,11 @@ libraries like [Leakcanary](https://github.com/square/leakcanary) and others wit
 
 Library contains:
 - [Debug Drawer Menu](docs/debug-drawer.md): right menu with features for development, (*yeah, it's for you! developer!*).
+    * __Note:__ check [sample](sample/) for a working project using this library to see how it works.
     * __Note:__ check [shake to report bug feature](docs/custom-bug-report-service.md)
+    
 
 - [ViewServer](https://github.com/romainguy/ViewServer): helps to debug layouts with more devices.
-
-## Some Comments
-
-- If you want to differentiate release/staging/debug builds on the drawer you need to add:
-
-```
-buildTypes {
-    debug {
-      versionNameSuffix "-staging"  // THIS LINE
-      
-      //...
-    }
-    //...
-}
-```
 
 Looks like we cant get
 

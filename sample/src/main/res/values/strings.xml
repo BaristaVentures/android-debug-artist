@@ -1,4 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="sample">sample</string>
+  <string name="sample">Debug Artist - Sample</string>
+
+  <string name="stetho_sample_description">
+    1. Open on your browser <br>chrome://inspect</br> to start inspecting requests. \n\n
+    2. Click Next button to do the request:
+  </string>
+
+  <string name="sample_description">
+    1. Basic Sample: shows basic features \n\n
+    2. Stetho Sample: shows how to setup your setup interceptor with OkHttp (you should setup stetho based on your own project dependencies)
+  </string>
+  <string name="basic_sample_description">Slide from right edge of the screen to left to see the debug artist drawer.</string>
+
 </resources>

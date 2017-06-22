@@ -10,7 +10,7 @@
     android:theme="@style/AppTheme">
 
     <activity
-      android:name=".MainActivity"
+      android:name=".LauncherActivity"
       android:label="@string/sample">
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
@@ -21,6 +21,14 @@
     </activity>
 
     <activity android:name="debug_artist.menu.report_bug.ReportBugActivity" />
+
+    <activity
+      android:name=".base.BasicActivity"
+      android:label="Basic Sample" />
+
+    <activity
+      android:name=".stetho.StethoActivity"
+      android:label="Stetho Sample" />
 
   </application>
 
