@@ -48,7 +48,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp">
 
-          <EditText
+        <EditText
           android:id="@+id/descriptionEditText"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
@@ -73,8 +73,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="16dp"
-        android:src="@drawable/ic_send_white_24dp"
-        app:useCompatPadding="true" />
+        android:src="@drawable/ic_send_white_24dp" />
 
     </LinearLayout>
 

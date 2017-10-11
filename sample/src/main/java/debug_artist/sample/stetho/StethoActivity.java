@@ -17,18 +17,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class StethoActivity extends BaseActivity {
 
-  OkHttpClient mOkHttpClient = new OkHttpClient.Builder()
-      .addNetworkInterceptor(new StethoInterceptor())     // <---- Put the interceptor
-      .build();
-
-  Retrofit mRetrofit = new Retrofit.Builder()
-      .client(mOkHttpClient)
-      .addConverterFactory(GsonConverterFactory.create())
-      .baseUrl("https://api.ipify.org")
-      .build();
-
-  RandomService mRandomService = mRetrofit.create(RandomService.class);
-
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -48,6 +36,18 @@ public class StethoActivity extends BaseActivity {
 
   private void requestInfo() {
     showMessage("Sending request");
+
+    OkHttpClient mOkHttpClient = new OkHttpClient.Builder()
+        .addNetworkInterceptor(new StethoInterceptor())     // <---- Put the interceptor
+        .build();
+
+    Retrofit mRetrofit = new Retrofit.Builder()
+        .client(mOkHttpClient)
+        .addConverterFactory(GsonConverterFactory.create())
+        .baseUrl("https://api.ipify.org")
+        .build();
+
+    RandomService mRandomService = mRetrofit.create(RandomService.class);
 
     mRandomService.get("json").enqueue(new Callback<Request>() {
       @Override

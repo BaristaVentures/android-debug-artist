@@ -6,7 +6,6 @@ import android.util.Log
 import com.facebook.stetho.Stetho
 import com.github.pedrovgs.lynx.LynxActivity
 import com.jakewharton.processphoenix.ProcessPhoenix
-import com.jakewharton.scalpel.ScalpelFrameLayout
 import com.squareup.leakcanary.LeakCanary
 import com.squareup.picasso.Picasso
 import debug_artist.menu.drawer.Actor
@@ -14,10 +13,12 @@ import java.lang.ref.WeakReference
 
 class DebugActor(application: Application, activity: Activity) : Actor {
 
-  val TAG = "DebugActor"
-  val applicationWeakReference = WeakReference(application)
-  val activityWeakReference = WeakReference(activity)
-  override var scalpelFrameLayout: ScalpelFrameLayout? = null
+  companion object {
+    private const val TAG = "DebugActor"
+  }
+
+  private val applicationWeakReference = WeakReference(application)
+  private val activityWeakReference = WeakReference(activity)
 
   override fun enableLeakCanary() {
     applicationWeakReference.get()?.let {
@@ -40,10 +41,6 @@ class DebugActor(application: Application, activity: Activity) : Actor {
       Log.i(TAG, "Picasso stats enabled: $stats")
     } ?: Log.e(TAG, "scalpelFrameLayout property is not set.")
   }
-
-  override fun enableScalpelLayout() = enableScalpelLayout(true)
-
-  override fun disableScalpelLayout() = enableScalpelLayout(false)
 
   override fun enableStetho() {
     applicationWeakReference.get()?.let {
@@ -69,13 +66,4 @@ class DebugActor(application: Application, activity: Activity) : Actor {
     }
   }
 
-  private fun enableScalpelLayout(enabled: Boolean) {
-    scalpelFrameLayout?.apply {
-      isLayerInteractionEnabled = enabled
-      setDrawViews(enabled)
-      chromeShadowColor = R.color.black
-
-      Log.i(TAG, "Scalpel Layout enabled:" + if (enabled) "true" else "false")
-    } ?: Log.e(TAG, "scalpelFrameLayout property is not set.")
-  }
 }

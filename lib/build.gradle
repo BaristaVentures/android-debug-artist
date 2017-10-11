@@ -12,8 +12,9 @@ android {
     targetSdkVersion setup.targetSdk
     versionCode VERSION_CODE as Integer
     versionName VERSION_NAME
-    consumerProguardFiles 'rules.pro'
     archivesBaseName = POM_ARTIFACT_ID // used by bintray plugin as artifact id
+
+    consumerProguardFiles 'rules.pro'
   }
 
   buildTypes {
@@ -47,9 +48,7 @@ dependencies {
 
   // Features
   compile 'com.squareup.leakcanary:leakcanary-android:1.5.1'
-
   compile 'com.squareup.picasso:picasso:2.5.2'
-  compile 'com.jakewharton.scalpel:scalpel:1.1.2'
   compile 'com.github.pedrovgs:lynx:1.6'
   compile 'com.jakewharton:process-phoenix:1.1.1'
   compile 'nl.littlerobots.rxlint:rxlint:1.3'

@@ -8,8 +8,8 @@ import rx.schedulers.Schedulers
 /**
  * Shorthand to set [subscribeOn], [observeOn] and retry policy for observables
  */
-fun <T> Observable<T>.composeForIoTasks(): Observable<T> = compose<T>(Observable.Transformer {
+fun <T> Observable<T>.composeForIoTasks() = compose<T> {
   it.subscribeOn(Schedulers.io())
       .observeOn(AndroidSchedulers.mainThread())
       .retryWhen(RetryAfterTimeoutWithDelay(10, 1000))
-})
+}

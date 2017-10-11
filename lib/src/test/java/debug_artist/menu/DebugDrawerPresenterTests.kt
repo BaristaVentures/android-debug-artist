@@ -99,22 +99,6 @@ class DebugDrawerPresenterTests {
   }
 
   @Test
-  fun test_onScalpelAdded_ifChecked_enable() {
-    presenter.onItemAdded(MockFactory.scalpelSwitchMenuItem(checked = true))
-
-    verify(actor).enableScalpelLayout()
-    verify(view).addScalpelSwitch(true)
-  }
-
-  @Test
-  fun test_onScalpelAdded_ifNotChecked_dontEnable() {
-    presenter.onItemAdded(MockFactory.scalpelSwitchMenuItem())
-
-    verify(actor, times(0)).enableScalpelLayout()
-    verify(view).addScalpelSwitch(false)
-  }
-
-  @Test
   fun test_onLynksAdded_add() {
     presenter.onItemAdded(LynksButtonMenuItem())
     verify(view).addLynksButton()
@@ -166,18 +150,6 @@ class DebugDrawerPresenterTests {
   fun test_onPicassoSelected_enable() {
     presenter.onPicassoItemSelected()
     verify(actor).enablePicassoLogs()
-  }
-
-  @Test
-  fun test_onScalpelSelected_ifChecked_enable() {
-    presenter.onScalpelItemSelected(true)
-    verify(actor).enableScalpelLayout()
-  }
-
-  @Test
-  fun test_onScalpelSelected_ifNotChecked_disable() {
-    presenter.onScalpelItemSelected(false)
-    verify(actor).disableScalpelLayout()
   }
 
   @Test

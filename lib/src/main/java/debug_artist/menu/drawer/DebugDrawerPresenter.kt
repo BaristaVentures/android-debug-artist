@@ -55,14 +55,6 @@ class DebugDrawerPresenter : OnShakeListener {
     startOrPauseShakeListener(checked)
   }
 
-  fun onScalpelItemSelected(enabled: Boolean) {
-    if (enabled) {
-      actor?.enableScalpelLayout()
-    } else {
-      actor?.disableScalpelLayout()
-    }
-  }
-
   fun onPhoenixItemSelected() {
     actor?.triggerAppRebirth()
     restartListener?.onAppRestarted()
@@ -90,14 +82,6 @@ class DebugDrawerPresenter : OnShakeListener {
       is PicassoLogsSwitchMenuItem -> {
         view?.addPicassoLogsSwitch(item.checked)
         if (item.checked) actor?.enablePicassoLogs()
-      }
-      is ScalpelSwitchMenuItem -> {
-        view?.addScalpelSwitch(item.checked)
-        actor?.scalpelFrameLayout = item.layout
-
-        if (item.checked) {
-          actor?.enableScalpelLayout()
-        }
       }
       is LynksButtonMenuItem -> view?.addLynksButton()
       is PhoenixButtonMenuItem -> {

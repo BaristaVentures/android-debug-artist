@@ -1,1 +1,3 @@
-include ':reporter-pivotal', ':lib', ':sample'
+include ':lib'
+include ':reporter-pivotal'
+include ':sample'
