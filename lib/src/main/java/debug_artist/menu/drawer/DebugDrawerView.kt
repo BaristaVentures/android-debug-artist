@@ -8,7 +8,6 @@ interface DebugDrawerView {
   fun addStethoSwitch(checked: Boolean)
   fun addLeakCanarySwitch(checked: Boolean)
   fun addPicassoLogsSwitch(checked: Boolean)
-  fun addScalpelSwitch(checked: Boolean)
   fun addBugReportSwitch(checked: Boolean)
 
   fun addLynksButton()

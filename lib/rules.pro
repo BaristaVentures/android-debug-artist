@@ -2,6 +2,12 @@
 -keepattributes InnerClasses, EnclosingMethod
 -dontskipnonpubliclibraryclasses
 
+# Debug Artist
+-keep class debug_artist.menu.** { *; }
+
+# Falcon screenshots
+-keep class com.jraska.falcon.** { *; }
+
 #
 -keep class com.android.org.conscrypt.SSLParametersImpl
 -keep class org.apache.harmony.xnet.provider.jsse.SSLParametersImpl
@@ -10,10 +16,19 @@
 # leakcanary
 -keep class org.eclipse.mat.** { *; }
 -keep class com.squareup.leakcanary.** { *; }
+-keep class com.squareup.haha.** { *; }
 -dontwarn com.squareup.leakcanary.**
+-dontwarn com.squareup.haha.guava.**
+-dontwarn com.squareup.haha.perflib.**
+-dontwarn com.squareup.haha.trove.**
+
+# Marshmallow removed Notification.setLatestEventInfo()
+-dontwarn android.app.Notification
 
 # Stetho
+-keepclasseswithmembers class com.facebook.stetho.** { *; }
 -keep class com.facebook.stetho.** { *; }
+-dontwarn com.facebook.stetho.**
 
 # okio
 -dontwarn java.nio.file.**
@@ -43,6 +58,7 @@
 -keep class com.squareup.okhttp.Connection
 -keep class com.github.pedrovgs.lynx.LynxConfig
 -keep class com.github.pedrovgs.lynx.presenter.LynxPresenter
+-keep class com.github.pedrovgs.lynx.LynxActivity
 -keep class com.mikepenz.iconics.typeface.IIcon
 -keep class com.mikepenz.iconics.IconicsDrawable
 -keep class com.mikepenz.materialize.view.OnInsetsCallback
@@ -60,3 +76,31 @@
 -keep class com.vladium.** { *; }
 # Keep everything for the jacoco classes
 -keep class org.jacoco.** { *; }
+
+
+# Bug Reporter
+## RXJava
+-dontwarn java.lang.invoke.*
+
+# Retrofit 2.X
+## https://square.github.io/retrofit/ ##
+
+-dontwarn retrofit2.**
+-keep class retrofit2.** { *; }
+-keepattributes Signature
+-keepattributes Exceptions
+
+# Platform calls Class.forName on types which do not exist on Android to determine platform.
+-dontnote retrofit2.Platform
+# Platform used when running on Java 8 VMs. Will not be used at runtime.
+-dontwarn retrofit2.Platform$Java8
+
+# OkHttp3
+-dontwarn okhttp3.**
+-dontwarn okio.**
+
+-dontwarn com.squareup.picasso.**
+
+
+
+-keepclasseswithmembers class * { @retrofit2.http.* <methods>; }

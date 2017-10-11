@@ -13,7 +13,6 @@ import android.widget.EditText
 import android.widget.Toast
 import android.widget.Toast.LENGTH_LONG
 import android.widget.Toast.LENGTH_SHORT
-import com.jakewharton.scalpel.ScalpelFrameLayout
 import com.mikepenz.materialdrawer.Drawer
 import com.mikepenz.materialdrawer.DrawerBuilder
 import com.mikepenz.materialdrawer.interfaces.OnCheckedChangeListener
@@ -89,10 +88,6 @@ class DebugDrawer @JvmOverloads constructor(application: Application,
   fun withLeakCanarySwitch(checked: Boolean = false) = withMenuItem(LeakCanarySwitchMenuItem(checked))
 
   @JvmOverloads
-  fun withScalpelSwitch(layout: ScalpelFrameLayout, checked: Boolean = false) =
-      withMenuItem(ScalpelSwitchMenuItem(layout, checked))
-
-  @JvmOverloads
   fun withPicassoLogsSwitch(checked: Boolean = false) = withMenuItem(PicassoLogsSwitchMenuItem(checked))
 
   @JvmOverloads
@@ -134,12 +129,8 @@ class DebugDrawer @JvmOverloads constructor(application: Application,
     addSwitchDrawerItem(R.string.picasso, R.id.drawer_dev_item_picasso).withChecked(checked)
   }
 
-  override fun addScalpelSwitch(checked: Boolean) {
-    addSwitchDrawerItem(R.string.scalpel, R.id.drawer_dev_item_scalpel).withChecked(checked)
-  }
-
   override fun addBugReportSwitch(checked: Boolean) {
-    addSwitchDrawerItem(R.string.report_bug, R.id.drawer_dev_item_bug_report).withChecked(checked)
+    addSwitchDrawerItem(R.string.report_bug_hint, R.id.drawer_dev_item_bug_report).withChecked(checked)
   }
 
   override fun addLynksButton() {
@@ -228,7 +219,6 @@ class DebugDrawer @JvmOverloads constructor(application: Application,
       R.id.drawer_dev_item_stetho.toLong() -> presenter.onStethoItemSelected()
       R.id.drawer_dev_item_leak.toLong() -> presenter.onLeakCanaryItemSelected()
       R.id.drawer_dev_item_picasso.toLong() -> presenter.onPicassoItemSelected()
-      R.id.drawer_dev_item_scalpel.toLong() -> presenter.onScalpelItemSelected(isChecked)
       R.id.drawer_dev_item_bug_report.toLong() -> presenter.onBugReporterItemSelected(isChecked)
     }
   }

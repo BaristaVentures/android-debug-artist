@@ -4,7 +4,6 @@ import debug_artist.menu.drawer.item.input.InputItemListener
 import debug_artist.menu.drawer.item.phoenix.RestartListener
 import debug_artist.menu.drawer.item.spinner.SpinnerItemListener
 import debug_artist.menu.report_bug.BugRepository
-import com.jakewharton.scalpel.ScalpelFrameLayout
 
 open class MenuItem
 open class DividerMenuItem : MenuItem()
@@ -17,9 +16,6 @@ open class LabelMenuItem(val properties: Map<String, String>) : MenuItem()
 open class StethoSwitchMenuItem(checked: Boolean = false) : SwitchMenuItem(checked)
 open class LeakCanarySwitchMenuItem(checked: Boolean = false) : SwitchMenuItem(checked)
 open class PicassoLogsSwitchMenuItem(checked: Boolean = false) : SwitchMenuItem(checked)
-
-open class ScalpelSwitchMenuItem(val layout: ScalpelFrameLayout?, checked: Boolean = false)
-  : SwitchMenuItem(checked)
 
 open class LynksButtonMenuItem : ButtonMenuItem()
 

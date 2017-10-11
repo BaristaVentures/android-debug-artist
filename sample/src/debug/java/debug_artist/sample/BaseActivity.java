@@ -3,7 +3,6 @@ package debug_artist.sample;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
-import com.jakewharton.scalpel.ScalpelFrameLayout;
 import debug_artist.menu.ViewServer;
 import debug_artist.menu.drawer.DebugDrawer;
 import debug_artist.menu.drawer.item.input.InputItemListener;
@@ -37,7 +36,6 @@ public class BaseActivity extends AppCompatActivity
 
     // Create debug drawer with selected features
     debugDrawer = new DebugDrawer(applicationInstance, this)
-        .withScalpelSwitch((ScalpelFrameLayout) findViewById(R.id.scalpelLayout))
         .withLeakCanarySwitch(true)
         .withPicassoLogsSwitch(true)
         .withStethoSwitch(true)

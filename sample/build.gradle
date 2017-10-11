@@ -21,8 +21,6 @@ android {
 
       proguardFiles getDefaultProguardFile('proguard-android.txt'), 'rules.pro'
 
-      versionNameSuffix "-staging"
-
       buildConfigField "String", "PIVOTAL_API_KEY", "\"$ARTIST_PIVOTAL_API_KEY\""
       buildConfigField "String", "PIVOTAL_PROJECT_ID", "\"$ARTIST_PIVOTAL_PROJECT_ID\""
     }
@@ -32,14 +30,33 @@ android {
       proguardFiles getDefaultProguardFile('proguard-android.txt'), 'rules.pro'
     }
   }
+
+  signingConfigs { // Added to be able to assemble release apks with shrink
+    debug {
+      keyAlias "sample"
+      keyPassword "sample"
+      storePassword "sample"
+      storeFile file("../sample.jks")
+    }
+    release {
+      keyAlias "sample"
+      keyPassword "sample"
+      storePassword "sample"
+      storeFile file("../sample.jks")
+    }
+  }
+
   lintOptions {
     abortOnError false
   }
 
+  packagingOptions {
+    exclude 'META-INF/lib_release.kotlin_module'
+  }
 }
 
-def versions = [retrofit    : "2.2.0",
-                okhttp      : "3.8.0"]
+def sampleVersions = [retrofit: "2.2.0",
+                      okhttp  : "3.8.0"]
 
 dependencies {
   compile deps.appCompat
@@ -48,12 +65,9 @@ dependencies {
 
   // For StethoActivity
   compile 'com.facebook.stetho:stetho-okhttp3:1.5.0'
-  compile "com.squareup.retrofit2:retrofit:${versions.retrofit}"
-  compile "com.squareup.retrofit2:converter-gson:${versions.retrofit}"
-  compile "com.squareup.retrofit2:converter-gson:${versions.retrofit}"
-  compile "com.squareup.okhttp3:okhttp:${versions.okhttp}"
-  compile "com.squareup.okhttp3:logging-interceptor:${versions.okhttp}"
-
-  //  debugCompile("com.baristav.debugartist:debugartist:0.6.1@aar") { transitive = true }
-//  debugCompile("com.baristav.debugartist:reporter_pivotal:0.6.1@aar") { transitive = true }
+  compile "com.squareup.retrofit2:retrofit:${sampleVersions.retrofit}"
+  compile "com.squareup.retrofit2:converter-gson:${sampleVersions.retrofit}"
+  compile "com.squareup.retrofit2:converter-gson:${sampleVersions.retrofit}"
+  compile "com.squareup.okhttp3:okhttp:${sampleVersions.okhttp}"
+  compile "com.squareup.okhttp3:logging-interceptor:${sampleVersions.okhttp}"
 }

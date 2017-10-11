@@ -30,6 +30,7 @@ class ReportBugActivity : AppCompatActivity(), ReportBugView {
 
     (findViewById(R.id.toolbar) as? Toolbar)?.let { setSupportActionBar(it) }
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    setTitle(R.string.report_bug)
 
     val presenter = ReportBugPresenter().apply {
       attach(this@ReportBugActivity,

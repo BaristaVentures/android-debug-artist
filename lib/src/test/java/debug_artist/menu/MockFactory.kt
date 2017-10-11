@@ -1,14 +1,14 @@
 package debug_artist.menu
 
-import debug_artist.menu.drawer.item.*
+import debug_artist.menu.drawer.item.InputMenuItem
+import debug_artist.menu.drawer.item.PhoenixButtonMenuItem
+import debug_artist.menu.drawer.item.ReportBugSwitchMenuItem
+import debug_artist.menu.drawer.item.SpinnerMenuItem
 import debug_artist.menu.report_bug.Answer
 import org.mockito.Mockito.mock
 import rx.Observable
 
 object MockFactory {
-
-  fun scalpelSwitchMenuItem(checked: Boolean = false): ScalpelSwitchMenuItem =
-      ScalpelSwitchMenuItem(null, checked)
 
   fun phoenixButtonMenuItem(): PhoenixButtonMenuItem = mock(PhoenixButtonMenuItem::class.java)
 
