@@ -1,5 +1,9 @@
 # CHANGELOG
 
+# v 0.6.4
+- Add proguard setup.
+- Update kotlin to 1.1.51.
+
 # v 0.6.3
 - Fix MemoryLeak caused by stetho [pr/48](https://github.com/BaristaVentures/debug-artist/pull/48)
 - Update kotlin 1.1.1-5.
