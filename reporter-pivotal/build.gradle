@@ -20,9 +20,9 @@ android {
 }
 
 dependencies {
-  compile deps.appCompat
-  compile deps.supportDesign
-  compile deps.kotlinStdLib
+  compile libraries.appCompat
+  compile libraries.supportDesign
+  compile libraries.kotlinStdLib
   compile project(":lib")
 
   compile "io.reactivex:rxjava:${versions.rxJava}"
