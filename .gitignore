@@ -6,8 +6,9 @@
 /build
 /captures
 
-
-/gradle.properties
+gradle.properties
+lib/bintray.properties
+reporter-pivotal/bintray.properties
 
 # Created by https://www.gitignore.io
 

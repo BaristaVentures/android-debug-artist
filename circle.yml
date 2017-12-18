@@ -12,20 +12,15 @@ machine:
 dependencies:
   cache_directories:
     - ~/.android
-    - ~/android
     - ~/.gradle
-  pre:
-    # Install dependencies
+  override:
     - wget "https://services.gradle.org/distributions/$GRADLE_VERSION-bin.zip"; unzip $GRADLE_VERSION-bin.zip
     - sh scripts/install-dependencies.sh
 
-    # Create config files based on all env variables
-    - PROPERTIES_FILE=lib/bintray.properties sh scripts/cp-env-to-properties.sh
-    - PROPERTIES_FILE=pivotaltracker-reporter/bintray.properties sh scripts/cp-env-to-properties.sh
-    - sh scripts/cp-env-to-properties.sh
-
 test:
   override:
+    - bash scripts/cp-env-to-properties.sh
+
     - ./gradlew assemble -PdisablePreDex --stacktrace --no-daemon
     - ./gradlew testDebugUnitTestCoverage -PdisablePreDex --stacktrace --no-daemon
 
@@ -35,3 +30,10 @@ test:
     - cp -r lib/build/test-results $CIRCLE_TEST_REPORTS
   post:
     - bash <(curl -s https://codecov.io/bash) -f "$CIRCLE_TEST_REPORTS/reports/jacoco/testDebugUnitTestCoverage/testDebugUnitTestCoverage.xml"
+
+deployment:
+  production:
+    branch: master
+    commands:
+      - bash scripts/cp-env-to-properties.sh
+      - bash scripts/deploy.sh

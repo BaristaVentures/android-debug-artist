@@ -16,5 +16,6 @@ ext {
   libraries = [appCompat    : "com.android.support:appcompat-v7:${versions.supportLibrary}",
                supportDesign: "com.android.support:design:${versions.supportLibrary}",
 
-               kotlinStdLib : "org.jetbrains.kotlin:kotlin-stdlib:${versions.kotlin}"]
+               kotlinStdLib : "org.jetbrains.kotlin:kotlin-stdlib:${versions.kotlin}",
+               kotlinReflect: "org.jetbrains.kotlin:kotlin-reflect:${versions.kotlin}"]
 }

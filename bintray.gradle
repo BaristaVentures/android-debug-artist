@@ -1,9 +1,6 @@
 //
 // This script must be applied after android app/lib plugin.
 //
-// Artifact id must be set in android.defaultConfig.archivesBaseName
-// use -PsignPackage to allow package signing
-//
 
 /*
  * Copyright 2013 Chris Banes
@@ -28,20 +25,12 @@ apply plugin: 'com.jfrog.bintray'
 version = VERSION_NAME
 group = GROUP
 
-def runCommand(String command) {
-  def outString = new StringBuilder(), errorString = new StringBuilder()
-  def process = command.execute()
-  process.consumeProcessOutput(outString, errorString)
-  process.waitForOrKill(1000)
-  println "Running '\$ ${command}' out> $outString err> $errorString"
-}
-
 def setup() {
-  println("Checking environment variables setup...")
+  println("Checking environment variables setup for ${project.name}...")
   def resultOk = true
 
   ["BINTRAY_USER", "BINTRAY_USER_ORG", "BINTRAY_PASSWORD", "BINTRAY_API_KEY", "DA_OSS_USERNAME",
-   "DA_OSS_PWD"].each {
+   "DA_OSS_PWD", "DA_SIGN_SECRET_RING_FILE"].each {
     if (!project.hasProperty(it)) {
       println("-> Property '$it' not found.")
       resultOk = false
@@ -49,9 +38,9 @@ def setup() {
   }
 
   if (resultOk) {
-    println("Project setup variables are good.")
+    println("Relax, it's fine.\n")
   } else {
-    println("Project setup variables are incomplete.")
+    println("Opps, it's incomplete.\n")
   }
 
   return resultOk
@@ -69,8 +58,6 @@ if (!setup()) {
   println("bintray.gradle script can't continue without all the needed variables.\n")
   return
 }
-
-runCommand("sh scripts/cp-env-to-properties.sh")
 
 def isReleaseBuild() {
   return VERSION_NAME.contains("SNAPSHOT") == false
@@ -229,7 +216,7 @@ bintray {
 
   override = true
   publish = true
-  dryRun = true
+  dryRun = false
 
   pkg {
     repo = "maven"
@@ -250,7 +237,7 @@ bintray {
       name = VERSION_NAME
 
       gpg {
-        sign = true
+        sign = false
       }
 
       mavenCentralSync {
