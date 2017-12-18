@@ -103,7 +103,7 @@
 
 -keepclasseswithmembers class * { @retrofit2.http.* <methods>; }
 
--keep class class com.github.pedrovgs.lynx.LynxActivity { *; }
--keep class class com.jakewharton.processphoenix.ProcessPhoenix { *; }
--keep class class com.jraska.falcon.Falcon$UnableToTakeScreenshotException { *; }
--keep class class com.jraska.falcon.Falcon { *; }
+-keep class com.github.pedrovgs.lynx.LynxActivity { *; }
+-keep class com.jakewharton.processphoenix.ProcessPhoenix { *; }
+-keep class com.jraska.falcon.Falcon$UnableToTakeScreenshotException { *; }
+-keep class com.jraska.falcon.Falcon { *; }
