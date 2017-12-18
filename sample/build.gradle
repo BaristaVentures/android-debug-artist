@@ -1,5 +1,13 @@
 apply plugin: 'com.android.application'
 
+def getVariableOrEmpty(String name) {
+  if (project.hasProperty(name)) {
+    return project.property(name)
+  } else {
+    return ""
+  }
+}
+
 android {
   compileSdkVersion setup.compileSdk
   buildToolsVersion setup.buildTools
@@ -21,8 +29,8 @@ android {
 
       proguardFiles getDefaultProguardFile('proguard-android.txt'), 'rules.pro'
 
-      buildConfigField "String", "PIVOTAL_API_KEY", "\"$ARTIST_PIVOTAL_API_KEY\""
-      buildConfigField "String", "PIVOTAL_PROJECT_ID", "\"$ARTIST_PIVOTAL_PROJECT_ID\""
+      buildConfigField "String", "PIVOTAL_API_KEY", "\"${getVariableOrEmpty("DA_PIVOTAL_API_KEY")}\""
+      buildConfigField "String", "PIVOTAL_PROJECT_ID", "\"${getVariableOrEmpty("DA_PIVOTAL_PROJECT_ID")}\""
     }
     release {
       minifyEnabled true
@@ -31,7 +39,8 @@ android {
     }
   }
 
-  signingConfigs { // Added to be able to assemble release apks with shrink
+  signingConfigs {
+    // Added to be able to assemble release apks with shrink
     debug {
       keyAlias "sample"
       keyPassword "sample"
