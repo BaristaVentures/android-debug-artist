@@ -28,24 +28,38 @@ apply plugin: 'com.jfrog.bintray'
 version = VERSION_NAME
 group = GROUP
 
-def correctSetup() {
+def runCommand(String command) {
+  def outString = new StringBuilder(), errorString = new StringBuilder()
+  def process = command.execute()
+  process.consumeProcessOutput(outString, errorString)
+  process.waitForOrKill(1000)
+  println "Running '\$ ${command}' out> $outString err> $errorString"
+}
+
+def setup() {
   ["BINTRAY_USER",
    "BINTRAY_USER_ORG",
    "BINTRAY_PASSWORD",
    "BINTRAY_API_KEY",
-   "BINTRAY_GPG_PASSPHRASE"].each {
+   "BINTRAY_GPG_PASSPHRASE",
+   "DA_OSS_USERNAME",
+   "DA_OSS_PWD"].each {
 
     if (!project.hasProperty(it)) {
       println("-> bintray: $it property not found and is needed to deploy")
       return false
     }
   }
+
+  return true
 }
 
-if (!correctSetup()) {
+if (!setup()) {
   println("-> bintray: No bintray properties found")
   return
 }
+
+runCommand("sh scripts/cp-env-to-properties.sh")
 
 def isReleaseBuild() {
   return VERSION_NAME.contains("SNAPSHOT") == false
@@ -192,6 +206,11 @@ afterEvaluate { project ->
 }
 
 bintray {
+  if (!setup()) {
+    println("-> bintray: No bintray properties found")
+    return
+  }
+
   user = getProperty("BINTRAY_USER")
   key = getProperty("BINTRAY_API_KEY")
 
@@ -218,6 +237,17 @@ bintray {
     version {
       desc = POM_DESCRIPTION
       name = VERSION_NAME
+
+      gpg {
+        sign = true
+      }
+
+      mavenCentralSync {
+        sync = true
+        user = getProperty("DA_OSS_USERNAME")
+        password = getProperty("DA_OSS_PWD")
+        close = '1' //Optional property. By default the staging repository is closed and artifacts are released to Maven Central. You can optionally turn this behaviour off (by puting 0 as value) and release the version manually.
+      }
     }
   }
 }
