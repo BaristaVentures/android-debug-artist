@@ -38,22 +38,35 @@ def runCommand(String command) {
 
 def setup() {
   println("Checking environment variables setup...")
+  def resultOk = true
 
   ["BINTRAY_USER", "BINTRAY_USER_ORG", "BINTRAY_PASSWORD", "BINTRAY_API_KEY", "DA_OSS_USERNAME",
    "DA_OSS_PWD"].each {
     if (!project.hasProperty(it)) {
       println("-> Property '$it' not found.")
-      return false
+      resultOk = false
     }
   }
 
-  println("-> Project setup variables are good.")
+  if (resultOk) {
+    println("Project setup variables are good.")
+  } else {
+    println("Project setup variables are incomplete.")
+  }
 
-  return true
+  return resultOk
+}
+
+def getVariableOrEmpty(String name) {
+  if (project.hasProperty(name)) {
+    return project.property(name)
+  } else {
+    return ""
+  }
 }
 
 if (!setup()) {
-  println("-> Project setup variables are incomplete.")
+  println("bintray.gradle script can't continue without all the needed variables.\n")
   return
 }
 
@@ -64,23 +77,23 @@ def isReleaseBuild() {
 }
 
 def getReleaseRepositoryUrl() {
-  hasProperty('RELEASE_REPOSITORY_URL') ? getProperty("RELEASE_REPOSITORY_URL") :
+  hasProperty('RELEASE_REPOSITORY_URL') ? getVariableOrEmpty("RELEASE_REPOSITORY_URL") :
       "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
 }
 
 def getSnapshotRepositoryUrl() {
-  return hasProperty('SNAPSHOT_REPOSITORY_URL') ? getProperty("SNAPSHOT_REPOSITORY_URL") :
+  return hasProperty('SNAPSHOT_REPOSITORY_URL') ? getVariableOrEmpty("SNAPSHOT_REPOSITORY_URL") :
       "https://oss.sonatype.org/content/repositories/snapshots/"
   //      "https://oss.jfrog.org/artifactory/oss-snapshot-local"
   //      "https://oss.jfrog.org"
 }
 
 def getRepositoryUsername() {
-  return hasProperty('BINTRAY_USER') ? getProperty("BINTRAY_USER") : ""
+  return hasProperty('BINTRAY_USER') ? getVariableOrEmpty("BINTRAY_USER") : ""
 }
 
 def getRepositoryPassword() {
-  return hasProperty('BINTRAY_PASSWORD') ? getProperty("BINTRAY_PASSWORD") : ""
+  return hasProperty('BINTRAY_PASSWORD') ? getVariableOrEmpty("BINTRAY_PASSWORD") : ""
 }
 
 afterEvaluate { project ->
@@ -209,8 +222,8 @@ bintray {
     return
   }
 
-  user = getProperty("BINTRAY_USER")
-  key = getProperty("BINTRAY_API_KEY")
+  user = getVariableOrEmpty("BINTRAY_USER")
+  key = getVariableOrEmpty("BINTRAY_API_KEY")
 
   configurations = ['archives']
 
@@ -221,7 +234,7 @@ bintray {
   pkg {
     repo = "maven"
     name = POM_ARTIFACT_ID
-    userOrg = getProperty("BINTRAY_USER_ORG")
+    userOrg = getVariableOrEmpty("BINTRAY_USER_ORG")
     desc = POM_DESCRIPTION
     websiteUrl = POM_URL
     issueTrackerUrl = POM_URL + '/issues'
@@ -242,9 +255,10 @@ bintray {
 
       mavenCentralSync {
         sync = true
-        user = getProperty("DA_OSS_USERNAME")
-        password = getProperty("DA_OSS_PWD")
-        close = '1' //Optional property. By default the staging repository is closed and artifacts are released to Maven Central. You can optionally turn this behaviour off (by puting 0 as value) and release the version manually.
+        user = getVariableOrEmpty("DA_OSS_USERNAME")
+        password = getVariableOrEmpty("DA_OSS_PWD")
+        close = '1'
+        //Optional property. By default the staging repository is closed and artifacts are released to Maven Central. You can optionally turn this behaviour off (by puting 0 as value) and release the version manually.
       }
     }
   }
