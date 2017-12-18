@@ -37,25 +37,23 @@ def runCommand(String command) {
 }
 
 def setup() {
-  ["BINTRAY_USER",
-   "BINTRAY_USER_ORG",
-   "BINTRAY_PASSWORD",
-   "BINTRAY_API_KEY",
-   "BINTRAY_GPG_PASSPHRASE",
-   "DA_OSS_USERNAME",
-   "DA_OSS_PWD"].each {
+  println("Checking environment variables setup...")
 
+  ["BINTRAY_USER", "BINTRAY_USER_ORG", "BINTRAY_PASSWORD", "BINTRAY_API_KEY", "DA_OSS_USERNAME",
+   "DA_OSS_PWD"].each {
     if (!project.hasProperty(it)) {
-      println("-> bintray: $it property not found and is needed to deploy")
+      println("-> Property '$it' not found.")
       return false
     }
   }
+
+  println("-> Project setup variables are good.")
 
   return true
 }
 
 if (!setup()) {
-  println("-> bintray: No bintray properties found")
+  println("-> Project setup variables are incomplete.")
   return
 }
 

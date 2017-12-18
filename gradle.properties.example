@@ -3,12 +3,8 @@ BINTRAY_USER=
 BINTRAY_USER_ORG=
 BINTRAY_PASSWORD=
 BINTRAY_API_KEY=
-BINTRAY_GPG_PASSPHRASE=
-
-# GPG signing data
-signing.keyId=
-signing.password=
-signing.secretKeyRingFile= # ~/.gnupg/secring.gpg
+DA_OSS_USERNAME=
+DA_OSS_PWD=
 
 # Optional
 ARTIST_PIVOTAL_API_KEY=
