@@ -216,7 +216,7 @@ bintray {
 
   override = true
   publish = true
-  dryRun = false
+  dryRun = true
 
   pkg {
     repo = "maven"
