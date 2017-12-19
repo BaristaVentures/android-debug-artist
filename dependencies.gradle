@@ -1,0 +1,20 @@
+ext {
+  setup = [buildTools: "26.0.2",
+           compileSdk: 26,
+           minSdk    : 15,
+           targetSdk : 26]
+
+  versions = [supportLibrary: "27.0.1",
+              kotlin        : "1.2.10",
+              retrofit      : "2.3.0",
+              okHttp        : "3.9.1",
+              rxJava        : "1.3.3"]
+
+  plugs = [kotlin        : "org.jetbrains.kotlin:kotlin-gradle-plugin:${versions.kotlin}",
+           gradleVersions: 'com.github.ben-manes:gradle-versions-plugin:0.15.0']
+
+  libraries = [appCompat    : "com.android.support:appcompat-v7:${versions.supportLibrary}",
+               supportDesign: "com.android.support:design:${versions.supportLibrary}",
+
+               kotlinStdLib : "org.jetbrains.kotlin:kotlin-stdlib:${versions.kotlin}"]
+}

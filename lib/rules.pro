@@ -101,6 +101,9 @@
 
 -dontwarn com.squareup.picasso.**
 
-
-
 -keepclasseswithmembers class * { @retrofit2.http.* <methods>; }
+
+-keep class com.github.pedrovgs.lynx.LynxActivity { *; }
+-keep class com.jakewharton.processphoenix.ProcessPhoenix { *; }
+-keep class com.jraska.falcon.Falcon$UnableToTakeScreenshotException { *; }
+-keep class com.jraska.falcon.Falcon { *; }

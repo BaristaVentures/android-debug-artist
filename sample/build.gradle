@@ -59,7 +59,7 @@ def sampleVersions = [retrofit: "2.2.0",
                       okhttp  : "3.8.0"]
 
 dependencies {
-  compile deps.appCompat
+  compile libraries.appCompat
   compile project(':lib')
   compile project(':reporter-pivotal')
 
