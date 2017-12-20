@@ -23,6 +23,7 @@ dependencies {
   compile libraries.appCompat
   compile libraries.supportDesign
   compile libraries.kotlinStdLib
+  compile libraries.kotlinReflect
   compile project(":lib")
 
   compile "io.reactivex:rxjava:${versions.rxJava}"

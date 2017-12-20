@@ -1,5 +1,10 @@
 # CHANGELOG
 
+# v 0.6.5
+- Update kotlin 1.2.10
+- Add missing proguard setup.
+- Update third party features versions. 
+
 # v 0.6.4
 - Add proguard setup.
 - Update kotlin to 1.1.51.
@@ -10,19 +15,16 @@
 - Remove wrong stetho-okhttp dependency.
  
 # v 0.6.2
-
 - Remove extra resources on PivotalTracker reporter module.
 - Update dependencies.
 - Simplify the use of properties view.
 - Hide library resources to user.
 
 # v 0.6.1 (~~0.6~~ BROKEN) 
-
 - Update to Kotlin 1.1.1.
 - Add bug reporter with pivotal tracker, waiting others!
 
 # v 0.5.11
-
 - Update to Kotlin 1.0.6.
 - Allow to set initial state for switch's (true/false).
 - Show drawer on first launch now can be set from constructor.
