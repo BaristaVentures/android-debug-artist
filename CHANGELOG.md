@@ -1,5 +1,8 @@
 # CHANGELOG
 
+# v 0.6.6
+- Fix missing library dependencies on generated pom.
+
 # v 0.6.5
 - Update kotlin 1.2.10
 - Add missing proguard setup.
