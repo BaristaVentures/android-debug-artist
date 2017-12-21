@@ -1,5 +1,8 @@
 # CHANGELOG
 
+# v 0.6.7
+- Fix last release dependencies for `reporter-pivotal` contains project reference "lib" causing clients crash on compile.
+
 # v 0.6.6
 - Fix missing library dependencies on generated pom.
 

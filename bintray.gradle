@@ -154,11 +154,13 @@ task install(type: Upload, dependsOn: assemble) {
       def dependenciesNode = asNode().appendNode('dependencies')
 
       configurations.compile.allDependencies.each {
-        def dependencyNode = dependenciesNode.appendNode('dependency')
+        if (it.name != "lib") {
+          def dependencyNode = dependenciesNode.appendNode('dependency')
 
-        dependencyNode.appendNode('groupId', it.group)
-        dependencyNode.appendNode('artifactId', it.name)
-        dependencyNode.appendNode('version', it.version)
+          dependencyNode.appendNode('groupId', it.group)
+          dependencyNode.appendNode('artifactId', it.name)
+          dependencyNode.appendNode('version', it.version)
+        }
       }
     }
   }
