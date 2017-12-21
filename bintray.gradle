@@ -83,6 +83,38 @@ def getRepositoryPassword() {
   return hasProperty('BINTRAY_PASSWORD') ? getVariableOrEmpty("BINTRAY_PASSWORD") : ""
 }
 
+def pomProperties = {
+  packaging "aar"
+  groupId = GROUP
+  artifactId = POM_ARTIFACT_ID
+  version = VERSION_NAME
+  name POM_NAME
+  description POM_DESCRIPTION
+  url POM_URL
+
+  scm {
+    url POM_SCM_URL
+    connection POM_SCM_CONNECTION
+    developerConnection POM_SCM_DEV_CONNECTION
+  }
+
+  licenses {
+    license {
+      name POM_LICENCE_NAME
+      url POM_LICENCE_URL
+      distribution POM_LICENCE_DIST
+    }
+  }
+
+  developers {
+    developer {
+      id POM_DEVELOPER_ID
+      name POM_DEVELOPER_NAME
+      email POM_DEVELOPER_EMAIL
+    }
+  }
+}
+
 afterEvaluate { project ->
   uploadArchives {
     repositories {
@@ -96,111 +128,68 @@ afterEvaluate { project ->
           authentication(userName: getRepositoryUsername(), password: getRepositoryPassword())
         }
 
-        pom.project {
-          packaging "aar"
-          groupId = GROUP
-          artifactId = POM_ARTIFACT_ID
-          version = VERSION_NAME
-          name POM_NAME
-          description POM_DESCRIPTION
-          url POM_URL
-
-          scm {
-            url POM_SCM_URL
-            connection POM_SCM_CONNECTION
-            developerConnection POM_SCM_DEV_CONNECTION
-          }
-
-          licenses {
-            license {
-              name POM_LICENCE_NAME
-              url POM_LICENCE_URL
-              distribution POM_LICENCE_DIST
-            }
-          }
-
-          developers {
-            developer {
-              id POM_DEVELOPER_ID
-              name POM_DEVELOPER_NAME
-              email POM_DEVELOPER_EMAIL
-            }
-          }
-        }
+        pom.project(pomProperties)
       }
     }
   }
+}
 
-  signing {
-    required { isReleaseBuild() && project.hasProperty("signPackage") }
-    sign configurations.archives
-  }
+signing {
+  required { isReleaseBuild() && project.hasProperty("signPackage") }
+  sign configurations.archives
+}
 
-  task install(type: Upload, dependsOn: assemble) {
-    repositories.mavenInstaller {
-      configuration = configurations.archives
+task install(type: Upload, dependsOn: assemble) {
+  repositories.mavenInstaller {
+    configuration = configurations.archives
 
-      pom.groupId = GROUP
-      pom.artifactId = POM_ARTIFACT_ID
-      pom.version = VERSION_NAME
+    pom.groupId = GROUP
+    pom.artifactId = POM_ARTIFACT_ID
+    pom.version = VERSION_NAME
 
-      pom.project {
-        name POM_NAME
-        packaging "aar"
-        description POM_DESCRIPTION
-        url POM_URL
+    pom.project(pomProperties)
 
-        scm {
-          url POM_SCM_URL
-          connection POM_SCM_CONNECTION
-          developerConnection POM_SCM_DEV_CONNECTION
-        }
+    // Append library dependencies to the pom
+    pom.withXml {
+      def dependenciesNode = asNode().appendNode('dependencies')
 
-        licenses {
-          license {
-            name POM_LICENCE_NAME
-            url POM_LICENCE_URL
-            distribution POM_LICENCE_DIST
-          }
-        }
+      configurations.compile.allDependencies.each {
+        def dependencyNode = dependenciesNode.appendNode('dependency')
 
-        developers {
-          developer {
-            id POM_DEVELOPER_ID
-            name POM_DEVELOPER_NAME
-          }
-        }
+        dependencyNode.appendNode('groupId', it.group)
+        dependencyNode.appendNode('artifactId', it.name)
+        dependencyNode.appendNode('version', it.version)
       }
     }
   }
+}
 
-  task androidJavadocs(type: Javadoc) {
-    source = android.sourceSets.main.kotlin.source
-    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-  }
+task androidJavadocs(type: Javadoc) {
+  source = android.sourceSets.main.kotlin.source
+  classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+}
 
-  task androidJavadocsJar(type: Jar, dependsOn: androidJavadocs) {
-    classifier = 'javadoc'
-    from androidJavadocs.destinationDir
-  }
+task androidJavadocsJar(type: Jar, dependsOn: androidJavadocs) {
+  classifier = 'javadoc'
+  from androidJavadocs.destinationDir
+}
 
-  task androidSourcesJar(type: Jar) {
-    classifier = 'sources'
-    from android.sourceSets.main.java.source
-  }
+task androidSourcesJar(type: Jar) {
+  classifier = 'sources'
+  from android.sourceSets.main.java.source
+}
 
-  if (JavaVersion.current().isJava8Compatible()) {
-    allprojects {
-      tasks.withType(Javadoc) {
-        options.addStringOption('Xdoclint:none', '-quiet')
-      }
+if (JavaVersion.current().isJava8Compatible()) {
+  allprojects {
+    tasks.withType(Javadoc) {
+      options.addStringOption('Xdoclint:none', '-quiet')
     }
   }
+}
 
-  artifacts {
-    archives androidSourcesJar
-    archives androidJavadocsJar
-  }
+artifacts {
+  archives androidSourcesJar
+  archives androidJavadocsJar
 }
 
 bintray {

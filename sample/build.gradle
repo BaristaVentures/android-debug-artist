@@ -29,8 +29,10 @@ android {
 
       proguardFiles getDefaultProguardFile('proguard-android.txt'), 'rules.pro'
 
-      buildConfigField "String", "PIVOTAL_API_KEY", "\"${getVariableOrEmpty("DA_PIVOTAL_API_KEY")}\""
-      buildConfigField "String", "PIVOTAL_PROJECT_ID", "\"${getVariableOrEmpty("DA_PIVOTAL_PROJECT_ID")}\""
+      buildConfigField "String", "PIVOTAL_API_KEY",
+          "\"${getVariableOrEmpty("DA_PIVOTAL_API_KEY")}\""
+      buildConfigField "String", "PIVOTAL_PROJECT_ID",
+          "\"${getVariableOrEmpty("DA_PIVOTAL_PROJECT_ID")}\""
     }
     release {
       minifyEnabled true
@@ -69,8 +71,8 @@ def sampleVersions = [retrofit: "2.2.0",
 
 dependencies {
   compile libraries.appCompat
-  compile project(':lib')
-  compile project(':reporter-pivotal')
+  compile(project(':lib')) { transitive = true }
+  compile(project(':reporter-pivotal')) { transitive = true }
 
   // For StethoActivity
   compile 'com.facebook.stetho:stetho-okhttp3:1.5.0'
