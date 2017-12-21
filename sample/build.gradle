@@ -74,6 +74,9 @@ dependencies {
   compile(project(':lib')) { transitive = true }
   compile(project(':reporter-pivotal')) { transitive = true }
 
+  //compile('com.baristav.debugartist:debugartist:0.6.6@aar') { transitive = true }
+  //compile('com.baristav.debugartist:reporter_pivotal:0.6.6@aar') { transitive = true }
+
   // For StethoActivity
   compile 'com.facebook.stetho:stetho-okhttp3:1.5.0'
   compile "com.squareup.retrofit2:retrofit:${sampleVersions.retrofit}"
