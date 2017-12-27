@@ -55,14 +55,15 @@ dependencies {
   compile 'com.facebook.stetho:stetho:1.5.0'
 
   // Bug Reporter
-  compile "io.reactivex:rxjava:${versions.rxJava}"
-  compile "io.reactivex:rxandroid:1.2.1"
-  compile "com.artemzin.rxjava:proguard-rules:${versions.rxJava}.0"
-  compile "com.squareup.retrofit2:retrofit:${versions.retrofit}"
-  compile "com.squareup.retrofit2:converter-gson:${versions.retrofit}"
-  compile "com.squareup.retrofit2:adapter-rxjava:${versions.retrofit}"
-  compile "com.squareup.okhttp3:logging-interceptor:${versions.okHttp}"
-  compile "com.squareup.okhttp3:okhttp:${versions.okHttp}"
+  compile libraries.rxJava
+  compile libraries.rxAndroid
+  compile libraries.retrofit
+  compile libraries.retrofitGsonConverter
+  compile libraries.retrofitRxJavaAdapter
+
+  compile libraries.okHttpLoggingInterceptor
+  compile libraries.okHttp
+
   compile 'com.jraska:falcon:1.0.4'
 
   testCompile 'junit:junit:4.12'

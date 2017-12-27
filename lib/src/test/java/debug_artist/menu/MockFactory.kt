@@ -6,7 +6,7 @@ import debug_artist.menu.drawer.item.ReportBugSwitchMenuItem
 import debug_artist.menu.drawer.item.SpinnerMenuItem
 import debug_artist.menu.report_bug.Answer
 import org.mockito.Mockito.mock
-import rx.Observable
+import io.reactivex.Observable
 
 object MockFactory {
 

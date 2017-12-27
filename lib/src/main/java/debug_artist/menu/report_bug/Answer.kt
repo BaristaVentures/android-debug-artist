@@ -1,8 +1,8 @@
 package debug_artist.menu.report_bug
 
 
+import retrofit2.HttpException
 import retrofit2.Response
-import retrofit2.adapter.rxjava.HttpException
 
 /**
  * Proxy to read, parse and organize backend responses and errors

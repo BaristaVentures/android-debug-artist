@@ -26,16 +26,15 @@ dependencies {
   compile libraries.kotlinReflect
   compile project(":lib")
 
-  compile "io.reactivex:rxjava:${versions.rxJava}"
-  compile "com.artemzin.rxjava:proguard-rules:${versions.rxJava}.0"
-  compile "io.reactivex:rxandroid:1.2.1"
+  // Bug Reporter
+  compile libraries.rxJava
+  compile libraries.rxAndroid
+  compile libraries.retrofit
+  compile libraries.retrofitGsonConverter
+  compile libraries.retrofitRxJavaAdapter
 
-  compile "com.squareup.retrofit2:retrofit:${versions.retrofit}"
-  compile "com.squareup.retrofit2:converter-gson:${versions.retrofit}"
-  compile "com.squareup.retrofit2:adapter-rxjava:${versions.retrofit}"
-
-  compile "com.squareup.okhttp3:logging-interceptor:${versions.okHttp}"
-  compile "com.squareup.okhttp3:okhttp:${versions.okHttp}"
+  compile libraries.okHttpLoggingInterceptor
+  compile libraries.okHttp
 }
 
 // SHOULD BE AT THE BOTTOM OF THE FILE, DONT MOVE
