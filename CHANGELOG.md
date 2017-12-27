@@ -1,5 +1,9 @@
 # CHANGELOG
 
+# v 0.6.8
+- Fix broken Bug reporter.
+- Update to RxJava 2
+
 # v 0.6.7
 - Fix last release dependencies for `reporter-pivotal` contains project reference "lib" causing clients crash on compile.
 
