@@ -1,8 +1,7 @@
 package debug_artist.menu.utils
 
 
-import rx.Observable
-import rx.functions.Func1
+import io.reactivex.functions.Function
 import java.net.SocketTimeoutException
 import java.util.concurrent.TimeUnit
 
@@ -15,19 +14,22 @@ import java.util.concurrent.TimeUnit
  * @param delay milliseconds of wait between each try
  * @param delayAmount  delay + delayAmount
  */
-class RetryAfterTimeoutWithDelay(val maxRetries: Int, var delay: Long, val delayAmount: Long = 100)
-  : Func1<Observable<out Throwable>, Observable<*>> {
+class RetryAfterTimeoutWithDelay(private val maxRetries: Int,
+                                 private var delay: Long,
+                                 private val delayAmount: Long = 100)
+  : Function<io.reactivex.Observable<Throwable>, io.reactivex.Observable<*>> {
 
-  internal var retryCount = 0
+  private var retryCount = 0
 
-  override fun call(attempts: Observable<out Throwable>): Observable<*> {
-    return attempts.flatMap({
+  override fun apply(attempts: io.reactivex.Observable<Throwable>): io.reactivex.Observable<*> {
+    return attempts.flatMap {
       if (++retryCount < maxRetries && it is SocketTimeoutException) {
         delay += delayAmount
-        Observable.timer(delay, TimeUnit.MILLISECONDS)
+        io.reactivex.Observable.timer(delay, TimeUnit.MILLISECONDS)
       } else {
-        Observable.error(it as Throwable)
+        io.reactivex.Observable.error(it)
       }
-    })
+    }
   }
+
 }

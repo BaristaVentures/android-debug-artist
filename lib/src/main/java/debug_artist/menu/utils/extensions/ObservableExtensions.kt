@@ -1,9 +1,9 @@
 package debug_artist.menu.utils.extensions
 
 import debug_artist.menu.utils.RetryAfterTimeoutWithDelay
-import rx.Observable
-import rx.android.schedulers.AndroidSchedulers
-import rx.schedulers.Schedulers
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 
 /**
  * Shorthand to set [subscribeOn], [observeOn] and retry policy for observables
