@@ -4,14 +4,14 @@ import com.google.gson.FieldNamingPolicy
 import com.google.gson.GsonBuilder
 import debug_artist.menu.report_bug.Answer
 import debug_artist.menu.report_bug.BugRepository
+import io.reactivex.Observable
+import io.reactivex.Observable.just
+import io.reactivex.Observable.zip
 import okhttp3.*
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
-import rx.Observable
-import rx.Observable.just
-import rx.Observable.zip
 import java.io.File
 
 class PivotalBugRepository(apiToken: String,
@@ -39,34 +39,43 @@ class PivotalBugRepository(apiToken: String,
         .client(okHttpClient)
         .baseUrl(url)
         .addConverterFactory(GsonConverterFactory.create(gson))
-        .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+        .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
         .build()
 
     service = retrofit.create(PivotalService::class.java)
   }
 
+  @Suppress("UNCHECKED_CAST")
   override fun create(name: String, description: String,
                       screenshotFilePath: String?, logsFilePath: String?): Observable<Answer<Any>> {
-    val uploadFileObservable = screenshotFilePath?.let { uploadFile("image/jpg", it) } ?: just(null)
-    val uploadLogsObservable = logsFilePath?.let { uploadFile("text/plain", it) } ?: just(null)
+    val observables = mutableListOf<Observable<*>>(createStory(name, description, labels))
 
-    return zip(createStory(name, description, labels), uploadFileObservable, uploadLogsObservable,
-        { story, uploadedScreenshot, uploadedLogs ->
-          val possibleStory = story?.body
-          val possibleScreenshot = uploadedScreenshot?.body
-          val possibleLogs = uploadedLogs?.body
+    screenshotFilePath?.let { observables.add(uploadFile("image/jpg", it)) }
+    logsFilePath?.let { observables.add(uploadFile("text/plain", it)) }
 
-          if (possibleStory == null) {
-            just(story)
-          } else if (possibleScreenshot == null) {
-            just(uploadedLogs)
-          } else if (possibleLogs == null) {
-            just(uploadedScreenshot)
+    return zip(observables) { result ->
+      val storyAnswer = (result.getOrNull(0) as? Answer<Story>)
+      val possibleStory = storyAnswer?.body
+
+      val possibleScreenshot = (result.getOrNull(1) as? Answer<Attachment>)?.body
+      val possibleLogs = (result.getOrNull(2) as? Answer<Attachment>)?.body
+
+      when (possibleStory) {
+        null -> just(storyAnswer)
+        else -> {
+          val attachments = mutableListOf<Attachment>()
+
+          possibleScreenshot?.let { attachments.add(it) }
+          possibleLogs?.let { attachments.add(it) }
+
+          if (attachments.size > 0) {
+            createComment(possibleStory.id, "Attach", attachments.toTypedArray())
           } else {
-            val attachments = arrayOf(possibleScreenshot, possibleLogs)
-            createComment(possibleStory.id, "Attach", attachments)
+            Observable.just(Answer())
           }
-        }).switchMap { observable -> observable }
+        }
+      }
+    }.switchMap { observable -> observable }
   }
 
   private fun createStory(name: String, description: String, labels: Array<String>? = null): Observable<Answer<Story>> {
@@ -102,7 +111,7 @@ class PivotalBugRepository(apiToken: String,
 
 }
 
-class PivotalTrackerHeaderInterceptor(val apiToken: String) : Interceptor {
+class PivotalTrackerHeaderInterceptor(private val apiToken: String) : Interceptor {
 
   override fun intercept(chain: Interceptor.Chain?): Response? {
     val builder = chain?.request()?.newBuilder()?.addHeader("X-TrackerToken", apiToken)

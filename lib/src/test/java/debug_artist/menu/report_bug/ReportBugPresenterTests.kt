@@ -6,7 +6,7 @@ import debug_artist.menu.mockSchedulers
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito
-import rx.Observable
+import io.reactivex.Observable
 
 class ReportBugPresenterTests {
   val view: ReportBugView = mock()

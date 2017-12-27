@@ -1,7 +1,7 @@
 package debug_artist.menu.report_bug
 
 import android.os.Parcelable
-import rx.Observable
+import io.reactivex.Observable
 
 interface BugRepository {
 
