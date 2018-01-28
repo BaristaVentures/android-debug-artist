@@ -8,7 +8,7 @@ ext {
               kotlin        : "1.2.21",
               retrofit      : "2.3.0",
               okHttp        : "3.9.1",
-              rxJava        : "2.1.8"]
+              rxJava        : "2.1.9"]
 
   plugs = [kotlin        : "org.jetbrains.kotlin:kotlin-gradle-plugin:${versions.kotlin}",
            gradleVersions: 'com.github.ben-manes:gradle-versions-plugin:0.15.0']
