@@ -1,5 +1,9 @@
 # CHANGELOG
 
+# v 0.6.9
+- Update Kotlin 1.2.21
+- Update RxJava
+
 # v 0.6.8
 - Fix broken Bug reporter.
 - Update to RxJava 2
