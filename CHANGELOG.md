@@ -1,5 +1,8 @@
 # CHANGELOG
 
+# v 0.6.10
+- Remove `RxLint` from features since it may break in a lot of possible ways on the clients.
+
 # v 0.6.9
 - Update Kotlin 1.2.21
 - Update RxJava
