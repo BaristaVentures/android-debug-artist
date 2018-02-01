@@ -51,7 +51,6 @@ dependencies {
   compile 'com.squareup.picasso:picasso:2.5.2'
   compile 'com.github.pedrovgs:lynx:1.6'
   compile 'com.jakewharton:process-phoenix:2.0.0'
-  compile 'nl.littlerobots.rxlint:rxlint:1.6'
   compile 'com.facebook.stetho:stetho:1.5.0'
 
   // Bug Reporter
