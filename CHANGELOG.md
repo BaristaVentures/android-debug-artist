@@ -1,5 +1,8 @@
 # CHANGELOG
 
+# v 0.6.11
+- Update to kotlin 1.2.30
+
 # v 0.6.10
 - Remove `RxLint` from features since it may break in a lot of possible ways on the clients.
 
