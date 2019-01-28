@@ -3,8 +3,8 @@ package debug_artist.menu.drawer.item.spinner
 import android.support.v7.widget.PopupMenu
 import android.view.MenuItem
 import android.view.View
-import debug_artist.menu.R
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem
+import debug_artist.menu.R
 
 open class SpinnerDrawerItem(id: Int,
                              internal val items: Array<String>,
@@ -24,8 +24,8 @@ open class SpinnerDrawerItem(id: Int,
     withIcon(R.drawable.ic_arrow_drop_down_grey_700_24dp)
   }
 
-  override fun bindView(viewHolder: ViewHolder?) {
-    super.bindView(viewHolder)
+  override fun bindView(viewHolder: ViewHolder?, payloads: MutableList<Any?>) {
+    super.bindView(viewHolder, payloads)
     viewHolder?.itemView?.setOnClickListener(this)
   }
 

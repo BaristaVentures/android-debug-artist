@@ -1,50 +1,41 @@
 package debug_artist.menu.drawer
 
 import android.app.Activity
-import android.app.Application
 import android.support.annotation.StringRes
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.RecyclerView
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.CompoundButton
 import android.widget.EditText
 import android.widget.Toast
 import android.widget.Toast.LENGTH_LONG
 import android.widget.Toast.LENGTH_SHORT
 import com.mikepenz.materialdrawer.Drawer
 import com.mikepenz.materialdrawer.DrawerBuilder
-import com.mikepenz.materialdrawer.interfaces.OnCheckedChangeListener
 import com.mikepenz.materialdrawer.model.DividerDrawerItem
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem
 import com.mikepenz.materialdrawer.model.SwitchDrawerItem
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem
-import debug_artist.menu.DebugActor
 import debug_artist.menu.R
 import debug_artist.menu.drawer.item.*
 import debug_artist.menu.drawer.item.input.InputItemListener
-import debug_artist.menu.drawer.item.phoenix.RestartListener
 import debug_artist.menu.drawer.item.spinner.SpinnerDrawerItem
 import debug_artist.menu.drawer.item.spinner.SpinnerItemListener
-import debug_artist.menu.report_bug.BugRepository
 import debug_artist.menu.utils.device.AndroidDevice
 import debug_artist.menu.utils.device.AndroidDevice.Companion.getProjectProperties
-import debug_artist.menu.utils.shake_detector.AndroidShakeDetector
 
 /**
  * Debug drawer showing some debugging tools and info.
 
  * To add dynamic actions check "debugDrawer.with*" methods.
  */
-class DebugDrawer @JvmOverloads constructor(application: Application,
-                                            val activity: Activity,
+class DebugDrawer @JvmOverloads constructor(val activity: Activity,
                                             showDrawerOnFirstLaunch: Boolean = false)
-  : OnCheckedChangeListener, Drawer.OnDrawerItemClickListener, SpinnerItemListener, DebugDrawerView {
+  : Drawer.OnDrawerItemClickListener, SpinnerItemListener, DebugDrawerView {
 
   private val presenter = DebugDrawerPresenter()
-  private val debugActor = DebugActor(application, activity)
   private val menuDrawer = DrawerBuilder(activity)
       .withTranslucentStatusBar(true)
       .withDrawerGravity(Gravity.END)
@@ -62,8 +53,7 @@ class DebugDrawer @JvmOverloads constructor(application: Application,
       }
 
   init {
-    presenter.attach(this@DebugDrawer, DebugDrawerTraveler(activity), debugActor,
-        AndroidShakeDetector(activity), AndroidDevice(activity))
+    presenter.attach(this@DebugDrawer, AndroidDevice(activity))
   }
 
   fun release() = presenter.deAttach()
@@ -81,23 +71,6 @@ class DebugDrawer @JvmOverloads constructor(application: Application,
   //<editor-fold desc="Builder Helpers">
   fun withDivider() = withMenuItem(DividerMenuItem())
 
-  @JvmOverloads
-  fun withStethoSwitch(checked: Boolean = false) = withMenuItem(StethoSwitchMenuItem(checked))
-
-  @JvmOverloads
-  fun withLeakCanarySwitch(checked: Boolean = false) = withMenuItem(LeakCanarySwitchMenuItem(checked))
-
-  @JvmOverloads
-  fun withPicassoLogsSwitch(checked: Boolean = false) = withMenuItem(PicassoLogsSwitchMenuItem(checked))
-
-  @JvmOverloads
-  fun withShakeToReportBugSwitch(checked: Boolean = false, bugReportRepository: BugRepository.Builder) =
-      withMenuItem(ReportBugSwitchMenuItem(checked, bugReportRepository))
-
-  fun withLynksButton() = withMenuItem(LynksButtonMenuItem())
-
-  fun withPhoenixRestartButton(listener: RestartListener) = withMenuItem(PhoenixButtonMenuItem(listener))
-
   fun withInputItem(id: Int, name: String, inputItemListener: InputItemListener) =
       withMenuItem(InputMenuItem(id, name, inputItemListener))
 
@@ -113,36 +86,9 @@ class DebugDrawer @JvmOverloads constructor(application: Application,
   //</editor-fold>
 
   //<editor-fold desc="DebugDrawerView">
-  override fun addStethoSwitch(checked: Boolean) {
-    addSwitchDrawerItem(R.string.stetho, R.id.drawer_dev_item_stetho).withChecked(checked)
-  }
 
   override fun addDividerItem() {
     menuDrawer.addItem(DividerDrawerItem())
-  }
-
-  override fun addLeakCanarySwitch(checked: Boolean) {
-    addSwitchDrawerItem(R.string.leak_canary, R.id.drawer_dev_item_leak).withChecked(checked)
-  }
-
-  override fun addPicassoLogsSwitch(checked: Boolean) {
-    addSwitchDrawerItem(R.string.picasso, R.id.drawer_dev_item_picasso).withChecked(checked)
-  }
-
-  override fun addBugReportSwitch(checked: Boolean) {
-    addSwitchDrawerItem(R.string.report_bug_hint, R.id.drawer_dev_item_bug_report).withChecked(checked)
-  }
-
-  override fun addLynksButton() {
-    menuDrawer.addItem(PrimaryDrawerItem().withName(R.string.lynks)
-        .withIdentifier(R.id.drawer_dev_item_lynks.toLong())
-        .withIcon(R.drawable.ic_android_grey_700_18dp))
-  }
-
-  override fun addPhoenixButton() {
-    menuDrawer.addItems(PrimaryDrawerItem().withName(R.string.restart_app)
-        .withIdentifier(R.id.drawer_dev_item_phoenix_app.toLong())
-        .withIcon(R.drawable.ic_gavel_grey_700_18dp))
   }
 
   override fun addSpinnerItem(it: SpinnerMenuItem) {
@@ -202,33 +148,12 @@ class DebugDrawer @JvmOverloads constructor(application: Application,
         }.show()
   }
 
-  private fun addSwitchDrawerItem(@StringRes text: Int, id: Int): SwitchDrawerItem {
-    val item = SwitchDrawerItem().withName(text).withIdentifier(id.toLong()).apply {
-      withOnCheckedChangeListener(this@DebugDrawer)
-    }
-    menuDrawer.addItem(item)
-
-    return item
-  }
-
   //<editor-fold desc="Select events">
-
-  override fun onCheckedChanged(drawerItem: IDrawerItem<Any, RecyclerView.ViewHolder>,
-                                buttonView: CompoundButton, isChecked: Boolean) {
-    when (drawerItem.identifier) {
-      R.id.drawer_dev_item_stetho.toLong() -> presenter.onStethoItemSelected()
-      R.id.drawer_dev_item_leak.toLong() -> presenter.onLeakCanaryItemSelected()
-      R.id.drawer_dev_item_picasso.toLong() -> presenter.onPicassoItemSelected()
-      R.id.drawer_dev_item_bug_report.toLong() -> presenter.onBugReporterItemSelected(isChecked)
-    }
-  }
 
   override fun onItemClick(view: View, position: Int,
                            drawerItem: IDrawerItem<Any, RecyclerView.ViewHolder>): Boolean {
     when (drawerItem.identifier) {
-      R.id.drawer_dev_item_phoenix_app.toLong() -> presenter.onPhoenixItemSelected()
       R.id.drawer_dev_item_input.toLong() -> showInputDialog(drawerItem as PrimaryDrawerItem)
-      R.id.drawer_dev_item_lynks.toLong() -> presenter.onLynksItemSelected()
     }
 
     return true

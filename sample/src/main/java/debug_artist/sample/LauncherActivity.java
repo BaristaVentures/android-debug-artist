@@ -6,7 +6,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import debug_artist.sample.base.BasicActivity;
-import debug_artist.sample.stetho.StethoActivity;
 
 public class LauncherActivity extends BaseActivity {
 
@@ -22,13 +21,5 @@ public class LauncherActivity extends BaseActivity {
         startActivity(new Intent(LauncherActivity.this, BasicActivity.class));
       }
     });
-
-    findViewById(R.id.stethoButton).setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        startActivity(new Intent(LauncherActivity.this, StethoActivity.class));
-      }
-    });
   }
-
 }

@@ -5,13 +5,6 @@ import debug_artist.menu.drawer.item.SpinnerMenuItem
 
 interface DebugDrawerView {
   fun addDividerItem()
-  fun addStethoSwitch(checked: Boolean)
-  fun addLeakCanarySwitch(checked: Boolean)
-  fun addPicassoLogsSwitch(checked: Boolean)
-  fun addBugReportSwitch(checked: Boolean)
-
-  fun addLynksButton()
-  fun addPhoenixButton()
 
   fun addInputItem(item: InputMenuItem)
   fun addSpinnerItem(it: SpinnerMenuItem)

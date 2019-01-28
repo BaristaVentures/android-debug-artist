@@ -3,7 +3,6 @@
   package="debug_artist.sample">
 
   <application
-    android:name=".BaseApplication"
     android:allowBackup="true"
     android:icon="@mipmap/ic_launcher"
     android:supportsRtl="true"
@@ -20,15 +19,9 @@
       </intent-filter>
     </activity>
 
-    <activity android:name="debug_artist.menu.report_bug.ReportBugActivity" />
-
     <activity
       android:name=".base.BasicActivity"
       android:label="Basic Sample" />
-
-    <activity
-      android:name=".stetho.StethoActivity"
-      android:label="Stetho Sample" />
 
   </application>
 
