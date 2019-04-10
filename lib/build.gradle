@@ -54,5 +54,14 @@ dependencies {
   testImplementation "org.jetbrains.kotlin:kotlin-test-junit:$versions.kotlin"
 }
 
+// Remove javadoc related tasks and errors with kotlin
+tasks.withType(Javadoc) {
+  enabled = false
+}
+task javadoc(type: Javadoc) {
+  source = android.sourceSets.main.java.srcDirs
+  classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+}
+
 // SHOULD BE AT THE BOTTOM OF THE FILE, DONT MOVE
 apply from: '../bintray.gradle'
