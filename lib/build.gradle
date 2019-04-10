@@ -5,7 +5,7 @@ apply from: '../jacoco.gradle'
 
 android {
   compileSdkVersion setup.compileSdk
-  buildToolsVersion setup.buildTools
+
 
   defaultConfig {
     minSdkVersion setup.minSdk
@@ -42,33 +42,25 @@ android {
 }
 
 dependencies {
-  compile libraries.kotlinStdLib
+  implementation libraries.kotlinStdLib
 
-  compile('com.mikepenz:materialdrawer:5.3.6@aar') { transitive = true }
+  api 'com.mikepenz:materialdrawer:6.0.9@aar', { transitive = true }
 
-  // Features
-  compile 'com.squareup.leakcanary:leakcanary-android:1.5.4'
-  compile 'com.squareup.picasso:picasso:2.5.2'
-  compile 'com.github.pedrovgs:lynx:1.6'
-  compile 'com.jakewharton:process-phoenix:2.0.0'
-  compile 'com.facebook.stetho:stetho:1.5.0'
+  implementation 'com.jraska:falcon:1.0.4'
 
-  // Bug Reporter
-  compile libraries.rxJava
-  compile libraries.rxAndroid
-  compile libraries.retrofit
-  compile libraries.retrofitGsonConverter
-  compile libraries.retrofitRxJavaAdapter
+  testImplementation 'junit:junit:4.12'
+  testImplementation "org.mockito:mockito-core:2.6.3"
+  testImplementation "com.nhaarman:mockito-kotlin:1.1.0"
+  testImplementation "org.jetbrains.kotlin:kotlin-test-junit:$versions.kotlin"
+}
 
-  compile libraries.okHttpLoggingInterceptor
-  compile libraries.okHttp
-
-  compile 'com.jraska:falcon:1.0.4'
-
-  testCompile 'junit:junit:4.12'
-  testCompile "org.mockito:mockito-core:2.6.3"
-  testCompile "com.nhaarman:mockito-kotlin:1.1.0"
-  testCompile "org.jetbrains.kotlin:kotlin-test-junit:$versions.kotlin"
+// Remove javadoc related tasks and errors with kotlin
+tasks.withType(Javadoc) {
+  enabled = false
+}
+task javadoc(type: Javadoc) {
+  source = android.sourceSets.main.java.srcDirs
+  classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
 }
 
 // SHOULD BE AT THE BOTTOM OF THE FILE, DONT MOVE

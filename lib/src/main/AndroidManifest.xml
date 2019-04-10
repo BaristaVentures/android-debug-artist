@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-  package="debug_artist.menu">
+  package="debugartist.menu">
 
   <uses-permission android:name="android.permission.READ_LOGS" />
   <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />

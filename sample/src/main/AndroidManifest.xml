@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-  package="debug_artist.sample">
+  package="debugartist.sample">
 
   <application
-    android:name=".BaseApplication"
     android:allowBackup="true"
     android:icon="@mipmap/ic_launcher"
     android:supportsRtl="true"
     android:theme="@style/AppTheme">
 
     <activity
-      android:name=".LauncherActivity"
+      android:name="debugartist.sample.LauncherActivity"
       android:label="@string/sample">
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
@@ -20,15 +19,9 @@
       </intent-filter>
     </activity>
 
-    <activity android:name="debug_artist.menu.report_bug.ReportBugActivity" />
-
     <activity
-      android:name=".base.BasicActivity"
+      android:name="debugartist.sample.base.BasicActivity"
       android:label="Basic Sample" />
-
-    <activity
-      android:name=".stetho.StethoActivity"
-      android:label="Stetho Sample" />
 
   </application>
 
