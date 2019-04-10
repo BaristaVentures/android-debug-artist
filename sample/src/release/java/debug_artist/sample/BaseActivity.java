@@ -1,4 +1,4 @@
-package debug_artist.sample;
+package debugartist.sample;
 
 import android.support.v7.app.AppCompatActivity;
 
