@@ -1,0 +1,68 @@
+version: 2.1
+jobs:
+  build:
+    docker:
+      - image: circleci/android:api-28-alpha
+    environment:
+      JVM_OPTS: -Xmx3200m
+    steps:
+      - checkout
+      - run:
+          name: Prepare
+          command: |
+            bash scripts/cp-env-to-properties.sh
+            bash scripts/install-dependencies.sh
+      - run:
+          name: Build
+          command: ./gradlew assemble -PdisablePreDex --stacktrace --no-daemon
+  test:
+    docker:
+      - image: circleci/android:api-28-alpha
+    environment:
+      JVM_OPTS: -Xmx3200m
+    steps:
+      - checkout
+      - run:
+          name: Prepare
+          command: |
+            bash scripts/cp-env-to-properties.sh
+            bash scripts/install-dependencies.sh
+      - run:
+          name: Test
+          command: ./gradlew testDebugUnitTestCoverage -PdisablePreDex --stacktrace --no-daemon
+      - store_artifacts:
+          path: app/build/reports
+          destination: reports
+      - store_test_results:
+          path: lib/build/test-results
+  deploy:
+    docker:
+    - image: circleci/android:api-28-alpha
+    environment:
+      JVM_OPTS: -Xmx3200m
+    steps:
+    - checkout
+    - run:
+        name: Prepare
+        command: |
+          bash scripts/cp-env-to-properties.sh
+          bash scripts/install-dependencies.sh
+    - run:
+        name: Deploy
+        command: bash scripts/deploy.sh
+
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - build
+      - test
+      - deploy:
+          filters:
+            branches:
+              only:
+                - master
+
+          requires:
+            - build
+            - test
