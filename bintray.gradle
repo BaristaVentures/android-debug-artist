@@ -207,7 +207,7 @@ bintray {
 
   override = true
   publish = true
-  dryRun = false
+  dryRun = project.hasProperty("dryRun")
 
   pkg {
     repo = "maven"
