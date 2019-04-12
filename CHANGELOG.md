@@ -1,5 +1,9 @@
 # CHANGELOG
 
+# v 0.7.0
+This release will change the orientation of this library to only show/take inputs from 
+the user related to the app. No extra features will be embedded into it to make it lightweight.
+
 # v 0.6.11
 - Update to kotlin 1.2.30
 
